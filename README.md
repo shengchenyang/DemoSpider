@@ -34,6 +34,20 @@ pymongo
 
 注：若有版本冲突，请去除版本限制即可。
 
+> 运行方法：
+
+只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl demo_one` 即可。
+
+```ini
+[DEV_MYSQL]
+HOST=***
+PORT=3306
+USER=root
+PWD=***
+DATABASE=***
+CHARSET=utf8mb4
+```
+
 ## 2. 使用 ayugespidertools
 
 ###  2.1. 导入配置
