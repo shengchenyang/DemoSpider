@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="13dfa437-ab8f-42d4-bea3-e7e0f5f9a53e" name="DemoSpider">
+        <fileTransfer rootFolder="/root/myproj/ForPycharmProjects/DemoSpider" accessType="SFTP" host="175.178.210.193" port="22" sshConfigId="318bc80c-138a-4510-987f-3be79ac9ae77" sshConfig="root@175.178.210.193:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
