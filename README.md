@@ -136,4 +136,4 @@ df = pandas.read_sql(sql, self.mysql_engine)
 
 如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段。
 
-![image-20220803151448062](http://175.178.210.193:9000/drawingbed/image/image-20220803151448062.png)
+![image-20220803151448062](DemoSpider/doc/image-20220803151448062.png)
