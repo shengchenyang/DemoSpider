@@ -1,5 +1,4 @@
 import json
-import scrapy
 import pandas
 from loguru import logger
 from scrapy.http import Request
@@ -11,7 +10,7 @@ from ayugespidertools.AyugeSpider import AyuSpider
 """
 ####################################################################################################
 # collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例
+# collection_content: 热榜文章排名 Demo 采集示例 - 存入 Mysql
 # create_time: 2022-07-30
 # explain:
 # demand_code_prefix = ''
@@ -22,20 +21,17 @@ from ayugespidertools.AyugeSpider import AyuSpider
 class DemoOneSpider(AyuSpider):
     name = 'demo_one'
     allowed_domains = ['blog.csdn.net']
-    start_urls = ['http://blog.csdn.net/']
+    start_urls = ['https://blog.csdn.net/']
 
     # 数据库表的枚举信息
     custom_table_enum = Table_Enum
-    # 配置的类型
+    # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
-        # 链接的数据库名称，用于返回 mysql_engine 来在 spider 层入库前去重使用
-        'MYSQL_DATABASE': "test",
         # 数据表的前缀名称，用于标记属于哪个项目
         'MYSQL_TABLE_PREFIX': "demo_",
-
-        # 激活此项则数据会存储至 Mysql
         'ITEM_PIPELINES': {
+            # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuALSMysqlPipeline': 300,
         },
 
@@ -48,7 +44,7 @@ class DemoOneSpider(AyuSpider):
             # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
 
             # 随机请求头
-            'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 300,
+            'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
         },
 
         # 独享代理配置(激活 DOWNLOADER_MIDDLEWARES 中的独享代理时使用)
@@ -66,7 +62,6 @@ class DemoOneSpider(AyuSpider):
     def start_requests(self):
         """
         get 请求首页，获取项目列表数据
-        :return:
         """
         yield Request(
             url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
@@ -99,7 +94,7 @@ class DemoOneSpider(AyuSpider):
             AritleInfoItem['alldata'] = Aritle_Info
             AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
             logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            yield AritleInfoItem
+            # yield AritleInfoItem
 
             # 旧脚本方便地改写为 ayugespidertools 的示例
             '''
@@ -126,15 +121,18 @@ class DemoOneSpider(AyuSpider):
             yield item
             '''
 
-            # 测试 mysql_engine 的功能
-            sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
-            df = pandas.read_sql(sql, self.mysql_engine)
+            try:
+                # 测试 mysql_engine 的功能
+                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
+                df = pandas.read_sql(sql, self.mysql_engine)
 
-            # 如果为空，说明此数据不存在于数据库，则新增
-            if df.empty:
+                # 如果为空，说明此数据不存在于数据库，则新增
+                if df.empty:
+                    yield AritleInfoItem
+
+                # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
+                else:
+                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
+
+            except Exception:
                 yield AritleInfoItem
-
-            # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑。
-            else:
-                logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
-                pass

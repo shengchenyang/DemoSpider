@@ -1,6 +1,6 @@
 # AyugeSpiderTools 工具说明
 
-> 本文章用于说明在爬虫开发中遇到的各种通用方法，将其打包成 `Pypi` 包以方便安装和使用，此工具会长久维护。
+> 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单用，可以**解放爬虫开发人员的双手**：不用太关注 `item, middlewares 和 pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
 
 ## 前言
 本文是以 `csdn` 的热榜文章为例，来说明此 `scrapy` 扩展的使用方法。
@@ -34,9 +34,13 @@ pymongo
 
 注：若有版本冲突，请去除版本限制即可。
 
-> 运行方法：
+### 1.1. 运行方法
 
-只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl demo_one` 即可。
+> 本扩展库用于方便 `python` 开发，本项目的应用场景的运行方法为：
+
+只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl xxxx` 对应的 `spiders` 即可。
+
+> `VIT` 文件夹中的 `.conf` 文件内容为，已脱敏，请自行配置：
 
 ```ini
 [DEV_MYSQL]
@@ -46,13 +50,31 @@ USER=root
 PWD=***
 DATABASE=***
 CHARSET=utf8mb4
+
+[DEV_MONGODB]
+HOST=***
+PORT=27017
+DATABASE=***
+USER=***
+PWD=***
 ```
+
+> 各 `spiders` 的文件介绍：
+
+```ini
+demo_one: 为 csdn 热榜文章的存入 Mysql 的场景
+demo_two: 为 csdn 热榜文章的存入 MongoDB 的场景
+```
+
+注：其实存入 `Mysql` 和存入 `MongoDB` 的功能可以写在一块，可同时生效，配置不同优先级即可。分开写是为了方便查看而已。
 
 ## 2. 使用 ayugespidertools
 
 ###  2.1. 导入配置
 
-在项目的 `settings` 中或 `spiders` 的 `custom_setting` 中添加 `LOCAL_MYSQL_CONFIG` 参数
+> 在项目的 `settings` 中或 `spiders` 的 `custom_setting` 中添加 `LOCAL_MYSQL_CONFIG` 参数
+
+`demo_one: mysql` 场景下：
 
 ```ini
 # 这是需要链接的数据库配置，请自行配置
@@ -72,50 +94,66 @@ LOCAL_MYSQL_CONFIG = {
 }
 ```
 
-在 `spiders` 中添加以下所需配置：
+`demo_two: MongoDB` 场景下：
 
-```python
+```ini
+# 测试 MongoDB 数据库配置
+MONGODB_CONFIG = {
+  "host": config_parse["DEV_MONGODB"]["HOST"],
+  "port": int(config_parse["DEV_MONGODB"]["PORT"]),
+  "user": config_parse["DEV_MONGODB"]["USER"],
+  "pwd": config_parse["DEV_MONGODB"]["PWD"],
+  "database": config_parse["DEV_MONGODB"]["DATABASE"],
+}
+```
+
+> 在 `spiders` 中添加以下所需配置：
+
+`demo_one: mysql` 场景下：
+
+```ini
 # 数据库表的枚举信息
 custom_table_enum = Table_Enum
-# 配置的类型
+# 初始化配置的类型
 settings_type = 'debug'
 custom_settings = {
-    # 链接的数据库名称，用于返回 mysql_engine 来在 spider 层入库前去重使用
-    'MYSQL_DATABASE': "test",
     # 数据表的前缀名称，用于标记属于哪个项目
     'MYSQL_TABLE_PREFIX': "demo_",
-
-    # 激活此项则数据会存储至 Mysql
     'ITEM_PIPELINES': {
+        # 激活此项则数据会存储至 Mysql
         'ayugespidertools.Pipelines.AyuALSMysqlPipeline': 300,
     },
-
     'DOWNLOADER_MIDDLEWARES': {
-        # 动态隧道代理
-        # 'scrapy_zst.middlewares.DynamicProxyDownloaderMiddleware': 125,
-        # 独享代理
-        # 'ayugespidertools.Middlewares.ExclusiveProxyDownloaderMiddleware': 125,
-
         # 随机请求头
-        'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 300,
+        'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
     },
-
-    # 独享代理配置(激活 DOWNLOADER_MIDDLEWARES 中的独享代理时使用)
-    'exclusive_proxy_config': {
-        "proxy_url": "独享代理地址：'http://***.com/api/***&num=100&format=json'",
-        "username": "独享代理用户名",
-        "password": "对应用户的密码",
-        "proxy_index": "需要返回的独享代理的索引",
-    }
 }
 
 # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
 mysql_engine_off = True
 ```
 
+`demo_two: MongoDB` 场景下：
+
+```ini
+# 初始化配置的类型
+settings_type = 'debug'
+custom_settings = {
+'ITEM_PIPELINES': {
+    # 激活此项则数据会存储至 MongoDB
+    'ayugespidertools.Pipelines.AyuALSMongoPipeline': 300,
+    },
+
+'DOWNLOADER_MIDDLEWARES': {
+    # 随机请求头
+    'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
+    },
+}
+```
+
 ###  2.2. yield item
 
-在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表
+在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表：`Mysql` 和 `MongoDB` 都推荐此写法
 
 ```python
 Aritle_Info = dict()
@@ -133,11 +171,18 @@ logger.info(f"AritleInfoItem: {AritleInfoItem}")
 
 ### 2.3. 去重查询
 
-`mysql_engine` 用于数据入库前的查询使用：
+`mysql_engine` 用于 `Mysql` 数据入库前的查询使用：
 
 ```python
 sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
 df = pandas.read_sql(sql, self.mysql_engine)
+```
+
+`MongoDB` 场景下自带去重，只需指定去重条件 `mongo_update_rule`：
+
+```python
+# mongo_update_rule 的字段则为去重判断条件
+AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
 ```
 
 ### 2.4. 中间件及 pipelines 介绍
