@@ -193,6 +193,6 @@ AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
 
 ## 3. 图片示例
 
-如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段。
+如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段及字段注释。
 
 ![image-20220803151448062](DemoSpider/doc/image-20220803151448062.png)
