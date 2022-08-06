@@ -1,7 +1,5 @@
 /.git
 /.idea
 /DemoSpider/VIT/.conf
-/DemoSpider/logs/
 /DemoSpider/logs/error.log
 /DemoSpider/logs/runtime.log
-/DemoSpider/test/

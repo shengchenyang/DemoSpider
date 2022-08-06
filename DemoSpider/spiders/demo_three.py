@@ -10,16 +10,16 @@ from ayugespidertools.AyugeSpider import AyuSpider
 """
 ####################################################################################################
 # collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
-# create_time: 2022-07-30
+# collection_content: 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据 consul 的应用管理中心中取值)
+# create_time: 2022-08-07
 # explain:
 # demand_code_prefix = ''
 ####################################################################################################
 """
 
 
-class DemoOneSpider(AyuSpider):
-    name = 'demo_one'
+class DemoThreeSpider(AyuSpider):
+    name = 'demo_three'
     allowed_domains = ['blog.csdn.net']
     start_urls = ['https://blog.csdn.net/']
 
@@ -28,32 +28,29 @@ class DemoOneSpider(AyuSpider):
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
+        # 是否开启 consul 的应用管理中心取值的功能
+        'APP_CONF_MANAGE': True,
+        'CONSUL_CONF': {
+            "HOST": "175.178.210.193",
+            "PORT": 8500,
+            # 此 token 值只需要只读权限即可，只用于取配置值
+            "TOKEN": "a2749dc4-498e-b5a1-39ea-41d2e5d67bcc",
+            # 这个是应用管理中心最终的 key 值，如果不设置此值会默认设置值为中程序中的 ENV 值
+            "KEY_VALUES": "test",
+            # 这个是此配置在应用管理中心所属的 group，默认为空(按需配置，如果不需要直接不配置此值或配置为空皆可)
+            "GROUP": None or "",
+        },
         # 数据表的前缀名称，用于标记属于哪个项目
-        'MYSQL_TABLE_PREFIX': "demo_",
+        'MYSQL_TABLE_PREFIX': "demo3_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuALSMysqlPipeline': 300,
         },
 
         'DOWNLOADER_MIDDLEWARES': {
-            # 动态隧道代理
-            # 'scrapy_zst.middlewares.DynamicProxyDownloaderMiddleware': 125,
-
-            # 独享代理
-            # 'ayugespidertools.Middlewares.ExclusiveProxyDownloaderMiddleware': 125,
-            # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
-
             # 随机请求头
             'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
         },
-
-        # 独享代理配置(激活 DOWNLOADER_MIDDLEWARES 中的独享代理时使用)
-        'exclusive_proxy_config': {
-            "proxy_url": "独享代理地址：'http://***.com/api/***&num=100&format=json'",
-            "username": "独享代理用户名",
-            "password": "对应用户的密码",
-            "proxy_index": "需要返回的独享代理的索引",
-        }
     }
 
     # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
@@ -109,7 +106,7 @@ class DemoOneSpider(AyuSpider):
                 'table': 'article_info_list',
             }
             yield item
-            
+
             # 或者这样写
             item = dict()
             item['article_detail_url'] = article_detail_url
@@ -123,7 +120,9 @@ class DemoOneSpider(AyuSpider):
 
             try:
                 # 测试 mysql_engine 的功能
-                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
+                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(
+                    self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'],
+                    article_detail_url)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增
