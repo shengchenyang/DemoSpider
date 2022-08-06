@@ -30,6 +30,9 @@ pandas = "^1.4.3"
 WorkWeixinRobot = "^1.0.1"
 crawlab-sdk
 pymongo
+pytest
+retrying
+SQLAlchemy
 ```
 
 注：若有版本冲突，请去除版本限制即可。
@@ -86,11 +89,11 @@ LOCAL_MYSQL_CONFIG = {
    # 数据库用户名
    'USER': config_parse["DEV_MYSQL"]["USER"],
    # 数据库密码
-   'PASSWORD': config_parse["DEV_MYSQL"]["PWD"],
+   'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
    # 数据库编码
-   'MYSQL_CHARSET': 'utf8',
-   # 数据库 engin 采用的驱动
-   'MYSQL_DRIVER': 'mysqlconnector'
+   'CHARSET': 'utf8mb4',
+   # 数据库
+   'DATABASE': 'test'
 }
 ```
 
@@ -99,11 +102,11 @@ LOCAL_MYSQL_CONFIG = {
 ```ini
 # 测试 MongoDB 数据库配置
 MONGODB_CONFIG = {
-  "host": config_parse["DEV_MONGODB"]["HOST"],
-  "port": int(config_parse["DEV_MONGODB"]["PORT"]),
-  "user": config_parse["DEV_MONGODB"]["USER"],
-  "pwd": config_parse["DEV_MONGODB"]["PWD"],
-  "database": config_parse["DEV_MONGODB"]["DATABASE"],
+  "HOST": config_parse["DEV_MONGODB"]["HOST"],
+  "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
+  "USER": config_parse["DEV_MONGODB"]["USER"],
+  "PASSWORD": config_parse["DEV_MONGODB"]["PASSWORD"],
+  "DATABASE": config_parse["DEV_MONGODB"]["DATABASE"],
 }
 ```
 
@@ -150,6 +153,10 @@ custom_settings = {
     },
 }
 ```
+
+`demo_three: Mysql` 在 `consul` 应用管理的场景下：
+
+具体请查看 `spiders` 的 `demo_three.py` 文件
 
 ###  2.2. yield item
 
