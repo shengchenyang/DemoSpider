@@ -28,18 +28,8 @@ class DemoThreeSpider(AyuSpider):
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
-        # 是否开启 consul 的应用管理中心取值的功能
+        # 是否开启 consul 的应用管理中心取值的功能(也需要设置 CONSUL_CONF 的值，本示例在 settings 中配置)
         'APP_CONF_MANAGE': True,
-        'CONSUL_CONF': {
-            "HOST": "***",
-            "PORT": 8500,
-            # 此 token 值只需要只读权限即可，只用于取配置值
-            "TOKEN": "***",
-            # 这个是应用管理中心最终的 key 值，如果不设置此值会默认设置值为中程序中的 ENV 值
-            "KEY_VALUES": "***",
-            # 这个是此配置在应用管理中心所属的 group，默认为空(按需配置，如果不需要直接不配置此值或配置为空皆可)
-            "GROUP": None or "",
-        },
         # 数据表的前缀名称，用于标记属于哪个项目
         'MYSQL_TABLE_PREFIX': "demo3_",
         'ITEM_PIPELINES': {

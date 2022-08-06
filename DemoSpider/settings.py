@@ -125,6 +125,18 @@ MONGODB_CONFIG = {
   "DATABASE": config_parse["DEV_MONGODB"]["DATABASE"],
 }
 
+# consul 应用管理的连接配置
+CONSUL_CONF = {
+    "HOST": config_parse["DEV_CONSUL"]["HOST"],
+    "PORT": config_parse["DEV_CONSUL"]["PORT"],
+    # 此 token 值只需要只读权限即可，只用于取配置值
+    "TOKEN": config_parse["DEV_CONSUL"]["TOKEN"],
+    # 这个是应用管理中心最终的 key 值，如果不设置此值会默认设置值为中程序中的 ENV 值
+    "KEY_VALUES": config_parse["DEV_CONSUL"]["KEY_VALUES"],
+    # 这个是此配置在应用管理中心所属的 group，默认为空(按需配置，如果不需要直接不配置此值或配置为空皆可)
+    "GROUP": config_parse["DEV_CONSUL"]["GROUP"],
+}
+
 # 以下是日志配置
 env = Env()
 env.read_env()
