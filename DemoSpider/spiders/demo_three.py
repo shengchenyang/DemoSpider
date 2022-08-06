@@ -31,12 +31,12 @@ class DemoThreeSpider(AyuSpider):
         # 是否开启 consul 的应用管理中心取值的功能
         'APP_CONF_MANAGE': True,
         'CONSUL_CONF': {
-            "HOST": "175.178.210.193",
+            "HOST": "***",
             "PORT": 8500,
             # 此 token 值只需要只读权限即可，只用于取配置值
-            "TOKEN": "a2749dc4-498e-b5a1-39ea-41d2e5d67bcc",
+            "TOKEN": "***",
             # 这个是应用管理中心最终的 key 值，如果不设置此值会默认设置值为中程序中的 ENV 值
-            "KEY_VALUES": "test",
+            "KEY_VALUES": "***",
             # 这个是此配置在应用管理中心所属的 group，默认为空(按需配置，如果不需要直接不配置此值或配置为空皆可)
             "GROUP": None or "",
         },
