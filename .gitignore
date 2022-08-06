@@ -3,3 +3,5 @@
 /DemoSpider/VIT/.conf
 /DemoSpider/logs/error.log
 /DemoSpider/logs/runtime.log
+/DemoSpider/test/
+/DemoSpider/test/once.py
