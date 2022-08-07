@@ -60,11 +60,18 @@ PORT=27017
 DATABASE=***
 USER=***
 PWD=***
+
+[DEV_CONSUL]
+HOST=175.178.210.193
+PORT=8500
+TOKEN=a2749dc4-498e-b5a1-39ea-41d2e5d67bcc
+KEY_VALUES=test
+GROUP=
 ```
 
 > 各 `spiders` 的文件介绍：
 
-```ini
+```yaml
 demo_one: 为 csdn 热榜文章的存入 Mysql 的场景
 demo_two: 为 csdn 热榜文章的存入 MongoDB 的场景
 ```
@@ -156,7 +163,9 @@ custom_settings = {
 
 `demo_three: Mysql` 在 `consul` 应用管理的场景下：
 
+```ini
 具体请查看 `spiders` 的 `demo_three.py` 文件
+```
 
 ###  2.2. yield item
 
