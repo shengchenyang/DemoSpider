@@ -117,7 +117,7 @@ LOCAL_MYSQL_CONFIG = {
 }
 
 # 测试 MongoDB 数据库配置
-MONGODB_CONFIG = {
+LOCAL_MONGODB_CONFIG = {
   "HOST": config_parse["DEV_MONGODB"]["HOST"],
   "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
   "USER": config_parse["DEV_MONGODB"]["USER"],

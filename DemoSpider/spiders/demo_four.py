@@ -9,7 +9,7 @@ from ayugespidertools.AyugeSpider import AyuSpider
 """
 ####################################################################################################
 # collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据本地 settings 的 LOCAL_MONGODB_CONFIG 中取值)
+# collection_content: 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据 consul 的应用管理中心中取值)
 # create_time: 2022-08-02
 # explain:
 # demand_code_prefix = ''
@@ -17,14 +17,16 @@ from ayugespidertools.AyugeSpider import AyuSpider
 """
 
 
-class DemoTwoSpider(AyuSpider):
-    name = 'demo_two'
-    allowed_domains = ['csdn.net']
+class DemoFourSpider(AyuSpider):
+    name = 'demo_four'
+    allowed_domains = ['blog.csdn.net']
     start_urls = ['https://blog.csdn.net/']
 
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
+        # 是否开启 consul 的应用管理中心取值的功能(也需要设置 CONSUL_CONF 的值，本示例在 settings 中配置)
+        'APP_CONF_MANAGE': True,
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 MongoDB
             'ayugespidertools.Pipelines.AyuALSMongoPipeline': 300,
@@ -59,25 +61,7 @@ class DemoTwoSpider(AyuSpider):
             nick_name = curr_data['nickName']
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
-            """1. 兼容经典写法"""
-            Aritle_Info = dict()
-            Aritle_Info['article_detail_url'] = article_detail_url
-            Aritle_Info['article_title'] = article_title
-            Aritle_Info['comment_count'] = comment_count
-            Aritle_Info['favor_count'] = favor_count
-            Aritle_Info['nick_name'] = nick_name
-
-            AritleInfoItem = MongoDataItem()
-            # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
-            AritleInfoItem['alldata'] = Aritle_Info
-            # table 为 mongo 的存储 Collection 集合的名称
-            AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
-            # mongo_update_rule 为查询数据是否存在的规则
-            AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
-            logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            yield AritleInfoItem
-
-            """2.ayugespidertools 推荐的风格写法(更直观)"""
+            """ayugespidertools 推荐的风格写法(更直观)"""
             Aritle_Info = dict()
             Aritle_Info['article_detail_url'] = {'key_value': article_detail_url, 'notes': '文章详情链接'}
             Aritle_Info['article_title'] = {'key_value': article_title, 'notes': '文章标题'}
@@ -92,16 +76,3 @@ class DemoTwoSpider(AyuSpider):
             logger.info(f"AritleInfoItem: {AritleInfoItem}")
             yield AritleInfoItem
 
-            """3.或者这样写"""
-            item = {
-                'alldata': {
-                    'article_detail_url': article_detail_url,
-                    'article_title': article_title,
-                    'comment_count': comment_count,
-                    'favor_count': favor_count,
-                    'nick_name': nick_name,
-                },
-                'table': 'article_info_list',
-                'mongo_update_rule': {"article_detail_url": article_detail_url},
-            }
-            yield item
