@@ -218,10 +218,10 @@ AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
 
 下图为 `demo_two` 的 `MongDB` 存储的场景下的示例：
 
-![image-20220807170330444](http://175.178.210.193:9000/drawingbed/image/image-20220807170330444.png)
+![image-20220807170330444](DemoSpider/doc/image-20220807170330444.png)
 
 下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
 
 **要运行此示例时，如果 `LOCAL_MYSQL_CONFIG` 在 `settings` 全局中有设置的话，请把它给去除。因为项目会优先从本地的配置中取配置，如果本地不存在 `LOCAL_MYSQL_CONFIG` 配置时，且 `APP_CONF_MANAGE` 为 `True` 时，当前的 `spiders` 才会从 `consul` 的应用管理中心中取相应配置。**
 
-![image-20220807170520647](http://175.178.210.193:9000/drawingbed/image/image-20220807170520647.png)
+![image-20220807170520647](DemoSpider/doc/image-20220807170520647.png)
