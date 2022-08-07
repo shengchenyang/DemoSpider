@@ -1,6 +1,6 @@
 # AyugeSpiderTools 工具说明
 
-> 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单用，可以**解放爬虫开发人员的双手**：不用太关注 `item, middlewares 和 pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
+> 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单应用，可以**解放爬虫开发人员的双手**：不用关注 `item, middlewares 和 pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
 
 ## 前言
 本文是以 `csdn` 的热榜文章为例，来说明此 `scrapy` 扩展的使用方法。
@@ -28,11 +28,12 @@ PyMySQL = "^1.0.2"
 Scrapy = "^2.6.2"
 pandas = "^1.4.3"
 WorkWeixinRobot = "^1.0.1"
-crawlab-sdk
-pymongo
-pytest
-retrying
-SQLAlchemy
+crawlab-sdk = “^0.6.0”
+# pymongo 版本要在 3.11.0 及以下
+pymongo = "3.11.0"
+pytest == “6.2.5”
+retrying = “^1.3.3”
+SQLAlchemy = "^1.4.39"
 ```
 
 注：若有版本冲突，请去除版本限制即可。
@@ -169,7 +170,7 @@ custom_settings = {
 
 ###  2.2. yield item
 
-在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表：`Mysql` 和 `MongoDB` 都推荐此写法
+在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表：`Mysql` 和 `MongoDB` 等各种场景下都推荐此写法：
 
 ```python
 Aritle_Info = dict()
@@ -211,4 +212,16 @@ AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
 
 如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段。
 
+下图为 `demo_one` 的 `Mysql` 取本地配置 `LOCAL_MYSQL_CONFIG` 下的运行示例：
+
 ![image-20220803151448062](DemoSpider/doc/image-20220803151448062.png)
+
+下图为 `demo_two` 的 `MongDB` 存储的场景下的示例：
+
+![image-20220807170330444](http://175.178.210.193:9000/drawingbed/image/image-20220807170330444.png)
+
+下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
+
+**要运行此示例时，如果 `LOCAL_MYSQL_CONFIG` 在 `settings` 全局中有设置的话，请把它给去除。因为项目会优先从本地的配置中取配置，如果本地不存在 `LOCAL_MYSQL_CONFIG` 配置时，且 `APP_CONF_MANAGE` 为 `True` 时，当前的 `spiders` 才会从 `consul` 的应用管理中心中取相应配置。**
+
+![image-20220807170520647](http://175.178.210.193:9000/drawingbed/image/image-20220807170520647.png)
