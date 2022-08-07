@@ -70,14 +70,12 @@ KEY_VALUES=***
 GROUP=
 ```
 
-> 各 `spiders` 的文件介绍：
+> 项目中各 `spiders` 的文件功能介绍，如下：
 
-```ini
-demo_one: 为 csdn 热榜文章的存入 Mysql 的场景 (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
-demo_two: 为 csdn 热榜文章的存入 MongoDB 的场景 (配置根据本地 settings 的 LOCAL_MONGODB_CONFIG 中取值)
-demo_three: 为 csdn 热榜文章的存入 Mysql 的场景 (配置根据 consul 的应用管理中心中取值)
-demo_four: 为 csdn 热榜文章的存入 MongoDB 的场景 (配置根据 consul 的应用管理中心中取值)
-```
+- **demo_one**: 为 csdn 热榜文章的存入 Mysql 的场景 (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
+- **demo_two**: 为 csdn 热榜文章的存入 MongoDB 的场景 (配置根据本地 settings 的 LOCAL_MONGODB_CONFIG 中取值)
+- **demo_three**: 为 csdn 热榜文章的存入 Mysql 的场景 (配置根据 consul 的应用管理中心中取值)
+- **demo_four**: 为 csdn 热榜文章的存入 MongoDB 的场景 (配置根据 consul 的应用管理中心中取值)
 
 注：其实存入 `Mysql` 和存入 `MongoDB` 的功能可以写在一块，可同时生效，配置不同优先级即可。分开写是为了方便查看而已。
 
