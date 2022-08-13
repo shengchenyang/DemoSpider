@@ -1,6 +1,6 @@
 # AyugeSpiderTools 工具说明
 
-> 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单应用，可以**解放爬虫开发人员的双手**：不用关注 `item, middlewares 和 pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
+> 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单应用，可以**解放爬虫开发人员的双手**：不用关注 `item`, `middlewares` 和 `pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
 
 ## 前言
 本文是以 `csdn` 的热榜文章为例，来说明此 `scrapy` 扩展的使用方法。
@@ -36,7 +36,7 @@ retrying = “^1.3.3”
 SQLAlchemy = "^1.4.39"
 ```
 
-注：若有版本冲突，请去除版本限制即可。
+注：若依赖库中的库有版本冲突，请去除版本限制即可。
 
 ### 1.1. 运行方法
 
@@ -109,7 +109,7 @@ LOCAL_MYSQL_CONFIG = {
 
 ```ini
 # 测试 MongoDB 数据库配置
-MONGODB_CONFIG = {
+LOCAL_MONGODB_CONFIG = {
   "HOST": config_parse["DEV_MONGODB"]["HOST"],
   "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
   "USER": config_parse["DEV_MONGODB"]["USER"],
@@ -166,6 +166,12 @@ custom_settings = {
 
 ```python
 # 具体请查看 `spiders` 的 `demo_three.py` 文件
+```
+
+`demo_four: MongoDB` 在 `consul` 应用管理的场景下：
+
+```python
+# 具体请查看 `spiders` 的 `demo_four.py` 文件
 ```
 
 ###  2.2. yield item
