@@ -51,7 +51,7 @@ SQLAlchemy = "^1.4.39"
 HOST=***
 PORT=3306
 USER=root
-PWD=***
+PASSWORD=***
 DATABASE=***
 CHARSET=utf8mb4
 
@@ -60,7 +60,7 @@ HOST=***
 PORT=27017
 DATABASE=***
 USER=***
-PWD=***
+PASSWORD=***
 
 [DEV_CONSUL]
 HOST=***
@@ -132,7 +132,7 @@ custom_settings = {
     'MYSQL_TABLE_PREFIX': "demo_",
     'ITEM_PIPELINES': {
         # 激活此项则数据会存储至 Mysql
-        'ayugespidertools.Pipelines.AyuALSMysqlPipeline': 300,
+        'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
     },
     'DOWNLOADER_MIDDLEWARES': {
         # 随机请求头
@@ -150,14 +150,13 @@ mysql_engine_off = True
 # 初始化配置的类型
 settings_type = 'debug'
 custom_settings = {
-'ITEM_PIPELINES': {
-    # 激活此项则数据会存储至 MongoDB
-    'ayugespidertools.Pipelines.AyuALSMongoPipeline': 300,
+    'ITEM_PIPELINES': {
+        # 激活此项则数据会存储至 MongoDB
+        'ayugespidertools.Pipelines.AyuFtyMongoPipeline': 300,
     },
-
-'DOWNLOADER_MIDDLEWARES': {
-    # 随机请求头
-    'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
+    'DOWNLOADER_MIDDLEWARES': {
+        # 随机请求头
+        'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
     },
 }
 ```
