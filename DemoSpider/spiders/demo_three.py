@@ -34,7 +34,7 @@ class DemoThreeSpider(AyuSpider):
         'MYSQL_TABLE_PREFIX': "demo3_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
-            'ayugespidertools.Pipelines.AyuALSMysqlPipeline': 300,
+            'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
         },
 
         'DOWNLOADER_MIDDLEWARES': {

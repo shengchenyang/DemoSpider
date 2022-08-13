@@ -27,7 +27,7 @@ class DemoTwoSpider(AyuSpider):
     custom_settings = {
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 MongoDB
-            'ayugespidertools.Pipelines.AyuALSMongoPipeline': 300,
+            'ayugespidertools.Pipelines.AyuFtyMongoPipeline': 300,
         },
         'DOWNLOADER_MIDDLEWARES': {
             # 随机请求头

@@ -28,18 +28,21 @@ class DemoOneSpider(AyuSpider):
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
+        # 是否开启记录项目相关运行统计信息
+        'RECORD_LOG_TO_MYSQL': False,
+
         # 数据表的前缀名称，用于标记属于哪个项目
         'MYSQL_TABLE_PREFIX': "demo_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
-            'ayugespidertools.Pipelines.AyuALSMysqlPipeline': 300,
+            'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
         },
 
         'DOWNLOADER_MIDDLEWARES': {
-            # 动态隧道代理
+            # 动态隧道代理激活
             # 'scrapy_zst.middlewares.DynamicProxyDownloaderMiddleware': 125,
 
-            # 独享代理
+            # 独享代理激活
             # 'ayugespidertools.Middlewares.ExclusiveProxyDownloaderMiddleware': 125,
             # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
 
@@ -47,13 +50,20 @@ class DemoOneSpider(AyuSpider):
             'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
         },
 
+        # 动态代理配置(激活 DOWNLOADER_MIDDLEWARES 中的动态隧道代理时使用)
+        "DYNAMIC_PROXY_CONFIG": {
+            "proxy_url": "动态隧道代理地址：***.***.com:*****",
+            "username": "隧道代理用户名",
+            "password": "对应用户的密码",
+        },
+
         # 独享代理配置(激活 DOWNLOADER_MIDDLEWARES 中的独享代理时使用)
-        'exclusive_proxy_config': {
+        'EXCLUSIVE_PROXY_CONFIG': {
             "proxy_url": "独享代理地址：'http://***.com/api/***&num=100&format=json'",
             "username": "独享代理用户名",
             "password": "对应用户的密码",
             "proxy_index": "需要返回的独享代理的索引",
-        }
+        },
     }
 
     # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
@@ -96,7 +106,7 @@ class DemoOneSpider(AyuSpider):
             logger.info(f"AritleInfoItem: {AritleInfoItem}")
             # yield AritleInfoItem
 
-            # 旧脚本方便地改写为 ayugespidertools 的示例
+            # 旧脚本也可方便地改写为 ayugespidertools 支持的示例
             '''
             item = {
                 'article_detail_url': article_detail_url,
@@ -121,8 +131,9 @@ class DemoOneSpider(AyuSpider):
             yield item
             '''
 
+            # 数据入库逻辑
             try:
-                # 测试 mysql_engine 的功能
+                # 测试 mysql_engine 的去重功能
                 sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
@@ -134,5 +145,8 @@ class DemoOneSpider(AyuSpider):
                 else:
                     logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
 
-            except Exception:
-                yield AritleInfoItem
+            except Exception as e:
+                if any(["1146" in str(e), "doesn't exist" in str(e)]):
+                    yield AritleInfoItem
+                else:
+                    logger.error("请查看数据库链接或网络是否通畅！")
