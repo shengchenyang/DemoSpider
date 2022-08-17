@@ -79,7 +79,7 @@ class DemoFiveSpider(AyuSpider):
             # 数据入库逻辑
             try:
                 # 测试 mysql_engine 的去重功能
-                sql = '''select `id` from `{}` where `book_name` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.book_info_list_table.value['value'], book_name)
+                sql = '''select `id` from `{}` where `book_name` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + Table_Enum.book_info_list_table.value['value'], book_name)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增

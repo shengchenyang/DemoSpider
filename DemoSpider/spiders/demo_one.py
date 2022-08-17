@@ -31,7 +31,7 @@ class DemoOneSpider(AyuSpider):
         # 是否开启记录项目相关运行统计信息
         'RECORD_LOG_TO_MYSQL': False,
 
-        # 数据表的前缀名称，用于标记属于哪个项目
+        # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加
         'MYSQL_TABLE_PREFIX': "demo_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
@@ -134,7 +134,7 @@ class DemoOneSpider(AyuSpider):
             # 数据入库逻辑
             try:
                 # 测试 mysql_engine 的去重功能
-                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
+                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + Table_Enum.aritle_list_table.value['value'], article_detail_url)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增
