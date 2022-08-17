@@ -5,7 +5,7 @@
 > 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单应用，可以**解放爬虫开发人员的双手**：不用关注 `item`, `middlewares` 和 `pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
 
 ## 前言
-本文是以 `csdn` 的热榜文章和纵横小说网为例，来说明此 `scrapy` 扩展的使用方法。
+本文是以 `csdn` 的热榜文章和纵横小说网为例，来说明此 `scrapy` 扩展库的使用方法。
 
 ## 1. 前提条件
 
@@ -39,13 +39,13 @@ SQLAlchemy = "^1.4.39"
 DBUtils = "^3.0.2"
 ```
 
-注：若依赖库中的库有版本冲突，请去除版本限制即可。
+注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 mongoDB 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
 
 ### 1.1. 运行方法
 
 > 本扩展库用于方便 `python` 开发，本项目的应用场景的运行方法为：
 
-只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl xxxx` 对应的 `spiders` 即可。
+只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl xxxx` 对应的 `spiders` 脚本即可。
 
 > `VIT` 文件夹中的 `.conf` 文件内容为，已脱敏，请自行配置：
 
@@ -62,6 +62,7 @@ CHARSET=utf8mb4
 HOST=***
 PORT=27017
 DATABASE=***
+AUTHSOURCE=***
 USER=***
 PASSWORD=***
 
@@ -73,7 +74,9 @@ KEY_VALUES=***
 GROUP=
 ```
 
-> 项目中各 `spiders` 的文件功能介绍，如下：
+注：具体请根据 `DemoSpider` 项目中的 `settings` 中的配置来设置
+
+> 项目中各 `spiders` 脚本的功能介绍，如下：
 
 ```ini
 1).demo_one: 采集数据存入 `Mysql` 的场景（配置根据本地 `settings` 的 `LOCAL_MYSQL_CONFIG` 中取值）
@@ -94,7 +97,7 @@ GROUP=
 
 > 在项目的 `settings` 中或 `spiders` 的 `custom_setting` 中添加 `LOCAL_MYSQL_CONFIG` 参数
 
-`demo_one: mysql` 场景下：
+`demo_one`: `mysql` 场景下的 `settings` 文件中，如下编写：
 
 ```ini
 # 这是需要链接的数据库配置，请自行配置
@@ -117,7 +120,7 @@ LOCAL_MYSQL_CONFIG = {
 
 > 在 `spiders` 中添加以下所需配置：
 
-`demo_one: mysql` 场景下：
+`demo_one`: `mysql` 场景下的 `spiders` 脚本 `demo_one` 文件中，如下编写：
 
 ```ini
 # 数据库表的枚举信息
@@ -143,7 +146,7 @@ mysql_engine_off = True
 
 ###  2.2. yield item
 
-在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法：
+在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法，写法风格如下：
 
 ```python
 Aritle_Info = dict()
@@ -171,7 +174,7 @@ df = pandas.read_sql(sql, self.mysql_engine)
 `MongoDB` 场景下自带去重，只需指定去重条件 `mongo_update_rule` 即可：
 
 ```python
-# mongo_update_rule 的字段则为去重判断条件，这里是指 article_detail_url 字段为 article_detail_url 参数的数据存在则更新，不存在则跳过
+# mongo_update_rule 的字段为去重判断条件，这里是指 article_detail_url 字段为 article_detail_url 参数的数据存在则更新，不存在则新增
 AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
 ```
 
@@ -183,7 +186,7 @@ AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
 
 ## 3. 图片示例
 
-如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段。
+如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段及字段说明。
 
 下图为 `demo_one` 的 `Mysql` 取本地配置 `LOCAL_MYSQL_CONFIG` 下的运行示例：
 
