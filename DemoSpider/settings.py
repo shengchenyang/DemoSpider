@@ -109,17 +109,18 @@ LOCAL_MYSQL_CONFIG = {
    # 数据库密码
    'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
    # 数据库编码
-   'CHARSET': 'utf8mb4',
+   'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
    # 数据库 engin 采用的驱动
    'DRIVER': 'mysqlconnector',
    # 数据库
-   'DATABASE': 'test'
+   'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
 }
 
 # 测试 MongoDB 数据库配置
 LOCAL_MONGODB_CONFIG = {
   "HOST": config_parse["DEV_MONGODB"]["HOST"],
   "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
+  "AUTHSOURCE": config_parse["DEV_MONGODB"]["AUTHSOURCE"],
   "USER": config_parse["DEV_MONGODB"]["USER"],
   "PASSWORD": config_parse["DEV_MONGODB"]["PASSWORD"],
   "DATABASE": config_parse["DEV_MONGODB"]["DATABASE"],
