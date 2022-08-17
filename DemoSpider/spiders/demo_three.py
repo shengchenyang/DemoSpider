@@ -110,9 +110,7 @@ class DemoThreeSpider(AyuSpider):
 
             try:
                 # 测试 mysql_engine 的功能
-                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(
-                    self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'],
-                    article_detail_url)
+                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + Table_Enum.aritle_list_table.value['value'], article_detail_url)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增
