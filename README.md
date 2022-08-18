@@ -87,7 +87,7 @@ GROUP=
 采集数据存入 `MongoDB` 的场景：
 - 2).demo_two: 采集数据存入 `MongoDB` 的场景（配置根据本地 `settings` 的 `LOCAL_MONGODB_CONFIG` 中取值）
 	6).demo_six: 异步存入 `MongoDB` 的场景
-+ 4).demo_four: 采集数据存入 `MongoDB` 的场景（配置根据 `consul` 的应用管理中心中取值）
++ 4).demo_four: 配置根据 `consul` 的应用管理中心中取值
 ```
 
 
