@@ -147,7 +147,7 @@ class DemoOneSpider(AyuSpider):
                     logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
 
             except Exception as e:
-                if any(["1146" in str(e), "doesn't exist" in str(e)]):
+                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
                     yield AritleInfoItem
                 else:
-                    logger.error("请查看数据库链接或网络是否通畅！")
+                    logger.error(f"请查看数据库链接或网络是否通畅！Error: {e}")
