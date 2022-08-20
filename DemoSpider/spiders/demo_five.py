@@ -50,7 +50,7 @@ class DemoFiveSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        for page in range(0, 200):
+        for page in range(1, 3):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
@@ -91,7 +91,7 @@ class DemoFiveSpider(AyuSpider):
                     logger.debug(f"标题为 ”{book_name}“ 的数据已存在，请自定义更新逻辑")
 
             except Exception as e:
-                if any(["1146" in str(e), "doesn't exist" in str(e)]):
+                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
                     yield BookInfoItem
                 else:
-                    logger.error("请查看数据库链接或网络是否通畅！")
+                    logger.error(f"请查看数据库链接或网络是否通畅！Error: {e}")
