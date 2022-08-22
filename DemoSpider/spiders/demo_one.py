@@ -91,7 +91,7 @@ class DemoOneSpider(AyuSpider):
             article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
             comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
             favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
-            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nick_name")
+            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
             Aritle_Info = dict()
