@@ -1,9 +1,7 @@
 import json
 from loguru import logger
 from scrapy.http import Request, FormRequest
-
 from DemoSpider.common.AboutProj import Operations
-from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
 
 

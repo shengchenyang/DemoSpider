@@ -1,3 +1,4 @@
+import copy
 import json
 import pandas
 from loguru import logger
@@ -91,7 +92,7 @@ class DemoOneSpider(AyuSpider):
             article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
             comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
             favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
-            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nick_name")
+            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
             Aritle_Info = dict()
@@ -101,7 +102,7 @@ class DemoOneSpider(AyuSpider):
             Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
             Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
 
-            AritleInfoItem = DataItem()
+            AritleInfoItem = copy.deepcopy(DataItem)
             AritleInfoItem['alldata'] = Aritle_Info
             AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
             logger.info(f"AritleInfoItem: {AritleInfoItem}")

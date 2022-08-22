@@ -1,3 +1,4 @@
+import copy
 import pandas
 from loguru import logger
 from scrapy.http import Request
@@ -70,7 +71,7 @@ class DemoFiveSpider(AyuSpider):
             Book_Info['book_href'] = {'key_value': book_href, 'notes': '小说链接'}
             Book_Info['book_intro'] = {'key_value': book_intro, 'notes': '小说简介'}
 
-            BookInfoItem = DataItem()
+            BookInfoItem = copy.deepcopy(DataItem)
             BookInfoItem['alldata'] = Book_Info
             BookInfoItem['table'] = Table_Enum.book_info_list_table.value['value']
             # logger.info(f"BookInfoItem: {BookInfoItem}")

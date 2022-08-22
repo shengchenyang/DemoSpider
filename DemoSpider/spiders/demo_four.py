@@ -1,3 +1,4 @@
+import copy
 import json
 from loguru import logger
 from scrapy.http import Request
@@ -69,7 +70,7 @@ class DemoFourSpider(AyuSpider):
             Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
             Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
 
-            AritleInfoItem = MongoDataItem()
+            AritleInfoItem = copy.deepcopy(MongoDataItem)
             AritleInfoItem['alldata'] = Aritle_Info
             AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
             AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}

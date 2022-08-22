@@ -1,4 +1,5 @@
 import json
+import copy
 from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
@@ -67,7 +68,7 @@ class DemoTwoSpider(AyuSpider):
             Aritle_Info['favor_count'] = favor_count
             Aritle_Info['nick_name'] = nick_name
 
-            AritleInfoItem = MongoDataItem()
+            AritleInfoItem = copy.deepcopy(MongoDataItem)
             # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
             AritleInfoItem['alldata'] = Aritle_Info
             # table 为 mongo 的存储 Collection 集合的名称
@@ -85,14 +86,14 @@ class DemoTwoSpider(AyuSpider):
             Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
             Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
 
-            AritleInfoItem = MongoDataItem()
+            AritleInfoItem = copy.deepcopy(MongoDataItem)
             AritleInfoItem['alldata'] = Aritle_Info
             AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
             AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
             logger.info(f"AritleInfoItem: {AritleInfoItem}")
             yield AritleInfoItem
 
-            """3.或者这样写"""
+            # """3.或者这样写(不推荐)"""
             item = {
                 'alldata': {
                     'article_detail_url': article_detail_url,
@@ -102,6 +103,7 @@ class DemoTwoSpider(AyuSpider):
                     'nick_name': nick_name,
                 },
                 'table': 'article_info_list',
+                'save_mode': 'MongoDB',
                 'mongo_update_rule': {"article_detail_url": article_detail_url},
             }
             yield item
