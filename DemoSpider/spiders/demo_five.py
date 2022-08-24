@@ -1,7 +1,7 @@
 import pandas
 from loguru import logger
 from scrapy.http import Request
-from ayugespidertools.Items import DataItem
+from ayugespidertools.Items import MysqlDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
 
@@ -28,7 +28,7 @@ class DemoFiveSpider(AyuSpider):
     settings_type = 'debug'
     custom_settings = {
         # 数据表的前缀名称，用于标记属于哪个项目
-        'MYSQL_TABLE_PREFIX': "demo_",
+        'MYSQL_TABLE_PREFIX': "demo5_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuTwistedMysqlPipeline': 300,
@@ -50,7 +50,7 @@ class DemoFiveSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        for page in range(1, 3):
+        for page in range(1, 20):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
@@ -65,14 +65,16 @@ class DemoFiveSpider(AyuSpider):
             book_intro = book_info.xpath('div[@class="bookintro"]/text()').extract_first("")
             # print(book_name, book_href, book_intro)
 
-            Book_Info = dict()
-            Book_Info['book_name'] = {'key_value': book_name, 'notes': '小说名称'}
-            Book_Info['book_href'] = {'key_value': book_href, 'notes': '小说链接'}
-            Book_Info['book_intro'] = {'key_value': book_intro, 'notes': '小说简介'}
+            book_info = {
+                "book_name": {'key_value': book_name, 'notes': '小说名称'},
+                "book_href": {'key_value': book_href, 'notes': '小说链接'},
+                "book_intro": {'key_value': book_intro, 'notes': '小说简介'},
+            }
 
-            BookInfoItem = DataItem()
-            BookInfoItem['alldata'] = Book_Info
-            BookInfoItem['table'] = Table_Enum.book_info_list_table.value['value']
+            BookInfoItem = MysqlDataItem(
+                alldata=book_info,
+                table=Table_Enum.book_info_list_table.value['value'],
+            )
             # logger.info(f"BookInfoItem: {BookInfoItem}")
             # yield BookInfoItem
 

@@ -59,49 +59,22 @@ class DemoTwoSpider(AyuSpider):
             nick_name = curr_data['nickName']
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
-            """1. 兼容经典写法"""
-            Aritle_Info = dict()
-            Aritle_Info['article_detail_url'] = article_detail_url
-            Aritle_Info['article_title'] = article_title
-            Aritle_Info['comment_count'] = comment_count
-            Aritle_Info['favor_count'] = favor_count
-            Aritle_Info['nick_name'] = nick_name
-
-            AritleInfoItem = MongoDataItem()
-            # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
-            AritleInfoItem['alldata'] = Aritle_Info
-            # table 为 mongo 的存储 Collection 集合的名称
-            AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
-            # mongo_update_rule 为查询数据是否存在的规则
-            AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
-            logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            yield AritleInfoItem
-
-            """2.ayugespidertools 推荐的风格写法(更直观)"""
-            Aritle_Info = dict()
-            Aritle_Info['article_detail_url'] = {'key_value': article_detail_url, 'notes': '文章详情链接'}
-            Aritle_Info['article_title'] = {'key_value': article_title, 'notes': '文章标题'}
-            Aritle_Info['comment_count'] = {'key_value': comment_count, 'notes': '文章评论数量'}
-            Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
-            Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
-
-            AritleInfoItem = MongoDataItem()
-            AritleInfoItem['alldata'] = Aritle_Info
-            AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
-            AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
-            logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            yield AritleInfoItem
-
-            """3.或者这样写"""
-            item = {
-                'alldata': {
-                    'article_detail_url': article_detail_url,
-                    'article_title': article_title,
-                    'comment_count': comment_count,
-                    'favor_count': favor_count,
-                    'nick_name': nick_name,
-                },
-                'table': 'article_info_list',
-                'mongo_update_rule': {"article_detail_url": article_detail_url},
+            """1. ayugespidertools 推荐的风格写法(更直观)"""
+            article_info = {
+                "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
+                "article_title": {'key_value': article_title, 'notes': '文章标题'},
+                "comment_count": {'key_value': comment_count, 'notes': '文章评论数量'},
+                "favor_count": {'key_value': favor_count, 'notes': '文章赞成数量'},
+                "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
             }
-            yield item
+
+            AritleInfoItem = MongoDataItem(
+                # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
+                alldata=article_info,
+                # table 为 mongo 的存储 Collection 集合的名称
+                table=Table_Enum.aritle_list_table.value['value'],
+                # mongo_update_rule 为查询数据是否存在的规则
+                mongo_update_rule={"article_detail_url": article_detail_url},
+            )
+            # logger.info(f"AritleInfoItem: {AritleInfoItem}")
+            yield AritleInfoItem
