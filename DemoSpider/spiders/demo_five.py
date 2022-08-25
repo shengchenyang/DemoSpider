@@ -4,6 +4,7 @@ from scrapy.http import Request
 from ayugespidertools.Items import MysqlDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.common.Utils import ToolsForAyu
 
 
 """
@@ -33,12 +34,10 @@ class DemoFiveSpider(AyuSpider):
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuTwistedMysqlPipeline': 300,
         },
-
         'DOWNLOADER_MIDDLEWARES': {
             # 随机请求头
             'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
         },
-
         'CONCURRENT_REQUESTS': 64,
         'DOWNLOAD_DELAY': 0.1
     }
@@ -58,11 +57,11 @@ class DemoFiveSpider(AyuSpider):
             )
 
     def parse_first(self, response):
-        book_info_list = response.xpath('//div[@class="bookinfo"]')
+        book_info_list = ToolsForAyu.extract_with_xpath(response=response, query='//div[@class="bookinfo"]', return_selector=True)
         for book_info in book_info_list:
-            book_name = book_info.xpath('div[@class="bookname"]/a/text()').extract_first("")
-            book_href = book_info.xpath('div[@class="bookname"]/a/@href').extract_first("")
-            book_intro = book_info.xpath('div[@class="bookintro"]/text()').extract_first("")
+            book_name = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/text()')
+            book_href = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/@href')
+            book_intro = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookintro"]/text()')
             # print(book_name, book_href, book_intro)
 
             book_info = {
@@ -76,7 +75,6 @@ class DemoFiveSpider(AyuSpider):
                 table=Table_Enum.book_info_list_table.value['value'],
             )
             # logger.info(f"BookInfoItem: {BookInfoItem}")
-            # yield BookInfoItem
 
             # 数据入库逻辑
             try:
@@ -90,7 +88,7 @@ class DemoFiveSpider(AyuSpider):
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    logger.debug(f"标题为 ”{book_name}“ 的数据已存在，请自定义更新逻辑")
+                    logger.debug(f"标题为 “{book_name}“ 的数据已存在")
 
             except Exception as e:
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):

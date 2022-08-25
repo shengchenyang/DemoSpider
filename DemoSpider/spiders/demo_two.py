@@ -4,6 +4,7 @@ from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.common.Utils import ToolsForAyu
 
 
 """
@@ -50,13 +51,13 @@ class DemoTwoSpider(AyuSpider):
         )
 
     def parse_first(self, response):
-        data_list = json.loads(response.text)['data']
+        data_list = ToolsForAyu.extract_with_json(json_data=response.json(), query="data")
         for curr_data in data_list:
-            article_detail_url = curr_data['articleDetailUrl']
-            article_title = curr_data['articleTitle']
-            comment_count = curr_data['commentCount']
-            favor_count = curr_data['favorCount']
-            nick_name = curr_data['nickName']
+            article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
+            article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
+            comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
+            favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
+            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
             """1. ayugespidertools 推荐的风格写法(更直观)"""

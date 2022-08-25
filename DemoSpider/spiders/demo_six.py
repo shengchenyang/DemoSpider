@@ -3,6 +3,7 @@ from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.common.Utils import ToolsForAyu
 
 
 """
@@ -50,12 +51,11 @@ class DemoSixSpider(AyuSpider):
             )
 
     def parse_first(self, response):
-        book_info_list = response.xpath('//div[@class="bookinfo"]')
+        book_info_list = ToolsForAyu.extract_with_xpath(response=response, query='//div[@class="bookinfo"]', return_selector=True)
         for book_info in book_info_list:
-            book_name = book_info.xpath('div[@class="bookname"]/a/text()').extract_first("")
-            book_href = book_info.xpath('div[@class="bookname"]/a/@href').extract_first("")
-            book_intro = book_info.xpath('div[@class="bookintro"]/text()').extract_first("")
-            # print(book_name, book_href, book_intro)
+            book_name = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/text()')
+            book_href = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/@href')
+            book_intro = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookintro"]/text()')
 
             book_info = {
                 "book_name": {'key_value': book_name, 'notes': '小说名称'},

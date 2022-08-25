@@ -1,3 +1,4 @@
+import copy
 import json
 import pandas
 from loguru import logger
@@ -63,7 +64,7 @@ class DemoEightSpider(AyuSpider):
         )
 
     def parse_first(self, response):
-        data_list = json.loads(response.text)['data']
+        data_list = ToolsForAyu.extract_with_json(json_data=response.json(), query="data")
         for curr_data in data_list:
             article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
             article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
@@ -107,7 +108,7 @@ class DemoEightSpider(AyuSpider):
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
+                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
 
             except Exception as e:
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
