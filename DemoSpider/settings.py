@@ -118,7 +118,7 @@ LOCAL_MYSQL_CONFIG = {
    'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
    # 数据库编码
    'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
-   # 数据库 engin 采用的驱动
+   # 数据库 engin 采用的驱动，可不填此参数
    'DRIVER': 'mysqlconnector',
    # 数据库
    'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
