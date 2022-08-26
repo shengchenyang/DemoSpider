@@ -1,5 +1,3 @@
-import copy
-import json
 import pandas
 from loguru import logger
 from scrapy.http import Request
@@ -33,7 +31,7 @@ class DemoEightSpider(AyuSpider):
         # 是否开启记录项目相关运行统计信息
         'RECORD_LOG_TO_MYSQL': False,
         # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加
-        'MYSQL_TABLE_PREFIX': "demo_",
+        'MYSQL_TABLE_PREFIX': "demo8_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,

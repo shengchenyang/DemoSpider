@@ -33,7 +33,7 @@ class DemoOneSpider(AyuSpider):
         'RECORD_LOG_TO_MYSQL': False,
 
         # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加
-        'MYSQL_TABLE_PREFIX': "demo_",
+        'MYSQL_TABLE_PREFIX': "demo1_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
@@ -79,7 +79,6 @@ class DemoOneSpider(AyuSpider):
             callback=self.parse_first,
             headers={
                 'referer': 'https://blog.csdn.net/rank/list',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
             },
             dont_filter=True
         )

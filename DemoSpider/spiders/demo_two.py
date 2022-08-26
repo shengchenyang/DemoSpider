@@ -45,7 +45,6 @@ class DemoTwoSpider(AyuSpider):
             callback=self.parse_first,
             headers={
                 'referer': 'https://blog.csdn.net/rank/list',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
             },
             dont_filter=True
         )
@@ -77,5 +76,17 @@ class DemoTwoSpider(AyuSpider):
                 # mongo_update_rule 为查询数据是否存在的规则
                 mongo_update_rule={"article_detail_url": article_detail_url},
             )
-            # logger.info(f"AritleInfoItem: {AritleInfoItem}")
             yield AritleInfoItem
+
+            """2. 旧风格的风格写法"""
+            item = dict()
+            item['article_detail_url'] = article_detail_url
+            item['article_title'] = article_title
+            item['comment_count'] = comment_count
+            item['favor_count'] = favor_count
+            item['nick_name'] = nick_name
+
+            item['item_mode'] = 'MongoDB'
+            item['table'] = Table_Enum.aritle_list_table.value['value']
+            item['mongo_update_rule'] = {"article_detail_url": article_detail_url}
+            yield item

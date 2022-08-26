@@ -1,4 +1,3 @@
-import json
 from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
@@ -53,7 +52,7 @@ class DemoFourSpider(AyuSpider):
         )
 
     def parse_first(self, response):
-        data_list = json.loads(response.text)['data']
+        data_list = ToolsForAyu.extract_with_json(json_data=response.json(), query="data")
         for curr_data in data_list:
             article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
             article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")

@@ -49,7 +49,7 @@ class DemoFiveSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        for page in range(1, 20):
+        for page in range(1, 3):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
