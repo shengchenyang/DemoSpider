@@ -37,6 +37,7 @@ pytest == “6.2.5”
 retrying = “^1.3.3”
 SQLAlchemy = "^1.4.39"
 DBUtils = "^3.0.2"
+itemadapter = "^0.7.0"
 ```
 
 注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 mongoDB 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
@@ -92,10 +93,10 @@ GROUP=
 # 将 Scrapy 的 Request，FormRequest 替换为其它工具实现的场景
 - 使用 scrapy 请求的场景
 + 7).demo_seven: 替换为 requests 请求的场景
+
+8).demo_eight: 同时存入 Mysql 和 MongoDB 的场景
 ```
 
-
-注：其实存入 `Mysql` 和存入 `MongoDB` 的功能可以写在一块，可同时生效，配置不同优先级即可。分开写只是为了方便查看而已。
 
 ## 2. 使用 ayugespidertools
 
@@ -119,9 +120,11 @@ LOCAL_MYSQL_CONFIG = {
    # 数据库密码
    'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
    # 数据库编码
-   'CHARSET': 'utf8mb4',
+   'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
+   # 数据库 engin 采用的驱动，可不填此参数
+   'DRIVER': 'mysqlconnector',
    # 数据库
-   'DATABASE': 'test'
+   'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
 }
 ```
 注：其实这个配置写在 `custom_settings` 中等地方也是可以的，只是这些配置一般是全局配置，放在 `settings` 中比较好管理而已。
@@ -137,7 +140,7 @@ custom_table_enum = Table_Enum
 settings_type = 'debug'
 custom_settings = {
     # 数据表的前缀名称，用于标记属于哪个项目
-    'MYSQL_TABLE_PREFIX': "demo_",
+    'MYSQL_TABLE_PREFIX': "demo1_",
     'ITEM_PIPELINES': {
         # 激活此项则数据会存储至 Mysql
         'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
@@ -154,20 +157,24 @@ mysql_engine_off = True
 
 ###  2.2. yield item
 
-在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据表：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法，写法风格如下：
+在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据库，数据表及表字段注释：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法，写法风格如下：
 
 ```python
-Aritle_Info = dict()
-Aritle_Info['article_detail_url'] = {'key_value': article_detail_url, 'notes': '文章详情链接'}
-Aritle_Info['article_title'] = {'key_value': article_title, 'notes': '文章标题'}
-Aritle_Info['comment_count'] = {'key_value': comment_count, 'notes': '文章评论数量'}
-Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
-Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
+# 非常推荐此写法。article_info 含有所有需要存储至表中的字段
+article_info = {
+    "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
+    "article_title": {'key_value': article_title, 'notes': '文章标题'},
+    "comment_count": {'key_value': comment_count, 'notes': '文章评论数量'},
+    "favor_count": {'key_value': favor_count, 'notes': '文章赞成数量'},
+    "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
+}
 
-AritleInfoItem = DataItem()
-AritleInfoItem['alldata'] = Aritle_Info
-AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
+AritleInfoItem = MysqlDataItem(
+    alldata=article_info,
+    table=Table_Enum.aritle_list_table.value['value'],
+)
 logger.info(f"AritleInfoItem: {AritleInfoItem}")
+yield AritleInfoItem
 ```
 
 ### 2.3. 去重查询
@@ -183,7 +190,14 @@ df = pandas.read_sql(sql, self.mysql_engine)
 
 ```python
 # mongo_update_rule 的字段为去重判断条件，这里是指 article_detail_url 字段为 article_detail_url 参数的数据存在则更新，不存在则新增
-AritleInfoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
+AritleInfoItem = MongoDataItem(
+    # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
+    alldata=article_info,
+    # table 为 mongo 的存储 Collection 集合的名称
+    table=Table_Enum.aritle_list_table.value['value'],
+    # mongo_update_rule 为查询数据是否存在的规则
+    mongo_update_rule={"article_detail_url": article_detail_url},
+)
 ```
 
 ### 2.4. 中间件及 pipelines 介绍
