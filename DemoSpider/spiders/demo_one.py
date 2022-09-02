@@ -1,9 +1,8 @@
-import copy
 import json
 import pandas
 from loguru import logger
 from scrapy.http import Request
-from ayugespidertools.Items import DataItem
+from ayugespidertools.Items import MysqlDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
@@ -34,7 +33,7 @@ class DemoOneSpider(AyuSpider):
         'RECORD_LOG_TO_MYSQL': False,
 
         # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加
-        'MYSQL_TABLE_PREFIX': "demo_",
+        'MYSQL_TABLE_PREFIX': "demo1_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
@@ -80,7 +79,6 @@ class DemoOneSpider(AyuSpider):
             callback=self.parse_first,
             headers={
                 'referer': 'https://blog.csdn.net/rank/list',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
             },
             dont_filter=True
         )
@@ -93,43 +91,58 @@ class DemoOneSpider(AyuSpider):
             comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
             favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
             nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
-            logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
-            Aritle_Info = dict()
-            Aritle_Info['article_detail_url'] = {'key_value': article_detail_url, 'notes': '文章详情链接'}
-            Aritle_Info['article_title'] = {'key_value': article_title, 'notes': '文章标题'}
-            Aritle_Info['comment_count'] = {'key_value': comment_count, 'notes': '文章评论数量'}
-            Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
-            Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
-
-            AritleInfoItem = copy.deepcopy(DataItem)
-            AritleInfoItem['alldata'] = Aritle_Info
-            AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
-            logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            # yield AritleInfoItem
-
-            # 旧脚本也可方便地改写为 ayugespidertools 支持的示例
-            '''
-            item = {
-                'article_detail_url': article_detail_url,
-                'article_title': article_title,
-                'comment_count': comment_count,
-                'favor_count': favor_count,
-                'nick_name': nick_name,
-                # 兼容旧写法，但是要添加 table 字段(即需要存储的表格名称，注意：是去除表格前缀的表名,
-                # 比如表为 demo_article_info_list，前缀为 demo_，则 table 名为 article_info_list)
-                'table': 'article_info_list',
+            # 数据存储方式1，非常推荐此写法。article_info 含有所有需要存储至表中的字段
+            article_info = {
+                "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
+                "article_title": {'key_value': article_title, 'notes': '文章标题'},
+                "comment_count": {'key_value': comment_count, 'notes': '文章评论数量'},
+                "favor_count": {'key_value': favor_count, 'notes': '文章赞成数量'},
+                "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
             }
-            yield item
-            
-            # 或者这样写
+
+            """
+            # 当然这么写也可以，但是不推荐
+            article_info = {
+                "article_detail_url": article_detail_url,
+                "article_title": article_title,
+                "comment_count": comment_count,
+                "favor_count": favor_count,
+                "nick_name": nick_name,
+            }
+            """
+
+            AritleInfoItem = MysqlDataItem(
+                alldata=article_info,
+                table=Table_Enum.aritle_list_table.value['value'],
+            )
+
+            '''
+            # 旧 scrapy 脚本也可方便地改写为 ayugespidertools 支持的示例
             item = dict()
             item['article_detail_url'] = article_detail_url
             item['article_title'] = article_title
             item['comment_count'] = comment_count
             item['favor_count'] = favor_count
             item['nick_name'] = nick_name
+            
             item['table'] = 'article_info_list'
+            item['item_mode'] = 'Mysql'
+            yield item
+            
+            # 或者这样写
+            item = {
+                'article_detail_url': article_detail_url,
+                'article_title': article_title,
+                'comment_count': comment_count,
+                'favor_count': favor_count,
+                'nick_name': nick_name,
+                
+                # 兼容旧写法，但是要添加 table 字段和 item_mode 字段
+                # (即需要存储的表格名称，注意：是去除表格前缀的表名, 比如表为 demo_article_info_list，前缀为 demo_，则 table 名为 article_info_list)
+                'table': 'article_info_list',
+                'item_mode': 'Mysql',
+            }
             yield item
             '''
 
@@ -145,7 +158,7 @@ class DemoOneSpider(AyuSpider):
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
+                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
 
             except Exception as e:
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):

@@ -1,11 +1,11 @@
-import copy
 import json
 import pandas
 from loguru import logger
 from scrapy.http import Request
-from ayugespidertools.Items import DataItem
+from ayugespidertools.Items import MysqlDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.common.Utils import ToolsForAyu
 
 
 """
@@ -64,50 +64,26 @@ class DemoThreeSpider(AyuSpider):
     def parse_first(self, response):
         data_list = json.loads(response.text)['data']
         for curr_data in data_list:
-            article_detail_url = curr_data['articleDetailUrl']
-            article_title = curr_data['articleTitle']
-            comment_count = curr_data['commentCount']
-            favor_count = curr_data['favorCount']
-            nick_name = curr_data['nickName']
-            logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
+            article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
+            article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
+            comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
+            favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
+            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
 
-            Aritle_Info = dict()
-            Aritle_Info['article_detail_url'] = {'key_value': article_detail_url, 'notes': '文章详情链接'}
-            Aritle_Info['article_title'] = {'key_value': article_title, 'notes': '文章标题'}
-            Aritle_Info['comment_count'] = {'key_value': comment_count, 'notes': '文章评论数量'}
-            Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
-            Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
+            article_info = {
+                "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
+                "article_title": {'key_value': article_title, 'notes': '文章标题'},
+                "comment_count": {'key_value': comment_count, 'notes': '文章评论数量'},
+                "favor_count": {'key_value': favor_count, 'notes': '文章赞成数量'},
+                "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
+            }
 
-            AritleInfoItem = copy.deepcopy(DataItem)
-            AritleInfoItem['alldata'] = Aritle_Info
-            AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
+            AritleInfoItem = MysqlDataItem(
+                alldata=article_info,
+                table=Table_Enum.aritle_list_table.value['value'],
+            )
             logger.info(f"AritleInfoItem: {AritleInfoItem}")
             # yield AritleInfoItem
-
-            # 旧脚本方便地改写为 ayugespidertools 的示例
-            '''
-            item = {
-                'article_detail_url': article_detail_url,
-                'article_title': article_title,
-                'comment_count': comment_count,
-                'favor_count': favor_count,
-                'nick_name': nick_name,
-                # 兼容旧写法，但是要添加 table 字段(即需要存储的表格名称，注意：是去除表格前缀的表名,
-                # 比如表为 demo_article_info_list，前缀为 demo_，则 table 名为 article_info_list)
-                'table': 'article_info_list',
-            }
-            yield item
-
-            # 或者这样写
-            item = dict()
-            item['article_detail_url'] = article_detail_url
-            item['article_title'] = article_title
-            item['comment_count'] = comment_count
-            item['favor_count'] = favor_count
-            item['nick_name'] = nick_name
-            item['table'] = 'article_info_list'
-            yield item
-            '''
 
             try:
                 # 测试 mysql_engine 的功能
@@ -120,7 +96,7 @@ class DemoThreeSpider(AyuSpider):
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
+                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
 
             except Exception:
                 yield AritleInfoItem

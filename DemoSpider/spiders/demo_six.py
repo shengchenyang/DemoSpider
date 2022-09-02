@@ -1,9 +1,9 @@
-import copy
 from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.common.Utils import ToolsForAyu
 
 
 """
@@ -43,7 +43,7 @@ class DemoSixSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        for page in range(0, 20):
+        for page in range(1, 3):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
@@ -51,21 +51,26 @@ class DemoSixSpider(AyuSpider):
             )
 
     def parse_first(self, response):
-        book_info_list = response.xpath('//div[@class="bookinfo"]')
+        book_info_list = ToolsForAyu.extract_with_xpath(response=response, query='//div[@class="bookinfo"]', return_selector=True)
         for book_info in book_info_list:
-            book_name = book_info.xpath('div[@class="bookname"]/a/text()').extract_first("")
-            book_href = book_info.xpath('div[@class="bookname"]/a/@href').extract_first("")
-            book_intro = book_info.xpath('div[@class="bookintro"]/text()').extract_first("")
-            # print(book_name, book_href, book_intro)
+            book_name = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/text()')
+            book_href = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/@href')
+            book_intro = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookintro"]/text()')
 
-            Book_Info = dict()
-            Book_Info['book_name'] = {'key_value': book_name, 'notes': '小说名称'}
-            Book_Info['book_href'] = {'key_value': book_href, 'notes': '小说链接'}
-            Book_Info['book_intro'] = {'key_value': book_intro, 'notes': '小说简介'}
+            book_info = {
+                "book_name": {'key_value': book_name, 'notes': '小说名称'},
+                "book_href": {'key_value': book_href, 'notes': '小说链接'},
+                "book_intro": {'key_value': book_intro, 'notes': '小说简介'},
+            }
 
-            BookInfoItem = copy.deepcopy(MongoDataItem)
-            BookInfoItem['alldata'] = Book_Info
-            BookInfoItem['table'] = Table_Enum.book_info_list_table.value['value']
-            BookInfoItem['mongo_update_rule'] = {"book_name": book_name}
+            BookInfoItem = MongoDataItem(
+                # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
+                alldata=book_info,
+                # table 为 mongo 的存储 Collection 集合的名称
+                table=Table_Enum.book_info_list_table.value['value'],
+                # mongo_update_rule 为查询数据是否存在的规则
+                mongo_update_rule={"book_name": book_name},
+            )
+
             # logger.info(f"BookInfoItem: {BookInfoItem}")
             yield BookInfoItem

@@ -93,6 +93,14 @@ from loguru import logger
 from os.path import dirname, abspath, join
 
 
+env = Env()
+env.read_env()
+
+# 项目根目录
+CONFIG_DIR = dirname(abspath(__file__))
+# 日志文件存储目录
+LOG_DIR = join(CONFIG_DIR, "logs")
+
 # 加载秘钥等配置信息
 config_parse = configparser.ConfigParser()
 config_parse.read("VIT/.conf", encoding="utf-8")
@@ -110,7 +118,7 @@ LOCAL_MYSQL_CONFIG = {
    'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
    # 数据库编码
    'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
-   # 数据库 engin 采用的驱动
+   # 数据库 engin 采用的驱动，可不填此参数
    'DRIVER': 'mysqlconnector',
    # 数据库
    'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
@@ -138,13 +146,6 @@ CONSUL_CONF = {
     "GROUP": config_parse["DEV_CONSUL"]["GROUP"],
 }
 
-# 以下是日志配置
-env = Env()
-env.read_env()
-
-# 项目根目录
-CONFIG_DIR = dirname(abspath(__file__))
-LOG_DIR = join(CONFIG_DIR, "logs")
 # 日志管理
 logger.add(env.str("LOG_RUNTIME_FILE", f"{LOG_DIR}/runtime.log"), level="DEBUG", rotation="1 week", retention="7 days")
 logger.add(env.str("LOG_ERROR_FILE", f"{LOG_DIR}/error.log"), level="ERROR", rotation="1 week", retention="7 days")

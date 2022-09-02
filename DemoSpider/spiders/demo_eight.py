@@ -1,12 +1,10 @@
-import copy
-import json
 import pandas
 from loguru import logger
 from scrapy.http import Request
 from DemoSpider.common.DataEnum import Table_Enum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import DataItem, MongoDataItem
+from ayugespidertools.Items import MysqlDataItem, MongoDataItem
 
 
 """
@@ -33,7 +31,7 @@ class DemoEightSpider(AyuSpider):
         # 是否开启记录项目相关运行统计信息
         'RECORD_LOG_TO_MYSQL': False,
         # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加
-        'MYSQL_TABLE_PREFIX': "demo_",
+        'MYSQL_TABLE_PREFIX': "demo8_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
@@ -64,7 +62,7 @@ class DemoEightSpider(AyuSpider):
         )
 
     def parse_first(self, response):
-        data_list = json.loads(response.text)['data']
+        data_list = ToolsForAyu.extract_with_json(json_data=response.json(), query="data")
         for curr_data in data_list:
             article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
             article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
@@ -73,23 +71,27 @@ class DemoEightSpider(AyuSpider):
             nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
-            Aritle_Info = dict()
-            Aritle_Info['article_detail_url'] = {'key_value': article_detail_url, 'notes': '文章详情链接'}
-            Aritle_Info['article_title'] = {'key_value': article_title, 'notes': '文章标题'}
-            Aritle_Info['comment_count'] = {'key_value': comment_count, 'notes': '文章评论数量'}
-            Aritle_Info['favor_count'] = {'key_value': favor_count, 'notes': '文章收藏数量'}
-            Aritle_Info['nick_name'] = {'key_value': nick_name, 'notes': '文章作者昵称'}
+            article_info = {
+                "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
+                "article_title": {'key_value': article_title, 'notes': '文章标题'},
+                "comment_count": {'key_value': comment_count, 'notes': '文章评论数量'},
+                "favor_count": {'key_value': favor_count, 'notes': '文章赞成数量'},
+                "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
+            }
 
-            AritleInfoItem = copy.deepcopy(DataItem)
-            AritleInfoItem['alldata'] = Aritle_Info
-            AritleInfoItem['table'] = Table_Enum.aritle_list_table.value['value']
-            logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            # yield AritleInfoItem
+            AritleInfoItem = MysqlDataItem(
+                alldata=article_info,
+                table=Table_Enum.aritle_list_table.value['value'],
+            )
 
-            AritleInfoMongoItem = copy.deepcopy(MongoDataItem)
-            AritleInfoMongoItem['alldata'] = Aritle_Info
-            AritleInfoMongoItem['table'] = Table_Enum.aritle_list_table.value['value']
-            AritleInfoMongoItem['mongo_update_rule'] = {"article_detail_url": article_detail_url}
+            AritleInfoMongoItem = MongoDataItem(
+                # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
+                alldata=article_info,
+                # table 为 mongo 的存储 Collection 集合的名称
+                table=Table_Enum.aritle_list_table.value['value'],
+                # mongo_update_rule 为查询数据是否存在的规则
+                mongo_update_rule={"article_detail_url": article_detail_url},
+            )
             yield AritleInfoMongoItem
 
             # 数据入库逻辑
@@ -104,7 +106,7 @@ class DemoEightSpider(AyuSpider):
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在，请自定义更新逻辑")
+                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
 
             except Exception as e:
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
