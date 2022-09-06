@@ -1,4 +1,3 @@
-import json
 from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem

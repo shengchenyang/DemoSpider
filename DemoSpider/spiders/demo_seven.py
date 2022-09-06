@@ -43,7 +43,7 @@ class DemoSevenSpider(AyuSpider):
         yield Request(
             url="http://httpbin.org/get?get_args=1",
             callback=self.parse_get_fir,
-            # 这里面的 ck 优先级比 cookies 参数中的高
+            # 这里面的 ck 优先级比 cookies 参数中的高，会覆盖 ck 参数
             headers={
                 'Cookie': 'headers_cookies_key1=headers_cookie_value1;'
             },

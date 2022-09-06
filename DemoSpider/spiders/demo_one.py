@@ -29,41 +29,17 @@ class DemoOneSpider(AyuSpider):
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
-        # 是否开启记录项目相关运行统计信息
+        # 是否开启记录项目相关运行统计信息，其实默认就是关闭，为了展示此参数
         'RECORD_LOG_TO_MYSQL': False,
-
-        # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加
+        # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
         'MYSQL_TABLE_PREFIX': "demo1_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
             'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
         },
-
         'DOWNLOADER_MIDDLEWARES': {
-            # 动态隧道代理激活
-            # 'scrapy_zst.middlewares.DynamicProxyDownloaderMiddleware': 125,
-
-            # 独享代理激活
-            # 'ayugespidertools.Middlewares.ExclusiveProxyDownloaderMiddleware': 125,
-            # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
-
             # 随机请求头
             'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
-        },
-
-        # 动态代理配置(激活 DOWNLOADER_MIDDLEWARES 中的动态隧道代理时使用)
-        "DYNAMIC_PROXY_CONFIG": {
-            "proxy_url": "动态隧道代理地址：***.***.com:*****",
-            "username": "隧道代理用户名",
-            "password": "对应用户的密码",
-        },
-
-        # 独享代理配置(激活 DOWNLOADER_MIDDLEWARES 中的独享代理时使用)
-        'EXCLUSIVE_PROXY_CONFIG': {
-            "proxy_url": "独享代理地址：'http://***.com/api/***&num=100&format=json'",
-            "username": "独享代理用户名",
-            "password": "对应用户的密码",
-            "proxy_index": "需要返回的独享代理的索引",
         },
     }
 

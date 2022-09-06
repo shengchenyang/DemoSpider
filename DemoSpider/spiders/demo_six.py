@@ -1,4 +1,3 @@
-from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
 from DemoSpider.common.DataEnum import Table_Enum
@@ -9,7 +8,7 @@ from ayugespidertools.common.Utils import ToolsForAyu
 """
 ####################################################################################################
 # collection_website: http://book.zongheng.com/ - 纵横中文网
-# collection_content: 热榜文章排名 Demo 采集示例 - 异步存入 MongoDB (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
+# collection_content: 纵横中文网小说书库采集 - 异步存入 MongoDB (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
 # create_time: 2022-08-17
 # explain:
 # demand_code_prefix = ''

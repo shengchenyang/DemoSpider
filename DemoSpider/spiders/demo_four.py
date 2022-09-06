@@ -46,7 +46,6 @@ class DemoFourSpider(AyuSpider):
             callback=self.parse_first,
             headers={
                 'referer': 'https://blog.csdn.net/rank/list',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
             },
             dont_filter=True
         )

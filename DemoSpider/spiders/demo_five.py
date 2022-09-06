@@ -10,7 +10,7 @@ from ayugespidertools.common.Utils import ToolsForAyu
 """
 ####################################################################################################
 # collection_website: http://book.zongheng.com/ - 纵横中文网
-# collection_content: 热榜文章排名 Demo 采集示例 - 异步存入 Mysql (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
+# collection_content: 纵横中文网小说书库采集 - 异步存入 Mysql (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
 # create_time: 2022-07-30
 # explain:
 # demand_code_prefix = ''
@@ -28,6 +28,7 @@ class DemoFiveSpider(AyuSpider):
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
+        'LOG_LEVEL': 'ERROR',
         # 数据表的前缀名称，用于标记属于哪个项目
         'MYSQL_TABLE_PREFIX': "demo5_",
         'ITEM_PIPELINES': {
@@ -39,7 +40,7 @@ class DemoFiveSpider(AyuSpider):
             'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
         },
         'CONCURRENT_REQUESTS': 64,
-        'DOWNLOAD_DELAY': 0.1
+        'DOWNLOAD_DELAY': 0.01
     }
 
     # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
@@ -49,7 +50,7 @@ class DemoFiveSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        for page in range(1, 3):
+        for page in range(1, 200):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
