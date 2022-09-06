@@ -1,4 +1,4 @@
+# Define your startup file here
 import os
 
-
-os.system("scrapy crawl demo_one")
+os.system("scrapy crawl xxx")

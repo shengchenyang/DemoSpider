@@ -1,6 +1,6 @@
 import json
-from DemoSpider.settings import logger
 
+from DemoSpider.settings import logger
 
 __all__ = [
     "Operations",

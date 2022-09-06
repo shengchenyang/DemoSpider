@@ -1,7 +1,10 @@
+import asyncio
+import json
+
+import scrapy
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MongoDataItem
-from loguru import logger
+from ayugespidertools.Items import MysqlDataItem
 from scrapy.http import Request
 
 from DemoSpider.common.DataEnum import TableEnum
@@ -9,29 +12,30 @@ from DemoSpider.common.DataEnum import TableEnum
 """
 ########################################################################################################################
 # collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据 consul 的应用管理中心中取值)
-# create_time: 2022-08-02
+# collection_content: 热榜文章排名 aiomysql Demo 采集示例 - 存入 Mysql (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
+# create_time: 2022-11-09
 # explain:
-# demand_code_prefix = ""
+# demand_code_prefix = 
 ########################################################################################################################
 """
 
 
-class DemoFourSpider(AyuSpider):
-    name = "demo_four"
+class DemoAiomysqlSpider(AyuSpider):
+    name = "demo_aiomysql"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
 
+    # 数据库表的枚举信息
+    custom_table_enum = TableEnum
     # 初始化配置的类型
     settings_type = "debug"
     custom_settings = {
-        # 是否开启 consul 的应用管理中心取值的功能(也需要设置 CONSUL_CONF 的值，本示例在 settings 中配置)
-        "APP_CONF_MANAGE": True,
+        "LOG_LEVEL": "ERROR",
         # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
-        "MONGODB_COLLECTION_PREFIX": "demo4_",
+        "MYSQL_TABLE_PREFIX": "demo_aiomysql_",
         "ITEM_PIPELINES": {
-            # 激活此项则数据会存储至 MongoDB
-            "ayugespidertools.Pipelines.AyuFtyMongoPipeline": 300,
+            # 激活此项则数据会存储至 Mysql，使用 aiomysql 实现
+            "ayugespidertools.Pipelines.AsyncMysqlPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
@@ -39,23 +43,25 @@ class DemoFourSpider(AyuSpider):
         },
     }
 
+    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+    mysql_engine_enabled = True
+
     def start_requests(self):
         """
         get 请求首页，获取项目列表数据
         """
-        yield Request(
-            url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
-            callback=self.parse_first,
-            headers={
-                "referer": "https://blog.csdn.net/rank/list",
-            },
-            dont_filter=True,
-        )
+        for page in range(20):
+            yield Request(
+                url=f"https://blog.csdn.net/phoenix/web/blog/hot-rank?page={page}&pageSize=25&type=",
+                callback=self.parse_first,
+                headers={
+                    "referer": "https://blog.csdn.net/rank/list",
+                },
+                dont_filter=True,
+            )
 
     def parse_first(self, response):
-        data_list = ToolsForAyu.extract_with_json(
-            json_data=response.json(), query="data"
-        )
+        data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
             article_detail_url = ToolsForAyu.extract_with_json(
                 json_data=curr_data, query="articleDetailUrl"
@@ -73,7 +79,7 @@ class DemoFourSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            """ayugespidertools 推荐的风格写法(更直观)"""
+            # 数据存储方式1，非常推荐此写法。article_info 含有所有需要存储至表中的字段
             article_info = {
                 "article_detail_url": {
                     "key_value": article_detail_url,
@@ -85,13 +91,9 @@ class DemoFourSpider(AyuSpider):
                 "nick_name": {"key_value": nick_name, "notes": "文章作者昵称"},
             }
 
-            ArticleInfoItem = MongoDataItem(
-                # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
+            ArticleInfoItem = MysqlDataItem(
                 alldata=article_info,
-                # table 为 mongo 的存储 Collection 集合的名称
                 table=TableEnum.article_list_table.value["value"],
-                # mongo_update_rule 为查询数据是否存在的规则
-                mongo_update_rule={"article_detail_url": article_detail_url},
             )
-            self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
+
             yield ArticleInfoItem
