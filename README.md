@@ -38,6 +38,7 @@ retrying = “^1.3.3”
 SQLAlchemy = "^1.4.39"
 DBUtils = "^3.0.2"
 itemadapter = "^0.7.0"
+aiohttp = "^3.8.1"
 ```
 
 注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 mongoDB 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
@@ -54,7 +55,7 @@ itemadapter = "^0.7.0"
 [DEV_MYSQL]
 HOST=***
 PORT=3306
-USER=root
+USER=***
 PASSWORD=***
 DATABASE=***
 CHARSET=utf8mb4
@@ -69,93 +70,135 @@ PASSWORD=***
 
 [DEV_CONSUL]
 HOST=***
-PORT=***
-TOKEN=***
+PORT=8500
+TOKEN=***-***-***-***-***
 KEY_VALUES=***
 GROUP=
+
+[DEV_KDL_DYNAMIC_PROXY]
+PROXY_URL=n188.kdltps.com:15818
+USERNAME=***
+PASSWORD=***
+
+[DEV_KDL_EXCLUSIVE_PROXY]
+PROXY_URL=http://kps.kdlapi.com/api/getkps?orderid=***&num=100&format=json
+USERNAME=***
+PASSWORD=***
+PROXY_INDEX=***
 ```
 
 注：具体请根据 `DemoSpider` 项目中的 `settings` 中的配置来设置
 
-> 项目中各 `spiders` 脚本的功能介绍，如下：
+> 项目中各 `spiders` 脚本名称及对应功能介绍，如下：
 
 ```diff
 # 采集数据存入 `Mysql` 的场景：
 - 1).demo_one: 配置根据本地 `settings` 的 `LOCAL_MYSQL_CONFIG` 中取值
-	5).demo_five: 异步存入 `Mysql` 的场景
 + 3).demo_three: 配置根据 `consul` 的应用管理中心中取值
++ 5).demo_five: 异步存入 `Mysql` 的场景
 
 # 采集数据存入 `MongoDB` 的场景：
 - 2).demo_two: 采集数据存入 `MongoDB` 的场景（配置根据本地 `settings` 的 `LOCAL_MONGODB_CONFIG` 中取值）
-	6).demo_six: 异步存入 `MongoDB` 的场景
 + 4).demo_four: 采集数据存入 `MongoDB` 的场景（配置根据 `consul` 的应用管理中心中取值）
++ 6).demo_six: 异步存入 `MongoDB` 的场景
 
 # 将 Scrapy 的 Request，FormRequest 替换为其它工具实现的场景
-- 使用 scrapy 请求的场景
-+ 7).demo_seven: 替换为 requests 请求的场景
+- 以上为使用 scrapy Request 的场景
++ 7).demo_seven: scrapy Request 替换为 requests 请求的场景(一般情况下不推荐使用，同步库会拖慢 scrapy 速度，可用于测试场景)
 
-8).demo_eight: 同时存入 Mysql 和 MongoDB 的场景
++ 8).demo_eight: 同时存入 Mysql 和 MongoDB 的场景
+
+- 9).demo_aiohttp_example: scrapy Request 替换为 aiohttp 请求的场景，提供了各种请求场景示例（GET,POST）
++ 10).demo_aiohttp_test: scrapy aiohttp 在具体项目中的使用方法示例
+
++ 11.demo_proxy_one: 快代理动态隧道代理示例
++ 12).demo_proxy_two: 测试快代理独享代理
 ```
 
 
 ## 2. 使用 ayugespidertools
 
-以下只对 `demo_one` 的 `spiders` 的脚本进行说明，因为只要你懂得 `Scrapy` 框架，那么项目中的配置对你来说极易上手。而且项目中的代码注释也较详细，并不难理解。
+以下只对项目的总体配置和一些注意点进行简要说明，因为只要你懂得 `Scrapy` 框架，那么项目中的配置对你来说也极易上手。而且项目中的代码注释也较详细，并不难理解。
 
-###  2.1. 导入配置
+###  2.1. 项目的配置说明
 
-> 在项目的 `settings` 中或 `spiders` 的 `custom_setting` 中添加 `LOCAL_MYSQL_CONFIG` 参数
+> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。比如，如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库配置统一放在 `settings` 中，或根据 consul 来远程获取配置信息会比较方便管理；若同个项目中不同脚本需要连接不同数据库等信息，则相关配置需要放在对应脚本的 `custom_setting` 中。
 
-`demo_one`: `mysql` 场景下的 `settings` 文件中，如下编写：
+以下 `settings` 配置信息，根据需求来设置对应参数。信息已脱敏，请根据 [1.1. 运行方法](# 1.1. 运行方法) 中的 `.conf` 内容来关联信息，或直接修改为具体值也行：
 
 ```ini
-# 这是需要链接的数据库配置，请自行配置
+# 这是需要链接的数据库配置，请自行设置
 LOCAL_MYSQL_CONFIG = {
-   # 数据库IP
-   'HOST': config_parse["DEV_MYSQL"]["HOST"],
-   # 数据库端口
-   'PORT': int(config_parse["DEV_MYSQL"]["PORT"]),
-   # 数据库用户名
-   'USER': config_parse["DEV_MYSQL"]["USER"],
-   # 数据库密码
-   'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
-   # 数据库编码
-   'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
-   # 数据库 engin 采用的驱动，可不填此参数
-   'DRIVER': 'mysqlconnector',
-   # 数据库
-   'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
-}
-```
-注：其实这个配置写在 `custom_settings` 中等地方也是可以的，只是这些配置一般是全局配置，放在 `settings` 中比较好管理而已。
-
-> 在 `spiders` 中添加以下所需配置：
-
-`demo_one`: `mysql` 场景下的 `spiders` 脚本 `demo_one` 文件中，如下编写：
-
-```ini
-# 数据库表的枚举信息
-custom_table_enum = Table_Enum
-# 初始化配置的类型
-settings_type = 'debug'
-custom_settings = {
-    # 数据表的前缀名称，用于标记属于哪个项目
-    'MYSQL_TABLE_PREFIX': "demo1_",
-    'ITEM_PIPELINES': {
-        # 激活此项则数据会存储至 Mysql
-        'ayugespidertools.Pipelines.AyuFtyMysqlPipeline': 300,
-    },
-    'DOWNLOADER_MIDDLEWARES': {
-        # 随机请求头
-        'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
-    },
+    # 数据库IP
+    'HOST': config_parse["DEV_MYSQL"]["HOST"],
+    # 数据库端口
+    'PORT': int(config_parse["DEV_MYSQL"]["PORT"]),
+    # 数据库用户名
+    'USER': config_parse["DEV_MYSQL"]["USER"],
+    # 数据库密码
+    'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
+    # 数据库编码
+    'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
+    # 数据库 engin 采用的驱动，可不填此参数
+    'DRIVER': 'mysqlconnector',
+    # 数据库
+    'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
 }
 
-# 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-mysql_engine_off = True
-```
+# 测试 MongoDB 数据库配置
+LOCAL_MONGODB_CONFIG = {
+    "HOST": config_parse["DEV_MONGODB"]["HOST"],
+    "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
+    "AUTHSOURCE": config_parse["DEV_MONGODB"]["AUTHSOURCE"],
+    "USER": config_parse["DEV_MONGODB"]["USER"],
+    "PASSWORD": config_parse["DEV_MONGODB"]["PASSWORD"],
+    "DATABASE": config_parse["DEV_MONGODB"]["DATABASE"],
+}
 
-###  2.2. yield item
+# scrapy Request 替换为 aiohttp 的配置
+LOCAL_AIOHTTP_CONFIG = {
+    "TIMEOUT": 5,
+    "PROXY": "127.0.0.1:1080",
+    "SLEEP": 0,
+    "RETRY_TIMES": 3,
+}
+
+# consul 应用管理的连接配置
+CONSUL_CONFIG = {
+    "HOST": config_parse["DEV_CONSUL"]["HOST"],
+    "PORT": config_parse["DEV_CONSUL"]["PORT"],
+    # 此 token 值只需要只读权限即可，只用于取配置值
+    "TOKEN": config_parse["DEV_CONSUL"]["TOKEN"],
+    # 这个是应用管理中心最终的 key 值，如果不设置此值会默认设置值为中程序中的 ENV 值
+    "KEY_VALUES": config_parse["DEV_CONSUL"]["KEY_VALUES"],
+    # 这个是此配置在应用管理中心所属的 group，默认为空(按需配置，如果不需要直接不配置此值或配置为空皆可)
+    "GROUP": config_parse["DEV_CONSUL"]["GROUP"],
+}
+
+# 动态隧道代理（快代理版本）
+DYNAMIC_PROXY_CONFIG = {
+    "PROXY_URL": config_parse["DEV_KDL_DYNAMIC_PROXY"]["PROXY_URL"],
+    "USERNAME": config_parse["DEV_KDL_DYNAMIC_PROXY"]["USERNAME"],
+    "PASSWORD": config_parse["DEV_KDL_DYNAMIC_PROXY"]["PASSWORD"],
+}
+
+# 独享代理（快代理版本）
+EXCLUSIVE_PROXY_CONFIG = {
+    "PROXY_URL": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["PROXY_URL"],
+    "USERNAME": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["USERNAME"],
+    "PASSWORD": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["PASSWORD"],
+    "PROXY_INDEX": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["PROXY_INDEX"],
+}
+```
+> 在 `custom_setting` 中添加个性化的配置：
+
+可以在 spider 中的各个脚本中添加其个性化的配置，比如随机请求头，优质账号对应的代理中间件等，具体请在本项目中的各个脚本中查看，不再赘述。
+
+### 2.2. yield item
+
+表及表字段注释：Mysql 和 MongoDB 等各种存储的场景下都推荐此写法，写法风格如下：
+
+可以段中，程序会自动创建 Table_Enum 中的所依赖的数据库，数据表及表字段注释：Mysql 和 MongoDB 等各种存储的场景下都推荐此写法，写法风格如下：
 
 在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据库，数据表及表字段注释：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法，写法风格如下：
 
