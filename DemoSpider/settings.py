@@ -108,34 +108,42 @@ config_parse.read("VIT/.conf", encoding="utf-8")
 
 # 这是需要链接的数据库配置，请自行设置
 LOCAL_MYSQL_CONFIG = {
-   # 数据库IP
-   'HOST': config_parse["DEV_MYSQL"]["HOST"],
-   # 数据库端口
-   'PORT': int(config_parse["DEV_MYSQL"]["PORT"]),
-   # 数据库用户名
-   'USER': config_parse["DEV_MYSQL"]["USER"],
-   # 数据库密码
-   'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
-   # 数据库编码
-   'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
-   # 数据库 engin 采用的驱动，可不填此参数
-   'DRIVER': 'mysqlconnector',
-   # 数据库
-   'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
+    # 数据库IP
+    'HOST': config_parse["DEV_MYSQL"]["HOST"],
+    # 数据库端口
+    'PORT': int(config_parse["DEV_MYSQL"]["PORT"]),
+    # 数据库用户名
+    'USER': config_parse["DEV_MYSQL"]["USER"],
+    # 数据库密码
+    'PASSWORD': config_parse["DEV_MYSQL"]["PASSWORD"],
+    # 数据库编码
+    'CHARSET': config_parse["DEV_MYSQL"]["CHARSET"],
+    # 数据库 engin 采用的驱动，可不填此参数
+    'DRIVER': 'mysqlconnector',
+    # 数据库
+    'DATABASE': config_parse["DEV_MYSQL"]["DATABASE"]
 }
 
 # 测试 MongoDB 数据库配置
 LOCAL_MONGODB_CONFIG = {
-  "HOST": config_parse["DEV_MONGODB"]["HOST"],
-  "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
-  "AUTHSOURCE": config_parse["DEV_MONGODB"]["AUTHSOURCE"],
-  "USER": config_parse["DEV_MONGODB"]["USER"],
-  "PASSWORD": config_parse["DEV_MONGODB"]["PASSWORD"],
-  "DATABASE": config_parse["DEV_MONGODB"]["DATABASE"],
+    "HOST": config_parse["DEV_MONGODB"]["HOST"],
+    "PORT": int(config_parse["DEV_MONGODB"]["PORT"]),
+    "AUTHSOURCE": config_parse["DEV_MONGODB"]["AUTHSOURCE"],
+    "USER": config_parse["DEV_MONGODB"]["USER"],
+    "PASSWORD": config_parse["DEV_MONGODB"]["PASSWORD"],
+    "DATABASE": config_parse["DEV_MONGODB"]["DATABASE"],
+}
+
+# scrapy Request 替换为 aiohttp 的配置
+LOCAL_AIOHTTP_CONFIG = {
+    "TIMEOUT": 5,
+    "PROXY": "127.0.0.1:1080",
+    "SLEEP": 0,
+    "RETRY_TIMES": 3,
 }
 
 # consul 应用管理的连接配置
-CONSUL_CONF = {
+CONSUL_CONFIG = {
     "HOST": config_parse["DEV_CONSUL"]["HOST"],
     "PORT": config_parse["DEV_CONSUL"]["PORT"],
     # 此 token 值只需要只读权限即可，只用于取配置值
@@ -144,6 +152,21 @@ CONSUL_CONF = {
     "KEY_VALUES": config_parse["DEV_CONSUL"]["KEY_VALUES"],
     # 这个是此配置在应用管理中心所属的 group，默认为空(按需配置，如果不需要直接不配置此值或配置为空皆可)
     "GROUP": config_parse["DEV_CONSUL"]["GROUP"],
+}
+
+# 动态隧道代理（快代理版本）
+DYNAMIC_PROXY_CONFIG = {
+    "PROXY_URL": config_parse["DEV_KDL_DYNAMIC_PROXY"]["PROXY_URL"],
+    "USERNAME": config_parse["DEV_KDL_DYNAMIC_PROXY"]["USERNAME"],
+    "PASSWORD": config_parse["DEV_KDL_DYNAMIC_PROXY"]["PASSWORD"],
+}
+
+# 独享代理（快代理版本）
+EXCLUSIVE_PROXY_CONFIG = {
+    "PROXY_URL": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["PROXY_URL"],
+    "USERNAME": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["USERNAME"],
+    "PASSWORD": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["PASSWORD"],
+    "PROXY_INDEX": config_parse["DEV_KDL_EXCLUSIVE_PROXY"]["PROXY_INDEX"],
 }
 
 # 日志管理
