@@ -49,7 +49,7 @@ aiohttp = "^3.8.1"
 
 只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl xxxx` 对应的 `spiders` 脚本即可。
 
-> `VIT` 文件夹中的 `.conf` 文件内容为，已脱敏，请自行配置：
+> `VIT` 文件夹中的 `.conf` 文件内容为，已脱敏，请按需自行配置：
 
 ```ini
 [DEV_MYSQL]
@@ -87,9 +87,7 @@ PASSWORD=***
 PROXY_INDEX=***
 ```
 
-注：具体请根据 `DemoSpider` 项目中的 `settings` 中的配置来设置
-
-> 项目中各 `spiders` 脚本名称及对应功能介绍，如下：
+> 项目中各 `spiders` 脚本名称及其对应功能介绍，如下：
 
 ```diff
 # 采集数据存入 `Mysql` 的场景：
@@ -122,7 +120,7 @@ PROXY_INDEX=***
 
 ###  2.1. 项目的配置说明
 
-> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。比如，如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库配置统一放在 `settings` 中，或根据 consul 来远程获取配置信息会比较方便管理；若同个项目中不同脚本需要连接不同数据库等信息，则相关配置需要放在对应脚本的 `custom_setting` 中。
+> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。比如，如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库相关配置统一放在 `settings` 中，或根据 consul 来远程获取配置信息会比较方便管理；若同个项目中不同脚本需要连接不同数据库等信息，则相关配置需要放在对应脚本的 `custom_setting` 中。
 
 以下 `settings` 配置信息，根据需求来设置对应参数。信息已脱敏，请根据 [1.1. 运行方法](# 1.1. 运行方法) 中的 `.conf` 内容来关联信息，或直接修改为具体值也行：
 
@@ -194,13 +192,12 @@ EXCLUSIVE_PROXY_CONFIG = {
 
 可以在 `spider` 中的各个脚本中添加其个性化的配置，比如随机请求头，优质账号对应的代理中间件等，具体请在本项目中的各个脚本中查看，不再赘述。
 
-### 2.2. yield item
+### 2.2. Item Loaders
 
-表及表字段注释：Mysql 和 MongoDB 等各种存储的场景下都推荐此写法，写法风格如下：
+`ayugespidertools` 扩展库使用了 `scrapy` 官方文档[推荐的 dataclass 方式](https://docs.scrapy.org/en/latest/topics/loaders.html?highlight=dataclass#working-with-dataclass-items)来替代 `scrapy Item` 对象（当然[也可以使用官方推荐的 attr.s 来替换](https://docs.scrapy.org/en/latest/topics/items.html?highlight=attr.s#attr-s-objects)），可以很方便地、优雅的序列化和约束需要存储的字段类型，设置默认值等等功能。
 
-可以段中，程序会自动创建 Table_Enum 中的所依赖的数据库，数据表及表字段注释：Mysql 和 MongoDB 等各种存储的场景下都推荐此写法，写法风格如下：
-
-在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据库，数据表及表字段注释：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法，写法风格如下：
+> 在 `yield item` 时，要把需要存储的数据放到 `alldata` 字段中，程序会自动创建 `Table_Enum` 中的所依赖的数据库，数据表，表字段及字段注释：`Mysql` 和 `MongoDB` 等各种存储的场景下都推荐此写法，写法风格如下：
+>
 
 ```python
 # 非常推荐此写法。article_info 含有所有需要存储至表中的字段
@@ -220,7 +217,31 @@ logger.info(f"AritleInfoItem: {AritleInfoItem}")
 yield AritleInfoItem
 ```
 
+> 其中，项目中 `common` 文件夹中的 `Table_Enum` 的数据库枚举信息（用于存放当前项目所依赖的数据表枚举信息）示例如下：
+
+```python
+from enum import Enum
+
+
+class Table_Enum(Enum):
+    '''数据库表 枚举'''
+
+    # 文章列表信息
+    aritle_list_table = {"value": "article_info_list", "notes": "项目列表信息", "demand_code": "DemoSpider_aritle_list_table_demand_code"}
+
+    # 小说列表信息
+    book_info_list_table = {"value": "book_info_list", "notes": "小说列表信息", "demand_code": "DemoSpider_book_info_list_table_demand_code"}
+```
+
 ### 2.3. 去重查询
+
+#### 2.3.1. Mysql 场景
+
+> 当需要在` mysql` 场景下的存储数据前进行更新策略时，需要在对应的 ` spider` 脚本中打开 `mysql` 引擎开关，即：
+
+```python
+mysql_engine_off = True
+```
 
 `mysql_engine` 用于 `Mysql` 数据入库前的查询使用：
 
@@ -228,6 +249,8 @@ yield AritleInfoItem
 sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
 df = pandas.read_sql(sql, self.mysql_engine)
 ```
+
+#### 2.3.2. MongoDB 场景
 
 `MongoDB` 场景下自带去重，只需指定去重条件 `mongo_update_rule` 即可：
 
@@ -253,20 +276,31 @@ AritleInfoItem = MongoDataItem(
 
 如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段及字段说明。
 
-下图为 `demo_one` 的 `Mysql` 取本地配置 `LOCAL_MYSQL_CONFIG` 下的运行示例：
+注：以下运行截图非覆盖全场景，请自行查看本项目中 `spdier` 的各脚本内容。
+
+> 下图为 `demo_one` 的 `Mysql` 取本地配置 `LOCAL_MYSQL_CONFIG` 下的运行示例：
+>
 
 ![image-20220803151448062](DemoSpider/doc/image-20220803151448062.png)
 
-下图为 `demo_two` 的 `MongDB` 存储的场景下的示例：
+> 下图为 `demo_two` 的 `MongDB` 存储的场景下的示例：
+>
 
 ![image-20220807170330444](DemoSpider/doc/image-20220807170330444.png)
 
-下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
+> 下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
+>
 
 **要运行此示例时，如果 `LOCAL_MYSQL_CONFIG` 在 `settings` 全局中有设置的话，请把它给去除。因为项目会优先从本地的配置中取配置，如果本地不存在 `LOCAL_MYSQL_CONFIG` 配置时，且 `APP_CONF_MANAGE` 为 `True` 时，当前的 `spiders` 才会从 `consul` 的应用管理中心中取相应配置。**
 
 ![image-20220807170520647](DemoSpider/doc/image-20220807170520647.png)
 
-下图为 `demo_four` 的 `MongoDB` 取 `consul` 应用管理中心的配置下的运行示例：
+> 下图为 `demo_four` 的 `MongoDB` 取 `consul` 应用管理中心的配置下的运行示例：
+>
 
 ![image-20220807223716593](DemoSpider/doc/image-20220807223716593.png)
+
+> 下图为 `demo_proxy_one` 的快代理动态隧道代理运行示例：
+
+![image-20220905112615892](DemoSpider/doc/image-20220905112615892.png)
+
