@@ -136,7 +136,9 @@ ayugespidertools genspider <spiderName> <domain>
 
 ###  2.1. 项目的配置说明
 
-> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。比如，如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库相关配置统一放在 `settings` 中，或根据 consul 来远程获取配置信息会比较方便管理；若同个项目中不同脚本需要连接不同数据库等信息，则相关配置需要放在对应脚本的 `custom_setting` 中。
+> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。
+>
+> 比如，1). 如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库相关配置统一放在 `settings` 中，或根据 `consul` 来远程获取配置信息会比较方便管理；2). 若同个项目中不同脚本需要连接不同数据库等信息，则相关配置放在对应脚本的 `custom_setting` 中会更好。
 
 以下 `settings` 配置信息，根据需求来设置对应参数。信息已脱敏，请根据 [1.1. 运行方法](# 1.1. 运行方法) 中的 `.conf` 内容来关联信息，或直接修改为具体值也行：
 
@@ -320,3 +322,6 @@ AritleInfoItem = MongoDataItem(
 
 ![image-20220905112615892](DemoSpider/doc/image-20220905112615892.png)
 
+> 下图为 `demo_aiohttp_example` 的替换 `scrapy` 的 `Request` 为 `aiohttp` 的示例：
+
+![image-20220913113650036](DemoSpider/doc/image-20220913113650036.png)
