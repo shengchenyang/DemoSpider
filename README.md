@@ -41,7 +41,7 @@ itemadapter = "^0.7.0"
 aiohttp = "^3.8.1"
 ```
 
-注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 mongoDB 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
+注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 `mongoDB` 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
 
 ### 1.1. 运行方法
 
@@ -100,7 +100,7 @@ PROXY_INDEX=***
 + 4).demo_four: 采集数据存入 `MongoDB` 的场景（配置根据 `consul` 的应用管理中心中取值）
 + 6).demo_six: 异步存入 `MongoDB` 的场景
 
-# 将 Scrapy 的 Request，FormRequest 替换为其它工具实现的场景
+# 将 `Scrapy` 的 `Request`，`FormRequest` 替换为其它工具实现的场景
 - 以上为使用 scrapy Request 的场景
 + 7).demo_seven: scrapy Request 替换为 requests 请求的场景(一般情况下不推荐使用，同步库会拖慢 scrapy 速度，可用于测试场景)
 
@@ -116,7 +116,23 @@ PROXY_INDEX=***
 
 ## 2. 使用 ayugespidertools
 
-以下只对项目的总体配置和一些注意点进行简要说明，因为只要你懂得 `Scrapy` 框架，那么项目中的配置对你来说也极易上手。而且项目中的代码注释也较详细，并不难理解。
+> 以下只对项目的总体配置和一些注意点进行简要说明，因为只要你懂得 `Scrapy` 框架，那么项目中的配置对你来说也极易上手。而且项目中的代码注释也较详细，并不难理解。
+
+使用以下命令来创建项目模板：
+
+```shell
+ayugespidertools startproject <projectName>
+```
+
+使用以下命令来创建 `spider` 脚本模板：
+
+```shell
+# 先进入对应的项目中
+cd <projectName>
+ayugespidertools genspider <spiderName> <domain>
+```
+
+注：其实是和 `scrapy` 命令一致的，也是兼容的，比如直接使用 `scrapy` 命令，然后手动设置相关配置也是可以的。
 
 ###  2.1. 项目的配置说明
 
@@ -200,7 +216,7 @@ EXCLUSIVE_PROXY_CONFIG = {
 >
 
 ```python
-# 非常推荐此写法。article_info 含有所有需要存储至表中的字段
+# 非常推荐此写法，article_info 含有所有需要存储至表中的字段
 article_info = {
     "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
     "article_title": {'key_value': article_title, 'notes': '文章标题'},
@@ -291,7 +307,7 @@ AritleInfoItem = MongoDataItem(
 > 下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
 >
 
-**要运行此示例时，如果 `LOCAL_MYSQL_CONFIG` 在 `settings` 全局中有设置的话，请把它给去除。因为项目会优先从本地的配置中取配置，如果本地不存在 `LOCAL_MYSQL_CONFIG` 配置时，且 `APP_CONF_MANAGE` 为 `True` 时，当前的 `spiders` 才会从 `consul` 的应用管理中心中取相应配置。**
+**要运行此示例时，如果 `LOCAL_MYSQL_CONFIG` 在任意 `settings` 中有设置的话，请把它删除。因为项目会优先从本地的配置中取值，如果本地不存在 `LOCAL_MYSQL_CONFIG` 配置时，且 `APP_CONF_MANAGE` 为 `True` 时，当前的 `spiders` 才会从 `consul` 的应用管理中心中取相应配置。**
 
 ![image-20220807170520647](DemoSpider/doc/image-20220807170520647.png)
 
