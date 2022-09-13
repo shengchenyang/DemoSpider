@@ -100,10 +100,12 @@ env.read_env()
 CONFIG_DIR = dirname(abspath(__file__))
 # 日志文件存储目录
 LOG_DIR = join(CONFIG_DIR, "logs")
+# 密钥配置等信息存储目录
+VIT_DIR = join(CONFIG_DIR, "VIT")
 
 # 加载秘钥等配置信息
 config_parse = configparser.ConfigParser()
-config_parse.read("VIT/.conf", encoding="utf-8")
+config_parse.read(f"{VIT_DIR}/.conf", encoding="utf-8")
 
 
 # 这是需要链接的数据库配置，请自行设置
