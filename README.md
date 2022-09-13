@@ -109,7 +109,7 @@ PROXY_INDEX=***
 - 9).demo_aiohttp_example: scrapy Request 替换为 aiohttp 请求的场景，提供了各种请求场景示例（GET,POST）
 + 10).demo_aiohttp_test: scrapy aiohttp 在具体项目中的使用方法示例
 
-+ 11.demo_proxy_one: 快代理动态隧道代理示例
++ 11).demo_proxy_one: 快代理动态隧道代理示例
 + 12).demo_proxy_two: 测试快代理独享代理
 ```
 
