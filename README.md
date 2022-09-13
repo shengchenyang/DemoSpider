@@ -39,6 +39,7 @@ SQLAlchemy = "^1.4.39"
 DBUtils = "^3.0.2"
 itemadapter = "^0.7.0"
 aiohttp = "^3.8.1"
+html2text = "^2020.1.16"
 ```
 
 注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 `mongoDB` 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
