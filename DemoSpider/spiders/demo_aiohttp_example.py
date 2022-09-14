@@ -30,6 +30,7 @@ class DemoAiohttpSpider(AyuSpider):
             'ayugespidertools.Middlewares.RandomRequestUaMiddleware': 400,
             # 将 scrapy Request 替换为 aiohttp 方式
             'ayugespidertools.DownloaderMiddlewares.AiohttpMiddleware': 543,
+            # 'ayugespidertools.DownloaderMiddlewares.AiohttpAsyncMiddleware': 543,
         }
     }
 

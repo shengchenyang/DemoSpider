@@ -3,7 +3,7 @@ import pandas
 from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MysqlDataItem
-from DemoSpider.common.DataEnum import Table_Enum
+from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
 
@@ -25,7 +25,7 @@ class DemoOneSpider(AyuSpider):
     start_urls = ['https://blog.csdn.net/']
 
     # 数据库表的枚举信息
-    custom_table_enum = Table_Enum
+    custom_table_enum = TableEnum
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
@@ -90,7 +90,7 @@ class DemoOneSpider(AyuSpider):
 
             AritleInfoItem = MysqlDataItem(
                 alldata=article_info,
-                table=Table_Enum.aritle_list_table.value['value'],
+                table=TableEnum.aritle_list_table.value['value'],
             )
 
             '''
@@ -125,7 +125,7 @@ class DemoOneSpider(AyuSpider):
             # 数据入库逻辑
             try:
                 # 测试 mysql_engine 的去重功能
-                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + Table_Enum.aritle_list_table.value['value'], article_detail_url)
+                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + TableEnum.aritle_list_table.value['value'], article_detail_url)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增

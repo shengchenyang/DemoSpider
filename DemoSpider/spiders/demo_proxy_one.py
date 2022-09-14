@@ -26,10 +26,13 @@ class DemoProxySpider(AyuSpider):
             'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
         },
 
-        # 动态代理对应配置(激活 DOWNLOADER_MIDDLEWARES 中的动态隧道代理时使用)。在 settings 中配置了即可，这里有点重复了，只设置以便即可，这里为了方便展示而已。
+        # 动态代理对应配置(激活 DOWNLOADER_MIDDLEWARES 中的动态隧道代理时使用)。在 settings 中配置了即可，这里有点重复了，只设置一遍即可，这里为了方便展示而已。
         "DYNAMIC_PROXY_CONFIG": {
+            # 隧道代理服务器域名:端口号（示例: o668.kdltps.com:15818）
             "PROXY_URL": DYNAMIC_PROXY_CONFIG["PROXY_URL"],
+            # 用户名 username（隧道代理 tid）
             "USERNAME": DYNAMIC_PROXY_CONFIG["USERNAME"],
+            # 对应密码
             "PASSWORD": DYNAMIC_PROXY_CONFIG["PASSWORD"],
         },
     }

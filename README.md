@@ -230,7 +230,7 @@ article_info = {
 
 AritleInfoItem = MysqlDataItem(
     alldata=article_info,
-    table=Table_Enum.aritle_list_table.value['value'],
+    table=TableEnum.aritle_list_table.value['value'],
 )
 logger.info(f"AritleInfoItem: {AritleInfoItem}")
 yield AritleInfoItem
@@ -265,7 +265,7 @@ mysql_engine_off = True
 `mysql_engine` 用于 `Mysql` 数据入库前的查询使用：
 
 ```python
-sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
+sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + TableEnum.aritle_list_table.value['value'], article_detail_url)
 df = pandas.read_sql(sql, self.mysql_engine)
 ```
 
@@ -279,7 +279,7 @@ AritleInfoItem = MongoDataItem(
     # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
     alldata=article_info,
     # table 为 mongo 的存储 Collection 集合的名称
-    table=Table_Enum.aritle_list_table.value['value'],
+    table=TableEnum.aritle_list_table.value['value'],
     # mongo_update_rule 为查询数据是否存在的规则
     mongo_update_rule={"article_detail_url": article_detail_url},
 )

@@ -1,6 +1,6 @@
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
-from DemoSpider.common.DataEnum import Table_Enum
+from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
 
@@ -66,7 +66,7 @@ class DemoSixSpider(AyuSpider):
                 # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
                 alldata=book_info,
                 # table 为 mongo 的存储 Collection 集合的名称
-                table=Table_Enum.book_info_list_table.value['value'],
+                table=TableEnum.book_info_list_table.value['value'],
                 # mongo_update_rule 为查询数据是否存在的规则
                 mongo_update_rule={"book_name": book_name},
             )

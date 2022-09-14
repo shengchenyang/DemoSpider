@@ -1,7 +1,7 @@
 import pandas
 from loguru import logger
 from scrapy.http import Request
-from DemoSpider.common.DataEnum import Table_Enum
+from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
 from ayugespidertools.Items import MysqlDataItem, MongoDataItem
@@ -24,7 +24,7 @@ class DemoEightSpider(AyuSpider):
     start_urls = ['https://blog.csdn.net/']
 
     # 数据库表的枚举信息
-    custom_table_enum = Table_Enum
+    custom_table_enum = TableEnum
     # 初始化配置的类型
     settings_type = 'debug'
     custom_settings = {
@@ -81,14 +81,14 @@ class DemoEightSpider(AyuSpider):
 
             AritleInfoItem = MysqlDataItem(
                 alldata=article_info,
-                table=Table_Enum.aritle_list_table.value['value'],
+                table=TableEnum.aritle_list_table.value['value'],
             )
 
             AritleInfoMongoItem = MongoDataItem(
                 # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
                 alldata=article_info,
                 # table 为 mongo 的存储 Collection 集合的名称
-                table=Table_Enum.aritle_list_table.value['value'],
+                table=TableEnum.aritle_list_table.value['value'],
                 # mongo_update_rule 为查询数据是否存在的规则
                 mongo_update_rule={"article_detail_url": article_detail_url},
             )
@@ -97,7 +97,7 @@ class DemoEightSpider(AyuSpider):
             # 数据入库逻辑
             try:
                 # 测试 mysql_engine 的去重功能
-                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + Table_Enum.aritle_list_table.value['value'], article_detail_url)
+                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + TableEnum.aritle_list_table.value['value'], article_detail_url)
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增
