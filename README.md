@@ -30,11 +30,10 @@ PyMySQL = "^1.0.2"
 Scrapy = "^2.6.2"
 pandas = "^1.4.3"
 WorkWeixinRobot = "^1.0.1"
-crawlab-sdk = “^0.6.0”
-# pymongo 版本要在 3.11.0 及以下
+crawlab-sdk = "^0.6.0"
 pymongo = "3.11.0"
-pytest == “6.2.5”
-retrying = “^1.3.3”
+pytest == "6.2.5"
+retrying = "^1.3.3"
 SQLAlchemy = "^1.4.39"
 DBUtils = "^3.0.2"
 itemadapter = "^0.7.0"
@@ -259,7 +258,7 @@ class Table_Enum(Enum):
 > 当需要在` mysql` 场景下的存储数据前进行更新策略时，需要在对应的 ` spider` 脚本中打开 `mysql` 引擎开关，即：
 
 ```python
-mysql_engine_off = True
+mysql_engine_enabled = True
 ```
 
 `mysql_engine` 用于 `Mysql` 数据入库前的查询使用：

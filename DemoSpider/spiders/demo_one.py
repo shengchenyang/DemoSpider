@@ -44,7 +44,7 @@ class DemoOneSpider(AyuSpider):
     }
 
     # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_off = True
+    mysql_engine_enabled = True
 
     def start_requests(self):
         """

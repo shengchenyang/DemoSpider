@@ -1,4 +1,4 @@
-import time
+from DemoSpider.settings import logger
 from ayugespidertools.Items import MysqlDataItem
 from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
@@ -44,10 +44,9 @@ class DemoAiohttpTestSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        for page in range(1, 10000):
+        for page in range(1, 100):
             yield AiohttpRequest(
-                # url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
-                url=f"http://175.178.210.193:5000/test",
+                url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
                 meta={
                     "meta_data": "这是用来测试 parse_first meta 的功能",
@@ -60,22 +59,21 @@ class DemoAiohttpTestSpider(AyuSpider):
             )
 
     def parse_first(self, response):
-        print(response.status)
-        # book_info_list = ToolsForAyu.extract_with_xpath(response=response, query='//div[@class="bookinfo"]', return_selector=True)
-        # for book_info in book_info_list:
-        #     book_name = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/text()')
-        #     book_href = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/@href')
-        #     book_intro = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookintro"]/text()')
-        #     # print(book_name, book_href, book_intro)
-        #
-        #     book_info = {
-        #         "book_name": {'key_value': book_name, 'notes': '小说名称'},
-        #         "book_href": {'key_value': book_href, 'notes': '小说链接'},
-        #         "book_intro": {'key_value': book_intro, 'notes': '小说简介'},
-        #     }
-        #
-        #     BookInfoItem = MysqlDataItem(
-        #         alldata=book_info,
-        #         table=TableEnum.book_info_list_table.value['value'],
-        #     )
-            # logger.info(f"BookInfoItem: {BookInfoItem}")
+        book_info_list = ToolsForAyu.extract_with_xpath(response=response, query='//div[@class="bookinfo"]', return_selector=True)
+        for book_info in book_info_list:
+            book_name = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/text()')
+            book_href = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookname"]/a/@href')
+            book_intro = ToolsForAyu.extract_with_xpath(response=book_info, query='div[@class="bookintro"]/text()')
+            # print(book_name, book_href, book_intro)
+
+            book_info = {
+                "book_name": {'key_value': book_name, 'notes': '小说名称'},
+                "book_href": {'key_value': book_href, 'notes': '小说链接'},
+                "book_intro": {'key_value': book_intro, 'notes': '小说简介'},
+            }
+
+            BookInfoItem = MysqlDataItem(
+                alldata=book_info,
+                table=TableEnum.book_info_list_table.value['value'],
+            )
+            logger.info(f"BookInfoItem: {BookInfoItem}")
