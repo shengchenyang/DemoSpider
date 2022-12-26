@@ -1,3 +1,4 @@
+# from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MongoDataItem
 from DemoSpider.common.DataEnum import TableEnum
@@ -25,6 +26,7 @@ class DemoSixSpider(AyuSpider):
     settings_type = 'debug'
     custom_settings = {
         'LOG_LEVEL': 'ERROR',
+        'MONGODB_COLLECTION_PREFIX': "demo6_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 MongoDB
             'ayugespidertools.Pipelines.AyuTwistedMongoPipeline': 300,
