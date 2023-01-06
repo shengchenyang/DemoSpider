@@ -30,15 +30,15 @@ PyMySQL = "^1.0.2"
 Scrapy = "^2.6.2"
 pandas = "^1.4.3"
 WorkWeixinRobot = "^1.0.1"
-crawlab-sdk = "^0.6.0"
+crawlab-sdk = “^0.6.0”
+# pymongo 版本要在 3.11.0 及以下
 pymongo = "3.11.0"
-pytest == "6.2.5"
-retrying = "^1.3.3"
+pytest == “6.2.5”
+retrying = “^1.3.3”
 SQLAlchemy = "^1.4.39"
 DBUtils = "^3.0.2"
 itemadapter = "^0.7.0"
 aiohttp = "^3.8.1"
-html2text = "^2020.1.16"
 ```
 
 注：`pymongo` 版本要在 `3.11.0` 及以下的要求是因为我的 `mongoDB` 的版本为 `3.4`；若依赖库中的库有版本冲突，请去除版本限制即可。
@@ -109,7 +109,7 @@ PROXY_INDEX=***
 - 9).demo_aiohttp_example: scrapy Request 替换为 aiohttp 请求的场景，提供了各种请求场景示例（GET,POST）
 + 10).demo_aiohttp_test: scrapy aiohttp 在具体项目中的使用方法示例
 
-+ 11).demo_proxy_one: 快代理动态隧道代理示例
++ 11.demo_proxy_one: 快代理动态隧道代理示例
 + 12).demo_proxy_two: 测试快代理独享代理
 ```
 
@@ -136,9 +136,7 @@ ayugespidertools genspider <spiderName> <domain>
 
 ###  2.1. 项目的配置说明
 
-> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。
->
-> 比如，1). 如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库相关配置统一放在 `settings` 中，或根据 `consul` 来远程获取配置信息会比较方便管理；2). 若同个项目中不同脚本需要连接不同数据库等信息，则相关配置放在对应脚本的 `custom_setting` 中会更好。
+> 本项目中的所涉及到的配置，可以放在 `settings` 和 `custom_setting` 任意地方中（只是**优先级 settings < ayuspider inner_settings < custom_settings**；如果**多处重复设置，则会根据优先级覆盖内容**），根据应用场景来决定。比如，如果你开发的项目所有脚本需要存储到同一个数据库中，那么将数据库相关配置统一放在 `settings` 中，或根据 consul 来远程获取配置信息会比较方便管理；若同个项目中不同脚本需要连接不同数据库等信息，则相关配置需要放在对应脚本的 `custom_setting` 中。
 
 以下 `settings` 配置信息，根据需求来设置对应参数。信息已脱敏，请根据 [1.1. 运行方法](# 1.1. 运行方法) 中的 `.conf` 内容来关联信息，或直接修改为具体值也行：
 
@@ -229,7 +227,7 @@ article_info = {
 
 AritleInfoItem = MysqlDataItem(
     alldata=article_info,
-    table=TableEnum.aritle_list_table.value['value'],
+    table=Table_Enum.aritle_list_table.value['value'],
 )
 logger.info(f"AritleInfoItem: {AritleInfoItem}")
 yield AritleInfoItem
@@ -258,13 +256,13 @@ class Table_Enum(Enum):
 > 当需要在` mysql` 场景下的存储数据前进行更新策略时，需要在对应的 ` spider` 脚本中打开 `mysql` 引擎开关，即：
 
 ```python
-mysql_engine_enabled = True
+mysql_engine_off = True
 ```
 
 `mysql_engine` 用于 `Mysql` 数据入库前的查询使用：
 
 ```python
-sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + TableEnum.aritle_list_table.value['value'], article_detail_url)
+sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings['MYSQL_TABLE_PREFIX'] + Table_Enum.aritle_list_table.value['value'], article_detail_url)
 df = pandas.read_sql(sql, self.mysql_engine)
 ```
 
@@ -278,7 +276,7 @@ AritleInfoItem = MongoDataItem(
     # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
     alldata=article_info,
     # table 为 mongo 的存储 Collection 集合的名称
-    table=TableEnum.aritle_list_table.value['value'],
+    table=Table_Enum.aritle_list_table.value['value'],
     # mongo_update_rule 为查询数据是否存在的规则
     mongo_update_rule={"article_detail_url": article_detail_url},
 )
@@ -322,6 +320,3 @@ AritleInfoItem = MongoDataItem(
 
 ![image-20220905112615892](DemoSpider/doc/image-20220905112615892.png)
 
-> 下图为 `demo_aiohttp_example` 的替换 `scrapy` 的 `Request` 为 `aiohttp` 的示例：
-
-![image-20220913113650036](DemoSpider/doc/image-20220913113650036.png)
