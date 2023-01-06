@@ -26,7 +26,7 @@ class DemoTwoSpider(AyuSpider):
     settings_type = 'debug'
     custom_settings = {
         # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
-        'MONGODB_COLLECTION_PREFIX': "demo1_",
+        'MONGODB_COLLECTION_PREFIX': "demo2_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 MongoDB
             'ayugespidertools.Pipelines.AyuFtyMongoPipeline': 300,
@@ -53,11 +53,26 @@ class DemoTwoSpider(AyuSpider):
     def parse_first(self, response):
         data_list = ToolsForAyu.extract_with_json(json_data=response.json(), query="data")
         for curr_data in data_list:
-            article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
-            article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
-            comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
-            favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
-            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
+            # 这里的所有解析规则可选择自己习惯的
+            article_detail_url = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleDetailUrl")
+
+            article_title = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleTitle")
+
+            comment_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="commentCount")
+
+            favor_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="favorCount")
+
+            nick_name = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="nickName")
             logger.info(f"article data: {article_detail_url, article_title, comment_count, favor_count, nick_name}")
 
             """1. ayugespidertools 推荐的风格写法(更直观)"""
@@ -79,7 +94,7 @@ class DemoTwoSpider(AyuSpider):
             )
             yield AritleInfoItem
 
-            """2. 旧风格的风格写法"""
+            """2. 旧风格的风格写法，需要补上 item_mode, table 和 mongo_update_rule 字段"""
             item = dict()
             item['article_detail_url'] = article_detail_url
             item['article_title'] = article_title
