@@ -63,11 +63,26 @@ class DemoThreeSpider(AyuSpider):
     def parse_first(self, response):
         data_list = json.loads(response.text)['data']
         for curr_data in data_list:
-            article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
-            article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
-            comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
-            favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
-            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
+            # 这里的所有解析规则可选择自己习惯的
+            article_detail_url = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleDetailUrl")
+
+            article_title = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleTitle")
+
+            comment_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="commentCount")
+
+            favor_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="favorCount")
+
+            nick_name = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="nickName")
 
             article_info = {
                 "article_detail_url": {'key_value': article_detail_url, 'notes': '文章详情链接'},
