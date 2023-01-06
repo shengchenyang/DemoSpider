@@ -92,12 +92,12 @@ class DemoThreeSpider(AyuSpider):
                 "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
             }
 
-            AritleInfoItem = MysqlDataItem(
+            ArticleInfoItem = MysqlDataItem(
                 alldata=article_info,
                 table=TableEnum.aritle_list_table.value['value'],
             )
-            logger.info(f"AritleInfoItem: {AritleInfoItem}")
-            # yield AritleInfoItem
+            logger.info(f"ArticleInfoItem: {ArticleInfoItem}")
+            # yield ArticleInfoItem
 
             try:
                 # 测试 mysql_engine 的功能
@@ -106,11 +106,11 @@ class DemoThreeSpider(AyuSpider):
 
                 # 如果为空，说明此数据不存在于数据库，则新增
                 if df.empty:
-                    yield AritleInfoItem
+                    yield ArticleInfoItem
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
                     logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
 
             except Exception:
-                yield AritleInfoItem
+                yield ArticleInfoItem

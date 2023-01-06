@@ -103,7 +103,7 @@ class DemoOneSpider(AyuSpider):
             }
             """
 
-            AritleInfoItem = MysqlDataItem(
+            ArticleInfoItem = MysqlDataItem(
                 alldata=article_info,
                 table=TableEnum.aritle_list_table.value['value'],
             )
@@ -142,4 +142,4 @@ class DemoOneSpider(AyuSpider):
             sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(
                 self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + TableEnum.aritle_list_table.value['value'],
                 article_detail_url)
-            yield ToolsForAyu.filter_data_before_yield(sql=sql, mysql_engine=self.mysql_engine, item=AritleInfoItem)
+            yield ToolsForAyu.filter_data_before_yield(sql=sql, mysql_engine=self.mysql_engine, item=ArticleInfoItem)

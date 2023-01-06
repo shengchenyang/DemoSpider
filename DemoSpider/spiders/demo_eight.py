@@ -79,7 +79,7 @@ class DemoEightSpider(AyuSpider):
                 "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
             }
 
-            AritleInfoItem = MysqlDataItem(
+            ArticleInfoItem = MysqlDataItem(
                 alldata=article_info,
                 table=TableEnum.aritle_list_table.value['value'],
             )
@@ -102,7 +102,7 @@ class DemoEightSpider(AyuSpider):
 
                 # 如果为空，说明此数据不存在于数据库，则新增
                 if df.empty:
-                    yield AritleInfoItem
+                    yield ArticleInfoItem
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
@@ -110,6 +110,6 @@ class DemoEightSpider(AyuSpider):
 
             except Exception as e:
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
-                    yield AritleInfoItem
+                    yield ArticleInfoItem
                 else:
                     logger.error(f"请查看数据库链接或网络是否通畅！Error: {e}")

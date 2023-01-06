@@ -84,7 +84,7 @@ class DemoTwoSpider(AyuSpider):
                 "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
             }
 
-            AritleInfoItem = MongoDataItem(
+            ArticleInfoItem = MongoDataItem(
                 # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
                 alldata=article_info,
                 # table 为 mongo 的存储 Collection 集合的名称
@@ -92,7 +92,7 @@ class DemoTwoSpider(AyuSpider):
                 # mongo_update_rule 为查询数据是否存在的规则
                 mongo_update_rule={"article_detail_url": article_detail_url},
             )
-            yield AritleInfoItem
+            yield ArticleInfoItem
 
             """2. 旧风格的风格写法，需要补上 item_mode, table 和 mongo_update_rule 字段"""
             item = dict()
