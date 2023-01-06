@@ -1,6 +1,4 @@
 import json
-import pandas
-from loguru import logger
 from scrapy.http import Request
 from ayugespidertools.Items import MysqlDataItem
 from DemoSpider.common.DataEnum import TableEnum
@@ -27,11 +25,13 @@ class DemoOneSpider(AyuSpider):
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     # 初始化配置的类型
-    settings_type = 'debug'
+    # settings_type = 'debug'
     custom_settings = {
+        # 日志等级，此参数值与 ayugespidertools 库中的 loguru 日志等级一致
+        'LOG_LEVEL': 'DEBUG',
         # 是否开启记录项目相关运行统计信息，其实默认就是关闭，为了展示此参数
         'RECORD_LOG_TO_MYSQL': False,
-        # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
+        # Mysql 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
         'MYSQL_TABLE_PREFIX': "demo1_",
         'ITEM_PIPELINES': {
             # 激活此项则数据会存储至 Mysql
@@ -62,11 +62,26 @@ class DemoOneSpider(AyuSpider):
     def parse_first(self, response):
         data_list = json.loads(response.text)['data']
         for curr_data in data_list:
-            article_detail_url = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleDetailUrl")
-            article_title = ToolsForAyu.extract_with_json(json_data=curr_data, query="articleTitle")
-            comment_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="commentCount")
-            favor_count = ToolsForAyu.extract_with_json(json_data=curr_data, query="favorCount")
-            nick_name = ToolsForAyu.extract_with_json(json_data=curr_data, query="nickName")
+            # 这里的所有解析规则可选择自己习惯的
+            article_detail_url = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleDetailUrl")
+
+            article_title = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="articleTitle")
+
+            comment_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="commentCount")
+
+            favor_count = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="favorCount")
+
+            nick_name = ToolsForAyu.extract_with_json(
+                json_data=curr_data,
+                query="nickName")
 
             # 数据存储方式1，非常推荐此写法。article_info 含有所有需要存储至表中的字段
             article_info = {
@@ -95,6 +110,7 @@ class DemoOneSpider(AyuSpider):
 
             '''
             # 旧 scrapy 脚本也可方便地改写为 ayugespidertools 支持的示例
+            # 也可以不用修改，只需补充上所需要的 table 和 item_mode 字段，来指定存储表名和存储方式
             item = dict()
             item['article_detail_url'] = article_detail_url
             item['article_title'] = article_title
@@ -122,22 +138,8 @@ class DemoOneSpider(AyuSpider):
             yield item
             '''
 
-            # 数据入库逻辑
-            try:
-                # 测试 mysql_engine 的去重功能
-                sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + TableEnum.aritle_list_table.value['value'], article_detail_url)
-                df = pandas.read_sql(sql, self.mysql_engine)
-
-                # 如果为空，说明此数据不存在于数据库，则新增
-                if df.empty:
-                    yield AritleInfoItem
-
-                # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
-                else:
-                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
-
-            except Exception as e:
-                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
-                    yield AritleInfoItem
-                else:
-                    logger.error(f"请查看数据库链接或网络是否通畅！Error: {e}")
+            # 数据入库逻辑 -> 测试 mysql_engine 的去重功能
+            sql = '''select `id` from `{}` where `article_detail_url` = "{}" limit 1'''.format(
+                self.custom_settings.get('MYSQL_TABLE_PREFIX', '') + TableEnum.aritle_list_table.value['value'],
+                article_detail_url)
+            yield ToolsForAyu.filter_data_before_yield(sql=sql, mysql_engine=self.mysql_engine, item=AritleInfoItem)
