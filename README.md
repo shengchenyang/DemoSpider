@@ -225,12 +225,12 @@ article_info = {
     "nick_name": {'key_value': nick_name, 'notes': '文章作者昵称'}
 }
 
-AritleInfoItem = MysqlDataItem(
+ArticleInfoItem = MysqlDataItem(
     alldata=article_info,
     table=Table_Enum.aritle_list_table.value['value'],
 )
-logger.info(f"AritleInfoItem: {AritleInfoItem}")
-yield AritleInfoItem
+logger.info(f"ArticleInfoItem: {ArticleInfoItem}")
+yield ArticleInfoItem
 ```
 
 > 其中，项目中 `common` 文件夹中的 `Table_Enum` 的数据库枚举信息（用于存放当前项目所依赖的数据表枚举信息）示例如下：
@@ -256,7 +256,7 @@ class Table_Enum(Enum):
 > 当需要在` mysql` 场景下的存储数据前进行更新策略时，需要在对应的 ` spider` 脚本中打开 `mysql` 引擎开关，即：
 
 ```python
-mysql_engine_off = True
+mysql_engine_enabled = True
 ```
 
 `mysql_engine` 用于 `Mysql` 数据入库前的查询使用：
@@ -272,7 +272,7 @@ df = pandas.read_sql(sql, self.mysql_engine)
 
 ```python
 # mongo_update_rule 的字段为去重判断条件，这里是指 article_detail_url 字段为 article_detail_url 参数的数据存在则更新，不存在则新增
-AritleInfoItem = MongoDataItem(
+ArticleInfoItem = MongoDataItem(
     # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
     alldata=article_info,
     # table 为 mongo 的存储 Collection 集合的名称
