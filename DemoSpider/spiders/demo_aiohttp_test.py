@@ -34,7 +34,6 @@ class DemoAiohttpTestSpider(AyuSpider):
             "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
             # 替换请求的中间件
             "ayugespidertools.DownloaderMiddlewares.AiohttpMiddleware": 543,
-            # 'ayugespidertools.DownloaderMiddlewares.AiohttpAsyncMiddleware': 543,
         },
         # scrapy Request 替换为 aiohttp 的配置示例
         "LOCAL_AIOHTTP_CONFIG": {
