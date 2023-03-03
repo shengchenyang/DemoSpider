@@ -1,9 +1,9 @@
-from scrapy.http import Request
-from ayugespidertools.Items import MongoDataItem
-from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
+from ayugespidertools.Items import MongoDataItem
+from scrapy.http import Request
 
+from DemoSpider.common.DataEnum import TableEnum
 
 """
 ########################################################################################################################

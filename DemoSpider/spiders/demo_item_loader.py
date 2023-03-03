@@ -2,16 +2,16 @@
 # -*- coding:utf-8 -*-
 import pandas
 import scrapy
-from loguru import logger
-from scrapy.http import Request
-from scrapy.loader import ItemLoader
-from itemloaders.processors import Join, MapCompose, TakeFirst
-from scrapy.http.response.text import TextResponse
-from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MysqlDataItem, MongoDataItem, ScrapyClassicItem
+from ayugespidertools.Items import MongoDataItem, MysqlDataItem, ScrapyClassicItem
+from itemloaders.processors import Join, MapCompose, TakeFirst
+from loguru import logger
+from scrapy.http import Request
+from scrapy.http.response.text import TextResponse
+from scrapy.loader import ItemLoader
 
+from DemoSpider.common.DataEnum import TableEnum
 
 """
 ########################################################################################################################

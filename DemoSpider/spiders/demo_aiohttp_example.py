@@ -1,9 +1,10 @@
 import json
-from loguru import logger
-from DemoSpider.common.AboutProj import Operations
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.AyuRequest import AiohttpRequest, AioFormRequest
 
+from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.AyuRequest import AioFormRequest, AiohttpRequest
+from loguru import logger
+
+from DemoSpider.common.AboutProj import Operations
 
 """
 ########################################################################################################################
@@ -31,6 +32,13 @@ class DemoAiohttpSpider(AyuSpider):
             # 将 scrapy Request 替换为 aiohttp 方式
             "ayugespidertools.DownloaderMiddlewares.AiohttpMiddleware": 543,
             # 'ayugespidertools.DownloaderMiddlewares.AiohttpAsyncMiddleware': 543,
+        },
+        # scrapy Request 替换为 aiohttp 的配置示例
+        "LOCAL_AIOHTTP_CONFIG": {
+            "TIMEOUT": 5,
+            "PROXY": "127.0.0.1:1080",
+            "SLEEP": 0,
+            "RETRY_TIMES": 3,
         },
     }
 

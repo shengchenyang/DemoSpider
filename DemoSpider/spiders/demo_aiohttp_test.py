@@ -1,10 +1,10 @@
-from DemoSpider.settings import logger
-from ayugespidertools.Items import MysqlDataItem
-from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.AyuRequest import AioFormRequest, AiohttpRequest
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.AyuRequest import AiohttpRequest, AioFormRequest
+from ayugespidertools.Items import MysqlDataItem
 
+from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.settings import logger
 
 """
 ########################################################################################################################
@@ -34,7 +34,13 @@ class DemoAiohttpTestSpider(AyuSpider):
             "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
             # 替换请求的中间件
             "ayugespidertools.DownloaderMiddlewares.AiohttpMiddleware": 543,
-            # 'ayugespidertools.DownloaderMiddlewares.AiohttpAsyncMiddleware': 543,
+        },
+        # scrapy Request 替换为 aiohttp 的配置示例
+        "LOCAL_AIOHTTP_CONFIG": {
+            "TIMEOUT": 5,
+            "PROXY": "127.0.0.1:1080",
+            "SLEEP": 0,
+            "RETRY_TIMES": 3,
         },
         "CONCURRENT_REQUESTS": 100,
         "DOWNLOAD_DELAY": 0.01,

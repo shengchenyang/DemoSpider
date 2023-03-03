@@ -1,11 +1,11 @@
 import pandas
-from scrapy.http import Request
-from DemoSpider.settings import logger
-from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MysqlDataItem, MongoDataItem
+from ayugespidertools.Items import MongoDataItem, MysqlDataItem
+from scrapy.http import Request
 
+from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.settings import logger
 
 """
 ########################################################################################################################

@@ -1,7 +1,7 @@
-from scrapy.http import Request
 from ayugespidertools.AyugeSpider import AyuSpider
-from DemoSpider.settings import DYNAMIC_PROXY_CONFIG
+from scrapy.http import Request
 
+from DemoSpider.settings import DYNAMIC_PROXY_CONFIG
 
 """
 ########################################################################################################################
@@ -23,7 +23,6 @@ class DemoProxySpider(AyuSpider):
         "DOWNLOADER_MIDDLEWARES": {
             # 动态隧道代理激活
             "ayugespidertools.Middlewares.DynamicProxyDownloaderMiddleware": 125,
-            "scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware": None,
         },
         # 动态代理对应配置(激活 DOWNLOADER_MIDDLEWARES 中的动态隧道代理时使用)。在 settings 中配置了即可，这里有点重复了，只设置一遍即可，这里为了方便展示而已。
         "DYNAMIC_PROXY_CONFIG": {

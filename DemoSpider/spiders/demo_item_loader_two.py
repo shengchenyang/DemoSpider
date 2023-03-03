@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-import scrapy
-import pandas
-from loguru import logger
+from dataclasses import dataclass, field, make_dataclass
 from typing import Optional
-from scrapy.http import Request
-from scrapy.loader import ItemLoader
-from dataclasses import dataclass, field
-from dataclasses import field, make_dataclass
-from scrapy.http.response.text import TextResponse
-from DemoSpider.common.DataEnum import TableEnum
+
+import pandas
+import scrapy
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
 from itemloaders.processors import Join, MapCompose, TakeFirst
+from loguru import logger
+from scrapy.http import Request
+from scrapy.http.response.text import TextResponse
+from scrapy.loader import ItemLoader
 
+from DemoSpider.common.DataEnum import TableEnum
 
 """
 ########################################################################################################################

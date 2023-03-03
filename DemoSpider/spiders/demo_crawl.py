@@ -1,9 +1,9 @@
-from ayugespidertools.Items import MysqlDataItem
-from DemoSpider.common.DataEnum import TableEnum
-from scrapy.linkextractors import LinkExtractor
 from ayugespidertools.AyugeCrawlSpider import AyuCrawlSpider
+from ayugespidertools.Items import MysqlDataItem
+from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
+from DemoSpider.common.DataEnum import TableEnum
 
 """
 ########################################################################################################################

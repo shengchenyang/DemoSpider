@@ -1,12 +1,13 @@
 import json
+
 import pandas
-from loguru import logger
-from scrapy.http import Request
-from ayugespidertools.Items import MysqlDataItem
-from DemoSpider.common.DataEnum import TableEnum
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
+from ayugespidertools.Items import MysqlDataItem
+from loguru import logger
+from scrapy.http import Request
 
+from DemoSpider.common.DataEnum import TableEnum
 
 """
 ########################################################################################################################
