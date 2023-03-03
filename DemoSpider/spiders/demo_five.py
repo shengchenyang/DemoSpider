@@ -1,13 +1,9 @@
-import datetime
-
-import pandas
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MysqlDataItem
+from ayugespidertools.Items import DataItem, MysqlDataItem
 from scrapy.http import Request
 
 from DemoSpider.common.DataEnum import TableEnum
-from DemoSpider.settings import logger
 
 """
 ########################################################################################################################
@@ -78,9 +74,9 @@ class DemoFiveSpider(AyuSpider):
             )
 
             book_info = {
-                "book_name": {"key_value": book_name, "notes": "小说名称"},
-                "book_href": {"key_value": book_href, "notes": "小说链接"},
-                "book_intro": {"key_value": book_intro, "notes": "小说简介"},
+                "book_name": DataItem(book_name, "小说名称"),
+                "book_href": DataItem(book_href, "小说链接"),
+                "book_intro": DataItem(book_intro, "小说简介"),
             }
 
             BookInfoItem = MysqlDataItem(

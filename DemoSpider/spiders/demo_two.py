@@ -1,6 +1,6 @@
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MongoDataItem
+from ayugespidertools.Items import DataItem, MongoDataItem
 from scrapy.http import Request
 
 from DemoSpider.common.DataEnum import TableEnum
@@ -75,17 +75,59 @@ class DemoTwoSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            """1. ayugespidertools 推荐的风格写法(更直观)"""
+            # 1. ayugespidertools 推荐的风格写法(更直观)
+            article_info = {
+                "article_detail_url": DataItem(article_detail_url, "文章详情链接"),
+                "article_title": DataItem(article_title, "文章标题"),
+                "comment_count": DataItem(comment_count, "文章评论数量"),
+                "favor_count": DataItem(favor_count, "文章赞成数量"),
+                "nick_name": DataItem(nick_name, "文章作者昵称"),
+            }
+
+            """
+            # 2.或者这么写，MongoDB 不需要注释参数，这里只有注解的附加功能。但还是推荐使用 DataItem 以
+            # 保持风格一致，但也可直接按照下面 4 中的 dict 示例写法
+            article_info = {
+                "article_detail_url": DataItem(article_detail_url),
+                "article_title": DataItem(article_title),
+                "comment_count": DataItem(comment_count),
+                "favor_count": DataItem(favor_count),
+                "nick_name": DataItem(nick_name),
+            }
+            
+            # 3.当然这么写也可以，但是不推荐，写法复杂易错
             article_info = {
                 "article_detail_url": {
                     "key_value": article_detail_url,
                     "notes": "文章详情链接",
                 },
-                "article_title": {"key_value": article_title, "notes": "文章标题"},
-                "comment_count": {"key_value": comment_count, "notes": "文章评论数量"},
-                "favor_count": {"key_value": favor_count, "notes": "文章赞成数量"},
-                "nick_name": {"key_value": nick_name, "notes": "文章作者昵称"},
+                "article_title": {
+                    "key_value": article_title,
+                    "notes": "文章标题",
+                },
+                "comment_count": {
+                    "key_value": comment_count,
+                    "notes": "文章评论数量",
+                },
+                "favor_count": {
+                    "key_value": favor_count,
+                    "notes": "文章赞成数量",
+                },
+                "nick_name": {
+                    "key_value": nick_name,
+                    "notes": "文章作者昵称",
+                },
             }
+            
+            # 4.应该是最简约的示例了
+            article_info = {
+                "article_detail_url": article_detail_url,
+                "article_title": article_title,
+                "comment_count": comment_count,
+                "favor_count": favor_count,
+                "nick_name": nick_name,
+            }
+            """
 
             ArticleInfoItem = MongoDataItem(
                 # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
@@ -98,16 +140,3 @@ class DemoTwoSpider(AyuSpider):
 
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             yield ArticleInfoItem
-
-            """2. 旧风格的风格写法，需要补上 item_mode, table 和 mongo_update_rule 字段"""
-            item = dict()
-            item["article_detail_url"] = article_detail_url
-            item["article_title"] = article_title
-            item["comment_count"] = comment_count
-            item["favor_count"] = favor_count
-            item["nick_name"] = nick_name
-
-            item["item_mode"] = "MongoDB"
-            item["table"] = TableEnum.article_list_table.value["value"]
-            item["mongo_update_rule"] = {"article_detail_url": article_detail_url}
-            yield item

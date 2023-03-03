@@ -2,8 +2,9 @@ import json
 
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MysqlDataItem
+from ayugespidertools.Items import DataItem, MysqlDataItem
 from scrapy.http import Request
+from scrapy.http.response.text import TextResponse
 
 from DemoSpider.common.DataEnum import TableEnum
 from DemoSpider.settings import logger
@@ -63,10 +64,10 @@ class DemoOneSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response):
+    def parse_first(self, response: TextResponse):
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
-            # 这里的所有解析规则可选择自己习惯的
+            # 这里的所有解析方式可选择自己习惯的其它任意库，xpath， json 或正则等等。
             article_detail_url = ToolsForAyu.extract_with_json(
                 json_data=curr_data, query="articleDetailUrl"
             )
@@ -89,6 +90,25 @@ class DemoOneSpider(AyuSpider):
 
             # 数据存储方式1，非常推荐此写法。article_info 含有所有需要存储至表中的字段
             article_info = {
+                "article_detail_url": DataItem(article_detail_url, "文章详情链接"),
+                "article_title": DataItem(article_title, "文章标题"),
+                "comment_count": DataItem(comment_count, "文章评论数量"),
+                "favor_count": DataItem(favor_count, "文章赞成数量"),
+                "nick_name": DataItem(nick_name, "文章作者昵称"),
+            }
+
+            """
+            # 2.或者这么写，在不需要注释参数时，那不如直接按照下面 4 中的示例写法
+            article_info = {
+                "article_detail_url": DataItem(article_detail_url),
+                "article_title": DataItem(article_title),
+                "comment_count": DataItem(comment_count),
+                "favor_count": DataItem(favor_count),
+                "nick_name": DataItem(nick_name),
+            }
+            
+            # 3.当然这么写也可以，但是不推荐，写法复杂易错
+            article_info = {
                 "article_detail_url": {
                     "key_value": article_detail_url,
                     "notes": "文章详情链接",
@@ -110,9 +130,8 @@ class DemoOneSpider(AyuSpider):
                     "notes": "文章作者昵称",
                 },
             }
-
-            """
-            # 当然这么写也可以，但是不推荐
+            
+            # 4.应该是最简约的示例了
             article_info = {
                 "article_detail_url": article_detail_url,
                 "article_title": article_title,
@@ -126,44 +145,12 @@ class DemoOneSpider(AyuSpider):
                 alldata=article_info,
                 table=TableEnum.article_list_table.value["value"],
             )
-
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
+            # yield ArticleInfoItem
 
-            """
-            # 旧 scrapy 脚本也可方便地改写为 ayugespidertools 支持的示例
-            # 也可以不用修改，只需补充上所需要的 table 和 item_mode 字段，来指定存储表名和存储方式
-            item = dict()
-            item["article_detail_url"] = article_detail_url
-            item["article_title"] = article_title
-            item["comment_count"] = comment_count
-            item["favor_count"] = favor_count
-            item["nick_name"] = nick_name
-
-            item["table"] = "article_info_list"
-            item["item_mode"] = "Mysql"
-            yield item
-
-            # 或者这样写
-            item = {
-                "article_detail_url": article_detail_url,
-                "article_title": article_title,
-                "comment_count": comment_count,
-                "favor_count": favor_count,
-                "nick_name": nick_name,
-                # 兼容旧写法，但是要添加 table 字段和 item_mode 字段
-                # (即需要存储的表格名称，注意：是去除表格前缀的表名, 比如表为 demo_article_info_list，前缀为 demo_，则 table 名为 article_info_list)
-                "table": "article_info_list",
-                "item_mode": "Mysql",
-            }
-            yield item
-            """
-
-            # 数据入库逻辑 -> 测试 mysql_engine 的去重功能
-            sql = """select `id` from `{}` where `article_detail_url` = "{}" limit 1""".format(
-                self.custom_settings.get("MYSQL_TABLE_PREFIX", "")
-                + TableEnum.article_list_table.value["value"],
-                article_detail_url,
-            )
+            # 数据入库逻辑 -> 测试 mysql_engine 的去重功能，你可以自行实现。mysql_engine 也已经给你了
+            save_table = f'{self.custom_settings.get("MYSQL_TABLE_PREFIX", "")}{TableEnum.article_list_table.value["value"]}'
+            sql = f"""select `id` from `{save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
             yield ToolsForAyu.filter_data_before_yield(
                 sql=sql,
                 mysql_engine=self.mysql_engine,

@@ -3,7 +3,7 @@ import json
 import pandas
 from ayugespidertools.AyugeSpider import AyuSpider
 from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import MysqlDataItem
+from ayugespidertools.Items import DataItem, MysqlDataItem
 from loguru import logger
 from scrapy.http import Request
 
@@ -85,14 +85,11 @@ class DemoThreeSpider(AyuSpider):
             )
 
             article_info = {
-                "article_detail_url": {
-                    "key_value": article_detail_url,
-                    "notes": "文章详情链接",
-                },
-                "article_title": {"key_value": article_title, "notes": "文章标题"},
-                "comment_count": {"key_value": comment_count, "notes": "文章评论数量"},
-                "favor_count": {"key_value": favor_count, "notes": "文章赞成数量"},
-                "nick_name": {"key_value": nick_name, "notes": "文章作者昵称"},
+                "article_detail_url": DataItem(article_detail_url, "文章详情链接"),
+                "article_title": DataItem(article_title, "文章标题"),
+                "comment_count": DataItem(comment_count, "文章评论数量"),
+                "favor_count": DataItem(favor_count, "文章赞成数量"),
+                "nick_name": DataItem(nick_name, "文章作者昵称"),
             }
 
             ArticleInfoItem = MysqlDataItem(
