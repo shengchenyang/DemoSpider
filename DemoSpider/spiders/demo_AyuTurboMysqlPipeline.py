@@ -52,64 +52,49 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        yield Request(
-            url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
-            callback=self.parse_first,
-            headers={
-                "referer": "https://blog.csdn.net/rank/list",
-            },
-            cb_kwargs=dict(
-                curr_site="csdn",
-            ),
-            dont_filter=True,
-        )
+        for page in range(1, 11):
+            url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
+            yield Request(
+                url=url,
+                callback=self.parse_first,
+                cb_kwargs=dict(
+                    curr_site="zongheng",
+                ),
+                dont_filter=True,
+            )
 
     def parse_first(self, response: TextResponse, curr_site: str):
         logger.info(f"当前采集站点为: {curr_site}")
-        data_list = ToolsForAyu.extract_with_json(
-            json_data=response.json(), query="data"
+        book_info_list = ToolsForAyu.extract_with_xpath(
+            response=response,
+            query='//div[@class="TwoBox02_01"]/div',
+            return_selector=True,
         )
-        for curr_data in data_list:
-            article_detail_url = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="articleDetailUrl"
+
+        for book_info in book_info_list:
+            book_name = ToolsForAyu.extract_with_xpath(
+                response=book_info, query="div[2]//h1/@title"
             )
 
-            article_title = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="articleTitle"
+            book_href = ToolsForAyu.extract_with_xpath(
+                response=book_info, query="div[2]//h1/a/@href"
+            )
+            book_href = response.urljoin(book_href)
+
+            book_intro = ToolsForAyu.extract_with_xpath(
+                response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
             )
 
-            comment_count = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="commentCount"
-            )
-
-            favor_count = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="favorCount"
-            )
-
-            nick_name = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="nickName"
-            )
-
-            article_info = {
-                "article_detail_url": DataItem(article_detail_url, "文章详情链接"),
-                "article_title": DataItem(article_title, "文章标题"),
-                "comment_count": DataItem(comment_count, "文章评论数量"),
-                "favor_count": DataItem(favor_count, "文章赞成数量"),
-                "nick_name": DataItem(nick_name, "文章作者昵称"),
+            book_info = {
+                "book_name": DataItem(book_name, "小说名称"),
+                "book_href": DataItem(book_href, "小说链接"),
+                "book_intro": DataItem(book_intro, "小说简介"),
             }
 
-            # 存储到 mysql 的示例
-            ArticleInfoMysqlItem = MysqlDataItem(
-                alldata=article_info,
-                table=TableEnum.article_list_table.value["value"],
+            BookInfoItem = MysqlDataItem(
+                alldata=book_info,
+                table=TableEnum.book_info_list_table.value["value"],
             )
 
-            # 数据入库逻辑 -> 测试 mysql_engine 的去重功能
-            sql = """select `id` from `{}` where `article_detail_url` = "{}" limit 1""".format(
-                self.custom_settings.get("MYSQL_TABLE_PREFIX", "")
-                + TableEnum.article_list_table.value["value"],
-                article_detail_url,
-            )
-            yield ToolsForAyu.filter_data_before_yield(
-                sql=sql, mysql_engine=self.mysql_engine, item=ArticleInfoMysqlItem
-            )
+            # self.slog.info(f"BookInfoItem: {BookInfoItem}")
+            yield BookInfoItem
