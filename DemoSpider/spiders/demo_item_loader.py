@@ -48,7 +48,7 @@ class DemoItemLoaderSpider(AyuSpider):
     mysql_engine_enabled = True
 
     def start_requests(self):
-        for page in range(1, 3):
+        for page in range(1, 5):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,

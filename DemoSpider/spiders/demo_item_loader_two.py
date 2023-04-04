@@ -50,15 +50,15 @@ class DemoItemLoaderTwoSpider(AyuSpider):
     mysql_engine_enabled = True
 
     def start_requests(self):
-        page = 1
-        yield Request(
-            url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
-            callback=self.parse_first,
-            cb_kwargs=dict(
-                curr_site="zongheng",
-            ),
-            dont_filter=True,
-        )
+        for page in range(1, 5):
+            yield Request(
+                url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
+                callback=self.parse_first,
+                cb_kwargs=dict(
+                    curr_site="zongheng",
+                ),
+                dont_filter=True,
+            )
 
     def parse_first(self, response: TextResponse, curr_site: str):
         logger.info(f"当前采集站点为: {curr_site}")
