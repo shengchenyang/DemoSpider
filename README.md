@@ -73,7 +73,7 @@ pip install ayugespidertools -i https://pypi.org/simple
 > 下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
 >
 
-**要运行此示例时，如果 `LOCAL_MYSQL_CONFIG` 在任意 `settings` 中有设置的话，请把它删除。因为项目会优先从本地的配置中取值，如果本地不存在 `LOCAL_MYSQL_CONFIG` 配置时，且 `APP_CONF_MANAGE` 为 `True` 时，当前的 `spiders` 才会从 `consul` 的应用管理中心中取相应配置。**
+**要运行此示例时，只需配置 `APP_CONF_MANAGE` 为 `True`，且在 `.conf` 中设置 `CONSUL` 相关配置后，当前的 `spiders` 即从 `consul` 的应用管理中心中取相应配置。**
 
 ![image-20220807170520647](DemoSpider/doc/image-20220807170520647.png)
 
