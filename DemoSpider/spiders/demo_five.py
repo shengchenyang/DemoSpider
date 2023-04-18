@@ -23,8 +23,6 @@ class DemoFiveSpider(AyuSpider):
 
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         "LOG_LEVEL": "ERROR",
         # 数据表的前缀名称，用于标记属于哪个项目

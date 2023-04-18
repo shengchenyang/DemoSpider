@@ -20,9 +20,6 @@ class DemoSixSpider(AyuSpider):
     name = "demo_six"
     allowed_domains = ["book.zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
-
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         "LOG_LEVEL": "ERROR",
         "MONGODB_COLLECTION_PREFIX": "demo6_",

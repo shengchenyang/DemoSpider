@@ -20,9 +20,6 @@ class DemoFourSpider(AyuSpider):
     name = "demo_four"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         # 是否开启 consul 的应用管理中心取值的功能(也需要设置 CONSUL_CONF 的值，本示例在 settings 中配置)
         "APP_CONF_MANAGE": True,

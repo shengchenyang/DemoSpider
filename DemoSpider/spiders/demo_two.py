@@ -20,9 +20,6 @@ class DemoTwoSpider(AyuSpider):
     name = "demo_two"
     allowed_domains = ["csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
         "MONGODB_COLLECTION_PREFIX": "demo2_",

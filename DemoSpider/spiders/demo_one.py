@@ -27,8 +27,6 @@ class DemoOneSpider(AyuSpider):
 
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         # scrapy 日志等级配置
         "LOG_LEVEL": "DEBUG",
