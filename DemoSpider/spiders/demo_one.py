@@ -28,8 +28,6 @@ class DemoOneSpider(AyuSpider):
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     custom_settings = {
-        # scrapy 日志等级配置
-        "LOG_LEVEL": "DEBUG",
         # 是否开启记录项目相关运行统计信息。不配置默认为 False
         "RECORD_LOG_TO_MYSQL": False,
         # 设置 ayugespidertools 库的日志输出为 loguru，可自行配置 logger 规则来管理项目日志。若不配置此项，库日志只会在控制台上打印
