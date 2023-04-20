@@ -27,8 +27,6 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
 
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         # 是否开启记录项目相关运行统计信息
         "RECORD_LOG_TO_MYSQL": False,
