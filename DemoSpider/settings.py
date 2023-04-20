@@ -42,7 +42,7 @@ VIT_DIR = CONFIG_DIR / "VIT"
 config_parser = configparser.ConfigParser()
 config_parser.read(f"{VIT_DIR}/.conf", encoding="utf-8")
 
-# 这是需要链接的数据库配置，请自行设置
+# Mysql 数据库配置
 LOCAL_MYSQL_CONFIG = {
     "HOST": config_parser.get("MYSQL", "HOST", fallback=None),
     "PORT": config_parser.getint("MYSQL", "PORT", fallback=3306),
@@ -54,7 +54,7 @@ LOCAL_MYSQL_CONFIG = {
     "DRIVER": "mysqlconnector",
 }
 
-# 测试 MongoDB 数据库配置
+# MongoDB 数据库配置
 LOCAL_MONGODB_CONFIG = {
     "HOST": config_parser.get("MONGODB", "HOST", fallback=None),
     "PORT": config_parser.getint("MONGODB", "PORT", fallback=27017),
@@ -66,9 +66,8 @@ LOCAL_MONGODB_CONFIG = {
 
 # consul 应用管理的连接配置
 CONSUL_CONFIG = {
-    "URL": config_parser.get("CONSUL", "URL", fallback=None),
-    # 此 token 值只需要只读权限即可，只用于取配置值
     "TOKEN": config_parser.get("CONSUL", "TOKEN", fallback=None),
+    "URL": config_parser.get("CONSUL", "URL", fallback=None),
     "FORMAT": config_parser.get("CONSUL", "FORMAT", fallback="json"),
 }
 
@@ -101,6 +100,7 @@ OSS_CONFIG = {
 }
 
 # 日志管理
+LOG_LEVEL = env.str("LOG_LEVEL", "ERROR")
 LOG_FILE = f"{LOG_DIR}/DemoSpider.log"
 logger.add(
     env.str("LOG_ERROR_FILE", f"{LOG_DIR}/error.log"),
