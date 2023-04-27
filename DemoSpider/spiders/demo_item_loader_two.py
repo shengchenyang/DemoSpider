@@ -5,15 +5,15 @@ from typing import Optional
 
 import pandas
 import scrapy
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.common.Utils import ToolsForAyu
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.spiders import AyuSpider
 from itemloaders.processors import Join, MapCompose, TakeFirst
 from loguru import logger
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 from scrapy.loader import ItemLoader
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 
 """
 ########################################################################################################################
@@ -36,11 +36,11 @@ class DemoItemLoaderTwoSpider(AyuSpider):
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
-            "ayugespidertools.Pipelines.AyuFtyMysqlPipeline": 300,
+            "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 

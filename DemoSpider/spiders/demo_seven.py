@@ -1,6 +1,6 @@
 import json
 
-from ayugespidertools.AyugeSpider import AyuSpider
+from ayugespidertools.spiders import AyuSpider
 from loguru import logger
 from scrapy.http import FormRequest, Request
 
@@ -27,9 +27,9 @@ class DemoSevenSpider(AyuSpider):
     custom_settings = {
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
             # 替换 scrapy Request 请求为 requests 的中间件
-            "ayugespidertools.Middlewares.RequestByRequestsMiddleware": 401,
+            "ayugespidertools.middlewares.RequestsDownloaderMiddleware": 401,
         },
     }
 
