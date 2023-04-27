@@ -1,9 +1,9 @@
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import DataItem, MysqlDataItem
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 
 """
 ########################################################################################################################
@@ -29,11 +29,11 @@ class DemoFiveSpider(AyuSpider):
         "MYSQL_TABLE_PREFIX": "demo5_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
-            "ayugespidertools.Pipelines.AyuTwistedMysqlPipeline": 300,
+            "ayugespidertools.pipelines.AyuTwistedMysqlPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
         "CONCURRENT_REQUESTS": 64,
         "DOWNLOAD_DELAY": 0.01,

@@ -1,9 +1,9 @@
-from ayugespidertools.AyugeCrawlSpider import AyuCrawlSpider
-from ayugespidertools.Items import DataItem, MysqlDataItem
+from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 
 """
 ########################################################################################################################
@@ -23,16 +23,19 @@ class DemoCrawlSpider(AyuCrawlSpider):
 
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
+    # 初始化配置的类型
+    settings_type = "debug"
     custom_settings = {
+        "LOG_LEVEL": "DEBUG",
         # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
         "MYSQL_TABLE_PREFIX": "demo_crawl_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
-            "ayugespidertools.Pipelines.AyuFtyMysqlPipeline": 300,
+            "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 
