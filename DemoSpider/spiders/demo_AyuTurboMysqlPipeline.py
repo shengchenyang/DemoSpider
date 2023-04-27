@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import DataItem, MysqlDataItem
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 from DemoSpider.settings import logger
 
 """
@@ -35,11 +35,11 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
         "MYSQL_TABLE_PREFIX": "demo_turbo_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
-            "ayugespidertools.Pipelines.AyuTurboMysqlPipeline": 300,
+            "ayugespidertools.pipelines.AyuTurboMysqlPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 

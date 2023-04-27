@@ -1,9 +1,10 @@
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.AyuRequest import AioFormRequest, AiohttpRequest
-from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import DataItem, MysqlDataItem
+from ayugespidertools.common.typevars import AiohttpRequestArgs
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
+from ayugespidertools.spiders import AyuSpider
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 from DemoSpider.settings import logger
 
 """
@@ -31,16 +32,16 @@ class DemoAiohttpTestSpider(AyuSpider):
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
             # 替换请求的中间件
-            "ayugespidertools.DownloaderMiddlewares.AiohttpMiddleware": 543,
+            "ayugespidertools.middlewares.AiohttpDownloaderMiddleware": 543,
         },
         # scrapy Request 替换为 aiohttp 的配置示例
         "LOCAL_AIOHTTP_CONFIG": {
-            "TIMEOUT": 5,
-            "PROXY": "127.0.0.1:1080",
-            "SLEEP": 0,
-            "RETRY_TIMES": 3,
+            "timeout": 5,
+            # "proxy": "127.0.0.1:1080",
+            "sleep": 0,
+            "retry_times": 3,
         },
         "CONCURRENT_REQUESTS": 100,
         "DOWNLOAD_DELAY": 0.01,
@@ -61,6 +62,9 @@ class DemoAiohttpTestSpider(AyuSpider):
                         "tmp": "tmp_data",
                     },
                 },
+                args=AiohttpRequestArgs(
+                    timeout=35,
+                ),
                 dont_filter=True,
             )
 
