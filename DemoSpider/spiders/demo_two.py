@@ -1,9 +1,9 @@
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import DataItem, MongoDataItem
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.items import DataItem, MongoDataItem
+from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 
 """
 ########################################################################################################################
@@ -25,11 +25,11 @@ class DemoTwoSpider(AyuSpider):
         "MONGODB_COLLECTION_PREFIX": "demo2_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
-            "ayugespidertools.Pipelines.AyuFtyMongoPipeline": 300,
+            "ayugespidertools.pipelines.AyuFtyMongoPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 

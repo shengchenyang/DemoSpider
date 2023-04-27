@@ -1,13 +1,13 @@
 import json
 
 import pandas
-from ayugespidertools.AyugeSpider import AyuSpider
-from ayugespidertools.common.Utils import ToolsForAyu
-from ayugespidertools.Items import DataItem, MysqlDataItem
+from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.spiders import AyuSpider
 from loguru import logger
 from scrapy.http import Request
 
-from DemoSpider.common.DataEnum import TableEnum
+from DemoSpider.items import TableEnum
 
 """
 ########################################################################################################################
@@ -34,11 +34,11 @@ class DemoThreeSpider(AyuSpider):
         "MYSQL_TABLE_PREFIX": "demo3_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
-            "ayugespidertools.Pipelines.AyuFtyMysqlPipeline": 300,
+            "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
-            "ayugespidertools.Middlewares.RandomRequestUaMiddleware": 400,
+            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 
