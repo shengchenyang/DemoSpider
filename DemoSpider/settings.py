@@ -83,17 +83,13 @@ EXCLUSIVE_PROXY_CONFIG = {
     "proxy": config_parser.get("kdl_exclusive_proxy", "proxy", fallback=None),
     "username": config_parser.get("kdl_exclusive_proxy", "username", fallback=None),
     "password": config_parser.get("kdl_exclusive_proxy", "password", fallback=None),
-    "index": config_parser.getint(
-        "kdl_exclusive_proxy", "index", fallback=1
-    ),
+    "index": config_parser.getint("kdl_exclusive_proxy", "index", fallback=1),
 }
 
 # ali oss 对象存储
 OSS_CONFIG = {
     "accesskeyid": config_parser.get("ali_oss", "accesskeyid", fallback=None),
-    "accesskeysecret": config_parser.get(
-        "ali_oss", "accesskeysecret", fallback=None
-    ),
+    "accesskeysecret": config_parser.get("ali_oss", "accesskeysecret", fallback=None),
     "endpoint": config_parser.get("ali_oss", "endpoint", fallback=None),
     "bucket": config_parser.get("ali_oss", "bucket", fallback=None),
     "doc": config_parser.get("ali_oss", "doc", fallback=None),
