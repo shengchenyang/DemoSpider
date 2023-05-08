@@ -3,9 +3,11 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-import scrapy
 from enum import Enum, unique
+
+import scrapy
 from ayugespidertools.common.typevars import TableTemplate
+
 
 @unique
 class TableEnum(Enum):
@@ -27,6 +29,7 @@ class TableEnum(Enum):
     )
 
     # 如果项目中依赖其它表格，请按照上方示例进行增加或修改
+
 
 class DemospiderItem(scrapy.Item):
     # define the fields for your item here like:
