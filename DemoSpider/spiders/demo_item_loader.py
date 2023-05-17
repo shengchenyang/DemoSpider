@@ -63,6 +63,13 @@ class DemoItemLoaderSpider(AyuSpider):
         )
 
         for book_info in book_info_list:
+            my_item = MysqlDataItem(
+                book_name=None,
+                book_href=None,
+                book_intro=None,
+                _table=TableEnum.article_list_table.value["value"],
+            )
+
             book_name = ToolsForAyu.extract_with_xpath(
                 response=book_info, query='div[@class="bookname"]/a/text()'
             )
@@ -76,22 +83,10 @@ class DemoItemLoaderSpider(AyuSpider):
                 response=book_info, query='div[@class="bookintro"]/text()'
             )
 
-            # 给 scrapy item 动态添加所需字段
-            ScrapyClassicItem.fields["book_name"] = scrapy.Field()
-            ScrapyClassicItem.fields["book_href"] = scrapy.Field()
-            ScrapyClassicItem.fields["book_intro"] = scrapy.Field()
-
-            mine_item = ItemLoader(item=ScrapyClassicItem(), selector=book_info)
+            mine_item = ItemLoader(item=my_item.asitem(), selector=None)
             mine_item.default_output_processor = TakeFirst()
             mine_item.add_value("book_name", book_name)
             mine_item.add_value("book_href", book_href)
-            mine_item.add_xpath("book_intro", 'div[@class="bookintro"]/text()')
-
-            mine_item.add_value("item_mode", "Mysql")
-            mine_item.add_value(
-                "table",
-                self.custom_settings.get("MYSQL_TABLE_PREFIX", "")
-                + TableEnum.article_list_table.value["value"],
-            )
+            mine_item.add_value("book_intro", book_intro)
             item = mine_item.load_item()
             yield item
