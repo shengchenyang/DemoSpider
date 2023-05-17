@@ -1,8 +1,6 @@
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.settings import DYNAMIC_PROXY_CONFIG
-
 """
 ########################################################################################################################
 # collection_website: myip - myip.ipip.net
@@ -23,15 +21,6 @@ class DemoProxySpider(AyuSpider):
         "DOWNLOADER_MIDDLEWARES": {
             # 动态隧道代理激活
             "ayugespidertools.middlewares.DynamicProxyDownloaderMiddleware": 125,
-        },
-        # 动态代理对应配置(激活 DOWNLOADER_MIDDLEWARES 中的动态隧道代理时使用)。在 settings 中配置了即可，这里有点重复了，只设置一遍即可，这里为了方便展示而已。
-        "DYNAMIC_PROXY_CONFIG": {
-            # 隧道代理服务器域名:端口号（示例: o668.kdltps.com:15818）
-            "proxy": DYNAMIC_PROXY_CONFIG["proxy"],
-            # 用户名 username（隧道代理 tid）
-            "username": DYNAMIC_PROXY_CONFIG["username"],
-            # 对应密码
-            "password": DYNAMIC_PROXY_CONFIG["password"],
         },
     }
 
