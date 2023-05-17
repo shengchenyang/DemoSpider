@@ -51,11 +51,9 @@ class DemoCrawlSpider(AyuCrawlSpider):
         book_name_list = response.xpath('//div[@class="book-name"]//text()').extract()
         book_name = "".join(book_name_list).strip()
 
-        novel_info = {"book_name": DataItem(book_name, "图书名称")}
-
         NovelInfoItem = MysqlDataItem(
-            alldata=novel_info,
-            table=TableEnum.article_list_table.value["value"],
+            book_name=book_name,
+            _table=TableEnum.article_list_table.value["value"],
         )
         self.slog.info(f"NovelInfoItem: {NovelInfoItem}")
         yield NovelInfoItem
