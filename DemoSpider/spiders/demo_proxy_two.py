@@ -1,8 +1,6 @@
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.settings import EXCLUSIVE_PROXY_CONFIG
-
 """
 ########################################################################################################################
 # collection_website: myip - myip.ipip.net
@@ -23,13 +21,6 @@ class DemoProxyTwoSpider(AyuSpider):
         "DOWNLOADER_MIDDLEWARES": {
             # 独享代理激活
             "ayugespidertools.middlewares.ExclusiveProxyDownloaderMiddleware": 125,
-        },
-        # 独享代理对应配置(激活 DOWNLOADER_MIDDLEWARES 中的独享代理时使用)。在 settings 中配置了即可，这里有点重复了，只设置以便即可，这里为了方便展示而已。
-        "EXCLUSIVE_PROXY_CONFIG": {
-            "proxy": EXCLUSIVE_PROXY_CONFIG["proxy"],
-            "username": EXCLUSIVE_PROXY_CONFIG["username"],
-            "password": EXCLUSIVE_PROXY_CONFIG["password"],
-            "index": EXCLUSIVE_PROXY_CONFIG["index"],
         },
     }
 
