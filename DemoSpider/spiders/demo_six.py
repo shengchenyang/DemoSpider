@@ -71,20 +71,12 @@ class DemoSixSpider(AyuSpider):
                 response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
             )
 
-            book_info = {
-                "book_name": DataItem(book_name, "小说名称"),
-                "book_href": DataItem(book_href, "小说链接"),
-                "book_intro": DataItem(book_intro, "小说简介"),
-            }
-
             BookInfoItem = MongoDataItem(
-                # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
-                alldata=book_info,
-                # table 为 mongo 的存储 Collection 集合的名称
-                table=TableEnum.book_info_list_table.value["value"],
-                # mongo_update_rule 为查询数据是否存在的规则
-                mongo_update_rule={"book_name": book_name},
+                book_name=book_name,
+                book_href=book_href,
+                book_intro=book_intro,
+                _table=TableEnum.book_info_list_table.value["value"],
+                _mongo_update_rule={"book_name": book_name},
             )
-
             self.slog.info(f"BookInfoItem: {BookInfoItem}")
             yield BookInfoItem
