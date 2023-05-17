@@ -69,22 +69,14 @@ class DemoFourSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            # ayugespidertools 推荐的风格写法(更直观)
-            article_info = {
-                "article_detail_url": DataItem(article_detail_url, "文章详情链接"),
-                "article_title": DataItem(article_title, "文章标题"),
-                "comment_count": DataItem(comment_count, "文章评论数量"),
-                "favor_count": DataItem(favor_count, "文章赞成数量"),
-                "nick_name": DataItem(nick_name, "文章作者昵称"),
-            }
-
             ArticleInfoItem = MongoDataItem(
-                # alldata 用于存储 mongo 的 Document 文档所需要的字段映射
-                alldata=article_info,
-                # table 为 mongo 的存储 Collection 集合的名称
-                table=TableEnum.article_list_table.value["value"],
-                # mongo_update_rule 为查询数据是否存在的规则
-                mongo_update_rule={"article_detail_url": article_detail_url},
+                article_detail_url=article_detail_url,
+                article_title=article_title,
+                comment_count=comment_count,
+                favor_count=favor_count,
+                nick_name=nick_name,
+                _table=TableEnum.article_list_table.value["value"],
+                _mongo_update_rule={"article_detail_url": article_detail_url},
             )
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             yield ArticleInfoItem
