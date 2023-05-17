@@ -84,16 +84,10 @@ class DemoAiohttpTestSpider(AyuSpider):
             book_intro = ToolsForAyu.extract_with_xpath(
                 response=book_info, query='div[@class="bookintro"]/text()'
             )
-            # print(book_name, book_href, book_intro)
-
-            book_info = {
-                "book_name": DataItem(book_name, "小说名称"),
-                "book_href": DataItem(book_href, "小说链接"),
-                "book_intro": DataItem(book_intro, "小说简介"),
-            }
-
             BookInfoItem = MysqlDataItem(
-                alldata=book_info,
-                table=TableEnum.book_info_list_table.value["value"],
+                book_name=book_name,
+                book_href=book_href,
+                book_intro=book_intro,
+                _table=TableEnum.book_info_list_table.value["value"],
             )
             self.slog.info(f"BookInfoItem: {BookInfoItem}")
