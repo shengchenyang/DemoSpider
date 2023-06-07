@@ -42,8 +42,7 @@ pip install ayugespidertools -i https://pypi.org/simple
 
 # 将 `Scrapy` 的 `Request`，`FormRequest` 替换为其它工具实现的场景
 - 以上为使用 scrapy Request 的场景
-+ 7).demo_seven: scrapy Request 替换为 requests 请求的场景(一般情况下不推荐使用，同步库
-+ 会拖慢 scrapy 速度，可用于测试场景)
+- 7).demo_seven: scrapy Request 替换为 requests 请求的场景(已删除此功能，更推荐使用 aiohttp 方式)
 
 + 8).demo_eight: 同时存入 Mysql 和 MongoDB 的场景
 
@@ -58,10 +57,11 @@ pip install ayugespidertools -i https://pypi.org/simple
 
 # 本库中给出支持 Item Loaders 特性的示例(文档地址：https://ayugespidertools.readthedocs.io/en/latest/topics/loaders.html)
 +15).demo_item_loader: 本库中使用 Item Loaders 的示例
--16).demo_item_loader_two: 展示本库使用 itemLoader 特性的示例，此示例已删除，可查看上个 demo_item_loader 中的示例，目标已经可以很方便的使用 Item Loaders 功能了
+-16).demo_item_loader_two: 展示本库使用 itemLoader 特性的示例，此示例已删除，可查看上个 demo_item_loader 中的示例，目前已经可以很方便的使用 Item Loaders 功能了
 
 +17).demo_mongo_async: asyncio 版本存储 mongoDB 的 pipelines 示例
-+18).demo_mq: 数据存入 rabbitmq 的模板示例，通过 pika 库实现
++18).demo_mq: 数据存入 rabbitmq 的模板示例
++19).demo_kafka: 数据存入 rabbitmq 的模板示例
 ```
 
 
