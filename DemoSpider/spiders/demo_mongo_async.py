@@ -25,8 +25,6 @@ class DemoMongoAsyncSpider(AyuSpider):
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     custom_settings = {
-        # MongoDB 集合的前缀名称，用于标记属于哪个项目，可不配置
-        "MONGODB_COLLECTION_PREFIX": "demo_mongo_async_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
             "ayugespidertools.pipelines.AsyncMongoPipeline": 300,
