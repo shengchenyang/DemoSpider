@@ -23,8 +23,6 @@ class DemoFourSpider(AyuSpider):
     custom_settings = {
         # 是否开启 consul 的应用管理中心取值的功能(也需要设置 CONSUL_CONF 的值，本示例在 settings 中配置)
         "APP_CONF_MANAGE": True,
-        # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
-        "MONGODB_COLLECTION_PREFIX": "demo4_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
             "ayugespidertools.pipelines.AyuFtyMongoPipeline": 300,
