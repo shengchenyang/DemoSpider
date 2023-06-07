@@ -27,8 +27,6 @@ class DemoCrawlSpider(AyuCrawlSpider):
     settings_type = "debug"
     custom_settings = {
         "LOG_LEVEL": "DEBUG",
-        # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
-        "MYSQL_TABLE_PREFIX": "demo_crawl_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
