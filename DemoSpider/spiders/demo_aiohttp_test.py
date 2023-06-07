@@ -37,7 +37,7 @@ class DemoAiohttpTestSpider(AyuSpider):
             "ayugespidertools.middlewares.AiohttpDownloaderMiddleware": 543,
         },
         # scrapy Request 替换为 aiohttp 的配置示例
-        "LOCAL_AIOHTTP_CONFIG": {
+        "AIOHTTP_CONFIG": {
             "timeout": 5,
             # "proxy": "127.0.0.1:1080",
             "sleep": 0,
