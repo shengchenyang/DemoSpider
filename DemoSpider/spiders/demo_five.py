@@ -25,8 +25,6 @@ class DemoFiveSpider(AyuSpider):
     custom_table_enum = TableEnum
     custom_settings = {
         "LOG_LEVEL": "ERROR",
-        # 数据表的前缀名称，用于标记属于哪个项目
-        "MYSQL_TABLE_PREFIX": "demo5_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuTwistedMysqlPipeline": 300,
