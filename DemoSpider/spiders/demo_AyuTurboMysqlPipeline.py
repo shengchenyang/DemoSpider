@@ -31,8 +31,6 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
         # 是否开启记录项目相关运行统计信息
         "RECORD_LOG_TO_MYSQL": False,
         "LOGURU_CONFIG": logger,
-        # 数据表的前缀名称，用于标记属于哪个项目，也可以不用添加或配置
-        "MYSQL_TABLE_PREFIX": "demo_turbo_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuTurboMysqlPipeline": 300,
