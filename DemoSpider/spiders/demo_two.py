@@ -21,8 +21,6 @@ class DemoTwoSpider(AyuSpider):
     allowed_domains = ["csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
     custom_settings = {
-        # 数据表的前缀名称，用于标记属于哪个项目（也可不配置此参数，按需配置）
-        "MONGODB_COLLECTION_PREFIX": "demo2_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
             "ayugespidertools.pipelines.AyuFtyMongoPipeline": 300,
