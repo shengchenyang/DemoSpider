@@ -30,8 +30,6 @@ class DemoThreeSpider(AyuSpider):
     custom_settings = {
         # 是否开启 consul 的应用管理中心取值的功能(也需要设置 CONSUL_CONF 的值，本示例在 settings 中配置)
         "APP_CONF_MANAGE": True,
-        # 数据表的前缀名称，用于标记属于哪个项目
-        "MYSQL_TABLE_PREFIX": "demo3_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
@@ -96,8 +94,7 @@ class DemoThreeSpider(AyuSpider):
             try:
                 # 测试 mysql_engine 的功能
                 sql = """select `id` from `{}` where `article_detail_url` = "{}" limit 1""".format(
-                    self.custom_settings.get("MYSQL_TABLE_PREFIX", "")
-                    + TableEnum.article_list_table.value["value"],
+                    TableEnum.article_list_table.value["value"],
                     article_detail_url,
                 )
                 df = pandas.read_sql(sql, self.mysql_engine)
