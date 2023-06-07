@@ -22,7 +22,6 @@ class DemoSixSpider(AyuSpider):
     start_urls = ["http://book.zongheng.com"]
     custom_settings = {
         "LOG_LEVEL": "ERROR",
-        "MONGODB_COLLECTION_PREFIX": "demo6_",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
             "ayugespidertools.pipelines.AyuTwistedMongoPipeline": 300,
