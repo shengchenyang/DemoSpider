@@ -28,9 +28,7 @@ class DemoKafkaSpider(AyuSpider):
     custom_table_enum = TableEnum
     custom_settings = {
         "ITEM_PIPELINES": {
-            # "DemoSpider.pipelines.KafkaPipeline": 301,
-            "DemoSpider.pipelines.AyuKafkaPipeline": 301,
-            # "ayugespidertools.pipelines.AyuKafkaPipeline": 301,
+            "ayugespidertools.pipelines.KafkaPipeline": 301,
         },
     }
 
@@ -79,12 +77,13 @@ class DemoKafkaSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            res = {
-                "article_detail_url": article_detail_url,
-                "article_title": article_title,
-                "comment_count": comment_count,
-                "favor_count": favor_count,
-                "nick_name": nick_name,
-                "_table": TableEnum.article_list_table.value["value"],
-            }
-            yield res
+            ArticleInfoMysqlItem = MysqlDataItem(
+                article_detail_url=DataItem(article_detail_url, "文章详情链接"),
+                article_title=DataItem(article_title, "文章标题"),
+                comment_count=DataItem(comment_count, "文章评论数量"),
+                favor_count=DataItem(favor_count, "文章赞成数量"),
+                nick_name=DataItem(nick_name, "文章作者昵称"),
+                _table=TableEnum.article_list_table.value["value"],
+            )
+            self.slog.info(f"ArticleInfoMysqlItem: {ArticleInfoMysqlItem}")
+            yield ArticleInfoMysqlItem
