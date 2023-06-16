@@ -1,11 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding:utf-8 -*-
-import pandas
-import scrapy
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import MongoDataItem, MysqlDataItem, ScrapyClassicItem
+from ayugespidertools.items import MysqlDataItem
 from ayugespidertools.spiders import AyuSpider
-from itemloaders.processors import Join, MapCompose, TakeFirst
+from itemloaders.processors import TakeFirst
 from loguru import logger
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
@@ -74,19 +70,10 @@ class DemoItemLoaderSpider(AyuSpider):
                 response=book_info, query='div[@class="bookname"]/a/text()'
             )
 
-            book_href = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[@class="bookname"]/a/@href'
-            )
-
-            # 可以自行解析出字段，也可以使用下方的 add_xpath("book_intro", xpath_info) 方法
-            book_intro = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[@class="bookintro"]/text()'
-            )
-
-            mine_item = ItemLoader(item=my_item.asitem(), selector=None)
+            mine_item = ItemLoader(item=my_item.asitem(), selector=book_info)
             mine_item.default_output_processor = TakeFirst()
             mine_item.add_value("book_name", book_name)
-            mine_item.add_value("book_href", book_href)
-            mine_item.add_value("book_intro", book_intro)
+            mine_item.add_css("book_href", "div.bookname > a::attr(href)")
+            mine_item.add_xpath("book_intro", 'div[@class="bookintro"]/text()')
             item = mine_item.load_item()
             yield item
