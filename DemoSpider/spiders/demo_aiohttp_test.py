@@ -1,6 +1,6 @@
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
@@ -84,7 +84,7 @@ class DemoAiohttpTestSpider(AyuSpider):
             book_intro = ToolsForAyu.extract_with_xpath(
                 response=book_info, query='div[@class="bookintro"]/text()'
             )
-            BookInfoItem = MysqlDataItem(
+            BookInfoItem = AyuItem(
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,

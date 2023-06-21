@@ -1,5 +1,5 @@
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import DataItem, MongoDataItem
+from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -70,7 +70,7 @@ class DemoSixSpider(AyuSpider):
                 response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
             )
 
-            BookInfoItem = MongoDataItem(
+            BookInfoItem = AyuItem(
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,

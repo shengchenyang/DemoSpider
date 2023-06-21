@@ -1,6 +1,6 @@
 import pandas
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import DataItem, MongoDataItem, MysqlDataItem
+from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
@@ -28,6 +28,7 @@ class DemoKafkaSpider(AyuSpider):
     custom_table_enum = TableEnum
     custom_settings = {
         "ITEM_PIPELINES": {
+            # "DemoSpider.pipelines.KafkaPipeline": 301,
             "ayugespidertools.pipelines.KafkaPipeline": 301,
         },
     }
@@ -77,7 +78,7 @@ class DemoKafkaSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            ArticleInfoMysqlItem = MysqlDataItem(
+            ArticleInfoMysqlItem = AyuItem(
                 article_detail_url=DataItem(article_detail_url, "文章详情链接"),
                 article_title=DataItem(article_title, "文章标题"),
                 comment_count=DataItem(comment_count, "文章评论数量"),

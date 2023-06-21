@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
@@ -81,7 +81,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
                 response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
             )
 
-            BookInfoItem = MysqlDataItem(
+            BookInfoItem = AyuItem(
                 book_name=DataItem(book_name, "小说名称"),
                 book_href=DataItem(book_href, "小说链接"),
                 book_intro=DataItem(book_intro, "小说简介"),

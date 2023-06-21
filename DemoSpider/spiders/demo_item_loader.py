@@ -1,5 +1,5 @@
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import MysqlDataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from itemloaders.processors import TakeFirst
 from loguru import logger
@@ -59,7 +59,7 @@ class DemoItemLoaderSpider(AyuSpider):
         )
 
         for book_info in book_info_list:
-            my_item = MysqlDataItem(
+            my_item = AyuItem(
                 book_name=None,
                 book_href=None,
                 book_intro=None,

@@ -1,5 +1,5 @@
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import DataItem, MongoDataItem
+from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -70,7 +70,7 @@ class DemoTwoSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            ArticleInfoItem = MongoDataItem(
+            ArticleInfoItem = AyuItem(
                 article_detail_url=article_detail_url,
                 article_title=article_title,
                 comment_count=comment_count,

@@ -1,4 +1,4 @@
-from ayugespidertools.items import DataItem, MysqlDataItem
+from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
@@ -49,7 +49,7 @@ class DemoCrawlSpider(AyuCrawlSpider):
         book_name_list = response.xpath('//div[@class="book-name"]//text()').extract()
         book_name = "".join(book_name_list).strip()
 
-        NovelInfoItem = MysqlDataItem(
+        NovelInfoItem = AyuItem(
             book_name=book_name,
             _table=TableEnum.article_list_table.value["value"],
         )
