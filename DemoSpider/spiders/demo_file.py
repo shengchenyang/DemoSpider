@@ -11,8 +11,8 @@ from DemoSpider.settings import DOC_DIR
 
 """
 ####################################################################################################
-# collection_website: image.baidu.com - 百度图片
-# collection_content: 采集百度图片
+# collection_website: csdn.net - csdn python 热榜
+# collection_content: 采集 csdn python 热榜的文章列表，并下载图片
 # create_time: 2023-06-19
 # explain:
 # demand_code_prefix = ""
@@ -65,8 +65,7 @@ class DemoFileSpider(AyuSpider):
                 json_data=curr_data, query=["extend", "title"]
             )
             img_href = ToolsForAyu.extract_with_json(
-                json_data=curr_data,
-                query=["extend", "pic"]
+                json_data=curr_data, query=["extend", "pic"]
             )
 
             img_item = AyuItem(

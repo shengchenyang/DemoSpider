@@ -61,7 +61,8 @@ pip install ayugespidertools -i https://pypi.org/simple
 
 +17).demo_mongo_async: asyncio 版本存储 mongoDB 的 pipelines 示例
 +18).demo_mq: 数据存入 rabbitmq 的模板示例
-+19).demo_kafka: 数据存入 rabbitmq 的模板示例
++19).demo_kafka: 数据存入 kafka 的模板示例
++20).demo_file: 下载图片等文件到本地的模板示例
 ```
 
 
