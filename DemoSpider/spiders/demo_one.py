@@ -1,9 +1,11 @@
 import json
+from typing import Union
 
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+from scrapy.http.response.html import HtmlResponse
 from scrapy.http.response.text import TextResponse
 
 from DemoSpider.items import TableEnum
@@ -58,7 +60,7 @@ class DemoOneSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: TextResponse):
+    def parse_first(self, response: Union[HtmlResponse, TextResponse]):
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
             # 这里的所有解析方式可选择自己习惯的其它任意库，xpath， json 或正则等等。
