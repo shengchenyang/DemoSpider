@@ -18,8 +18,8 @@ from DemoSpider.items import TableEnum
 
 class DemoCrawlSpider(AyuCrawlSpider):
     name = "demo_crawl"
-    allowed_domains = ["zongheng.com"]
-    start_urls = ["https://www.zongheng.com/rank/details.html?rt=1&d=1"]
+    allowed_domains = ["qidian.com"]
+    start_urls = ["https://www.qidian.com/rank/hotsales/"]
 
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
@@ -39,14 +39,14 @@ class DemoCrawlSpider(AyuCrawlSpider):
 
     rules = (
         Rule(
-            LinkExtractor(restrict_xpaths='//div[@class="rank_d_b_name"]/a'),
+            LinkExtractor(restrict_xpaths="//ul/li/div[@class='book-mid-info']/h2/a"),
             callback="parse_item",
         ),
     )
 
     def parse_item(self, response):
         # 获取图书名称 - （获取的是详情页中的图书名称）
-        book_name_list = response.xpath('//div[@class="book-name"]//text()').extract()
+        book_name_list = response.xpath("//h1[@id='bookName']//text()").extract()
         book_name = "".join(book_name_list).strip()
 
         NovelInfoItem = AyuItem(
