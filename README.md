@@ -75,26 +75,26 @@ pip install ayugespidertools -i https://pypi.org/simple
 > 下图为 `demo_one` 的 `Mysql` 取本地配置 `LOCAL_MYSQL_CONFIG` 下的运行示例：
 >
 
-![image-20220803151448062](DemoSpider/doc/image-20220803151448062.png)
+![image-20220803151448062](DemoSpider/docs/images/image-20220803151448062.png)
 
 > 下图为 `demo_two` 的 `MongDB` 存储的场景下的示例：
 >
 
-![image-20220807170330444](DemoSpider/doc/image-20220807170330444.png)
+![image-20220807170330444](DemoSpider/docs/images/image-20220807170330444.png)
 
 > 下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
 >
 
 **要运行此示例时，只需配置 `APP_CONF_MANAGE` 为 `True`，且在 `.conf` 中设置 `CONSUL` 相关配置后，当前的 `spiders` 即从 `consul` 的应用管理中心中取相应配置。**
 
-![image-20220807170520647](DemoSpider/doc/image-20220807170520647.png)
+![image-20220807170520647](DemoSpider/docs/images/image-20220807170520647.png)
 
 > 下图为 `demo_four` 的 `MongoDB` 取 `consul` 应用管理中心的配置下的运行示例：
 >
 
-![image-20220807223716593](DemoSpider/doc/image-20220807223716593.png)
+![image-20220807223716593](DemoSpider/docs/images/image-20220807223716593.png)
 
 > 下图为 `demo_proxy_one` 的快代理动态隧道代理运行示例：
 
-![image-20220905112615892](DemoSpider/doc/image-20220905112615892.png)
+![image-20220905112615892](DemoSpider/docs/images/image-20220905112615892.png)
 
