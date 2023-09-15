@@ -28,8 +28,7 @@ class DemoKafkaSpider(AyuSpider):
     custom_table_enum = TableEnum
     custom_settings = {
         "ITEM_PIPELINES": {
-            # "DemoSpider.pipelines.KafkaPipeline": 301,
-            "ayugespidertools.pipelines.KafkaPipeline": 301,
+            "ayugespidertools.pipelines.AyuKafkaPipeline": 301,
         },
     }
 
