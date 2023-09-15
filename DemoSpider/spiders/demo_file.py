@@ -74,5 +74,15 @@ class DemoFileSpider(AyuSpider):
                 file_format=DataItem("png", "图片格式"),
                 _table=TableEnum.article_list_table.value["value"],
             )
+
+            # 同样地，也可以直接返回 dict，但记得 _table 特殊字段
+            """
+            img_item = {
+                "title": title,
+                "file_url": img_href,
+                "file_format": "png",
+                "_table": TableEnum.article_list_table.value["value"],
+            }
+            """
             self.slog.info(f"img_item: {img_item}")
             yield img_item
