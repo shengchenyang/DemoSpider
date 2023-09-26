@@ -26,9 +26,10 @@ class DemoOneSpider(AyuSpider):
     name = "demo_one"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
+    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+    mysql_engine_enabled = True
     custom_settings = {
         # 是否开启记录项目相关运行统计信息。不配置默认为 False
         "RECORD_LOG_TO_MYSQL": False,
@@ -43,9 +44,6 @@ class DemoOneSpider(AyuSpider):
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
-
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
 
     def start_requests(self):
         """
