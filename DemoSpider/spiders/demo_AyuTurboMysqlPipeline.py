@@ -24,9 +24,10 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
     name = "demo_AyuTurboMysqlPipeline"
     allowed_domains = ["csdn.net"]
     start_urls = ["http://csdn.net/"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
+    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+    mysql_engine_enabled = True
     custom_settings = {
         # 是否开启记录项目相关运行统计信息
         "RECORD_LOG_TO_MYSQL": False,
@@ -40,9 +41,6 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
-
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
 
     def start_requests(self):
         """
