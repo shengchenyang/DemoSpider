@@ -22,7 +22,6 @@ class DemoAiohttpTestSpider(AyuSpider):
     name = "demo_aiohttp_test"
     allowed_domains = ["book.zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     # 初始化配置的类型
