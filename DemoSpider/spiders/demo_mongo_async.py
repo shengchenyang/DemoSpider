@@ -21,7 +21,6 @@ class DemoMongoAsyncSpider(AyuSpider):
     name = "demo_mongo_async"
     allowed_domains = ["faloo.com"]
     start_urls = ["http://b.faloo.com/"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     custom_settings = {
