@@ -26,8 +26,9 @@ class DemoFileSpider(AyuSpider):
     start_urls = [
         "https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python"
     ]
-
     custom_table_enum = TableEnum
+    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+    mysql_engine_enabled = True
     custom_settings = {
         "ITEM_PIPELINES": {
             "ayugespidertools.pipelines.FilesDownloadPipeline": 300,
@@ -39,9 +40,6 @@ class DemoFileSpider(AyuSpider):
         # 下载文件保存路径，不配置则默认为设置中的 DOC_DIR（需要确认此文件夹是否存在）
         "FILES_STORE": DOC_DIR,
     }
-
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
 
     def start_requests(self):
         """
