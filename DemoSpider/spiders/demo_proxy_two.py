@@ -16,7 +16,6 @@ class DemoProxyTwoSpider(AyuSpider):
     name = "demo_proxy_two"
     allowed_domains = ["myip.ipip.net"]
     start_urls = ["https://myip.ipip.net/"]
-
     custom_settings = {
         "DOWNLOADER_MIDDLEWARES": {
             # 独享代理激活

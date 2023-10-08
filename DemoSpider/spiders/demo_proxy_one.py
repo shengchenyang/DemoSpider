@@ -16,7 +16,6 @@ class DemoProxySpider(AyuSpider):
     name = "demo_proxy_one"
     allowed_domains = ["myip.ipip.net"]
     start_urls = ["https://myip.ipip.net/"]
-
     custom_settings = {
         "DOWNLOADER_MIDDLEWARES": {
             # 动态隧道代理激活
