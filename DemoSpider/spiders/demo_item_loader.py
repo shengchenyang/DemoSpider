@@ -24,9 +24,10 @@ class DemoItemLoaderSpider(AyuSpider):
     name = "demo_item_loader"
     allowed_domains = ["zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
+    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+    mysql_engine_enabled = True
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
@@ -37,9 +38,6 @@ class DemoItemLoaderSpider(AyuSpider):
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
-
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
 
     def start_requests(self):
         for page in range(1, 5):
