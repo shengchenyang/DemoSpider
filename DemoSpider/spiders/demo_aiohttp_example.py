@@ -23,7 +23,6 @@ class DemoAiohttpSpider(AyuSpider):
     name = "demo_aiohttp_example"
     allowed_domains = ["httpbin.org"]
     start_urls = ["http://httpbin.org/"]
-
     # 初始化配置的类型
     settings_type = "debug"
     custom_settings = {
