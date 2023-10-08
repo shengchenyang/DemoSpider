@@ -20,7 +20,6 @@ class DemoMqSpider(AyuSpider):
     name = "demo_mq"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
