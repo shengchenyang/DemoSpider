@@ -1,4 +1,3 @@
-import pandas
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
@@ -6,7 +5,6 @@ from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
 from DemoSpider.items import TableEnum
-from DemoSpider.settings import logger
 
 """
 ####################################################################################################
@@ -23,7 +21,6 @@ class DemoKafkaSpider(AyuSpider):
     name = "demo_kafka"
     allowed_domains = ["csdn.net"]
     start_urls = ["http://csdn.net/"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     custom_settings = {
