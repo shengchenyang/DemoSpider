@@ -20,7 +20,6 @@ class DemoCrawlSpider(AyuCrawlSpider):
     name = "demo_crawl"
     allowed_domains = ["qidian.com"]
     start_urls = ["https://www.qidian.com/rank/hotsales/"]
-
     # 数据库表的枚举信息
     custom_table_enum = TableEnum
     # 初始化配置的类型
