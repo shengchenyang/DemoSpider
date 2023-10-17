@@ -1,9 +1,5 @@
 # DemoSpider 项目说明文档
 
-## —— 之 AyugeSpiderTools 工具应用示例
-
-> 本文章用于说明 `ayugespidertools` 的 `scrapy` 扩展库在 `python` 爬虫开发中的简单应用，可以**解放爬虫开发人员的双手**：不用关注 `item`, `middlewares` 和 `pipelines` 的编写，专心反爬和 `spiders` 的解析规则即可。
-
 ## 前言
 本文是对 `AyugeSpiderTools` 工具的使用进行具体场景实现，由于此项目会经常变动和修改，所以独立成为一个专属项目，而不是放入 `AyugeSpiderTools` 项目的示例中。
 
@@ -14,57 +10,20 @@
 > `python 3.8+` 可以直接输入以下命令：
 
 ```shell
-pip install ayugespidertools -i https://pypi.org/simple
+pip install ayugespidertools
 ```
 
 ### 1.1. 运行方法
 
 > 本扩展库用于方便 `python` 开发，本项目的应用场景的运行方法为：
 
-只需要将本项目中的 `VIT` 文件夹下的 `.conf` 文件如下编辑，然后 `scrapy crawl xxxx` 对应的 `spiders` 脚本即可。
-
-> `VIT` 文件夹中的 `.conf` 文件内容为，已脱敏，请按需自行配置：
+只需要补充本项目中 `VIT` 下的 `.conf` 配置内容即可。
 
 项目中已给出 `.conf_example` 的示例文件，请对照你所复现的场景按需配置。
 
-> 项目中各 `spiders` 脚本名称及其对应功能介绍，如下：
+> 项目中各 `spiders` 脚本名称及其对应功能介绍：
 
-```diff
-# 采集数据存入 `Mysql` 的场景：
-+ 1).demo_one: 配置根据本地 `settings` 的 `LOCAL_MYSQL_CONFIG` 中取值
-+ 3).demo_three: 配置根据 `consul` 的应用管理中心中取值
-+ 5).demo_five: 异步存入 `Mysql` 的场景
-
-# 采集数据存入 `MongoDB` 的场景：
-+ 2).demo_two: 采集数据存入 `MongoDB` 的场景（配置根据本地 `settings` 的 `LOCAL_MONGODB_CONFIG` 中取值）
-+ 4).demo_four: 采集数据存入 `MongoDB` 的场景（配置根据 `consul` 的应用管理中心中取值）
-+ 6).demo_six: 异步存入 `MongoDB` 的场景
-
-# 将 `Scrapy` 的 `Request`，`FormRequest` 替换为其它工具实现的场景
-- 以上为使用 scrapy Request 的场景
-- 7).demo_seven: scrapy Request 替换为 requests 请求的场景(已删除此功能，更推荐使用 aiohttp 方式)
-
-+ 8).demo_eight: 同时存入 Mysql 和 MongoDB 的场景
-
-+ 9).demo_aiohttp_example: scrapy Request 替换为 aiohttp 请求的场景，提供了各种请求场景示例（GET,POST）
-+ 10).demo_aiohttp_test: scrapy aiohttp 在具体项目中的使用方法示例
-
-+ 11).demo_proxy_one: 快代理动态隧道代理示例
-+ 12).demo_proxy_two: 测试快代理独享代理
-
-+13).demo_AyuTurboMysqlPipeline: mysql 同步连接池的示例
-+14).demo_crawl: 支持 scrapy CrawlSpider 的示例
-
-# 本库中给出支持 Item Loaders 特性的示例(文档地址：https://ayugespidertools.readthedocs.io/en/latest/topics/loaders.html)
-+15).demo_item_loader: 本库中使用 Item Loaders 的示例
--16).demo_item_loader_two: 展示本库使用 itemLoader 特性的示例，此示例已删除，可查看上个 demo_item_loader 中的示例，目前已经可以很方便的使用 Item Loaders 功能了
-
-+17).demo_mongo_async: asyncio 版本存储 mongoDB 的 pipelines 示例
-+18).demo_mq: 数据存入 rabbitmq 的模板示例
-+19).demo_kafka: 数据存入 kafka 的模板示例
-+20).demo_file: 下载图片等文件到本地的模板示例
-```
-
+具体请在 `AyugeSpiderTools` 的 `readme` 中查看，这里不再重复。
 
 ## 2. 运行结果图示
 
