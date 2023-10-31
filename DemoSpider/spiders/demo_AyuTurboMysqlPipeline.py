@@ -6,9 +6,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
-from DemoSpider.items import TableEnum
-from DemoSpider.settings import logger
-
 """
 ########################################################################################################################
 # collection_website: csdn.net - 采集的目标站点介绍
@@ -24,14 +21,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
     name = "demo_AyuTurboMysqlPipeline"
     allowed_domains = ["csdn.net"]
     start_urls = ["http://csdn.net/"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
     custom_settings = {
-        # 是否开启记录项目相关运行统计信息
-        "RECORD_LOG_TO_MYSQL": False,
-        "LOGURU_CONFIG": logger,
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuTurboMysqlPipeline": 300,
@@ -58,7 +48,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
             )
 
     def parse_first(self, response: TextResponse, curr_site: str):
-        logger.info(f"当前采集站点为: {curr_site}")
+        self.slog.info(f"当前采集站点为: {curr_site}")
         book_info_list = ToolsForAyu.extract_with_xpath(
             response=response,
             query='//div[@class="TwoBox02_01"]/div',
@@ -83,7 +73,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
                 book_name=DataItem(book_name, "小说名称"),
                 book_href=DataItem(book_href, "小说链接"),
                 book_intro=DataItem(book_intro, "小说简介"),
-                _table=TableEnum.book_info_list_table.value["value"],
+                _table=DataItem("demo_AyuTurboMysql", "demo_AyuTurboMysql表"),
             )
 
             # self.slog.info(f"BookInfoItem: {BookInfoItem}")
