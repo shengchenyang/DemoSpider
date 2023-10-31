@@ -3,8 +3,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: http://book.zongheng.com/ - 纵横中文网
@@ -21,7 +19,6 @@ class DemoSixSpider(AyuSpider):
     allowed_domains = ["book.zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
     custom_settings = {
-        "LOG_LEVEL": "ERROR",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
             "ayugespidertools.pipelines.AyuTwistedMongoPipeline": 300,
@@ -74,7 +71,7 @@ class DemoSixSpider(AyuSpider):
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,
-                _table=TableEnum.book_info_list_table.value["value"],
+                _table="demo_six",
                 _mongo_update_rule={"book_name": book_name},
             )
             self.slog.info(f"BookInfoItem: {BookInfoItem}")

@@ -6,7 +6,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
-from DemoSpider.items import TableEnum
 from DemoSpider.settings import VIT_DIR
 
 """
@@ -24,8 +23,6 @@ class DemoMysqlNacosSpider(AyuSpider):
     name = "demo_mysql_nacos"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-    custom_table_enum = TableEnum
-    mysql_engine_enabled = True
     custom_settings = {
         # 开启远程配置服务
         "APP_CONF_MANAGE": True,
@@ -96,7 +93,7 @@ class DemoMysqlNacosSpider(AyuSpider):
                 comment_count=DataItem(comment_count, "文章评论数量"),
                 favor_count=DataItem(favor_count, "文章赞成数量"),
                 nick_name=DataItem(nick_name, "文章作者昵称"),
-                _table=TableEnum.article_list_table.value["value"],
+                _table=DataItem("demo_mysql_nacos", "demo_mysql_nacos表"),
             )
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             yield ArticleInfoItem

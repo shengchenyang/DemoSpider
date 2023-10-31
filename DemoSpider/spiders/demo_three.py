@@ -7,8 +7,6 @@ from ayugespidertools.spiders import AyuSpider
 from loguru import logger
 from scrapy.http import Request
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: CSDN - 专业开发者社区
@@ -24,11 +22,9 @@ class DemoThreeSpider(AyuSpider):
     name = "demo_three"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
     custom_settings = {
+        # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+        "MYSQL_ENGINE_ENABLED": True,
         # 开启远程配置服务(优先级 consul > nacos)
         "APP_CONF_MANAGE": True,
         "ITEM_PIPELINES": {
@@ -84,7 +80,7 @@ class DemoThreeSpider(AyuSpider):
                 comment_count=DataItem(comment_count, "文章评论数量"),
                 favor_count=DataItem(favor_count, "文章赞成数量"),
                 nick_name=DataItem(nick_name, "文章作者昵称"),
-                _table=TableEnum.article_list_table.value["value"],
+                _table=DataItem("demo_three", "项目列表信息"),
             )
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             # yield ArticleInfoItem
@@ -92,7 +88,7 @@ class DemoThreeSpider(AyuSpider):
             try:
                 # 测试 mysql_engine 的功能
                 sql = """select `id` from `{}` where `article_detail_url` = "{}" limit 1""".format(
-                    TableEnum.article_list_table.value["value"],
+                    "demo_three",
                     article_detail_url,
                 )
                 df = pandas.read_sql(sql, self.mysql_engine)
