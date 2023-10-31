@@ -3,8 +3,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
-from DemoSpider.items import TableEnum
-
 """
 ####################################################################################################
 # collection_website: CSDN - 专业开发者社区
@@ -78,5 +76,5 @@ class DemoMqSpider(AyuSpider):
                 "comment_count": comment_count,
                 "favor_count": favor_count,
                 "nick_name": nick_name,
-                "_table": TableEnum.article_list_table.value["value"],
+                "_table": "demo_mq",
             }
