@@ -3,8 +3,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: CSDN - 专业开发者社区
@@ -20,13 +18,7 @@ class DemoEightSpider(AyuSpider):
     name = "demo_eight"
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
     custom_settings = {
-        # 是否开启记录项目相关运行统计信息
-        "RECORD_LOG_TO_MYSQL": False,
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
@@ -84,6 +76,6 @@ class DemoEightSpider(AyuSpider):
                 comment_count=comment_count,
                 favor_count=favor_count,
                 nick_name=nick_name,
-                _table=TableEnum.article_list_table.value["value"],
+                _table="demo_eight",
             )
             yield ArticleInfoItem
