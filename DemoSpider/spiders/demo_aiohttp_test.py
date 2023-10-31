@@ -4,9 +4,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
-from DemoSpider.items import TableEnum
-from DemoSpider.settings import logger
-
 """
 ########################################################################################################################
 # collection_website: http://book.zongheng.com/ - 纵横中文网
@@ -22,12 +19,7 @@ class DemoAiohttpTestSpider(AyuSpider):
     name = "demo_aiohttp_test"
     allowed_domains = ["book.zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
-        "LOG_LEVEL": "ERROR",
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
@@ -87,6 +79,6 @@ class DemoAiohttpTestSpider(AyuSpider):
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,
-                _table=TableEnum.book_info_list_table.value["value"],
+                _table="demo_aiohttp_test",
             )
             self.slog.info(f"BookInfoItem: {BookInfoItem}")

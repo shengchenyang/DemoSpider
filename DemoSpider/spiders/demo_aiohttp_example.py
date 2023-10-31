@@ -23,8 +23,6 @@ class DemoAiohttpSpider(AyuSpider):
     name = "demo_aiohttp_example"
     allowed_domains = ["httpbin.org"]
     start_urls = ["http://httpbin.org/"]
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOADER_MIDDLEWARES": {
@@ -32,7 +30,6 @@ class DemoAiohttpSpider(AyuSpider):
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
             # 将 scrapy Request 替换为 aiohttp 方式
             "ayugespidertools.middlewares.AiohttpDownloaderMiddleware": 543,
-            # 'ayugespidertools.DownloaderMiddlewares.AiohttpAsyncMiddleware': 543,
         },
         # scrapy Request 替换为 aiohttp 的配置示例
         "AIOHTTP_CONFIG": {
