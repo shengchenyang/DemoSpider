@@ -4,8 +4,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
-from DemoSpider.items import TableEnum
-
 """
 ####################################################################################################
 # collection_website: csdn.net - 专业开发者社区
@@ -21,8 +19,6 @@ class DemoKafkaSpider(AyuSpider):
     name = "demo_kafka"
     allowed_domains = ["csdn.net"]
     start_urls = ["http://csdn.net/"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
     custom_settings = {
         "ITEM_PIPELINES": {
             "ayugespidertools.pipelines.AyuKafkaPipeline": 301,
@@ -80,7 +76,7 @@ class DemoKafkaSpider(AyuSpider):
                 comment_count=DataItem(comment_count, "文章评论数量"),
                 favor_count=DataItem(favor_count, "文章赞成数量"),
                 nick_name=DataItem(nick_name, "文章作者昵称"),
-                _table=TableEnum.article_list_table.value["value"],
+                _table=DataItem("demo_kafka", "demo_kafka表"),
             )
             self.slog.info(f"ArticleInfoMysqlItem: {ArticleInfoMysqlItem}")
             yield ArticleInfoMysqlItem

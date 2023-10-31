@@ -4,8 +4,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
-from DemoSpider.items import TableEnum
-
 """
 ####################################################################################################
 # collection_website: faloo.com - async 存入 mongoDB 的示例，以 motor 实现
@@ -21,8 +19,6 @@ class DemoMongoAsyncSpider(AyuSpider):
     name = "demo_mongo_async"
     allowed_domains = ["faloo.com"]
     start_urls = ["http://b.faloo.com/"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
@@ -76,7 +72,7 @@ class DemoMongoAsyncSpider(AyuSpider):
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,
-                _table=TableEnum.book_info_list_table.value["value"],
+                _table="demo_mongo_async",
                 _mongo_update_rule={"book_name": book_name},
             )
             yield BookInfoItem
