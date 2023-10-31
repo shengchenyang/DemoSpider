@@ -3,8 +3,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: http://book.zongheng.com/ - 纵横中文网
@@ -20,12 +18,7 @@ class DemoFiveSpider(AyuSpider):
     name = "demo_five"
     allowed_domains = ["book.zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
     custom_settings = {
-        "LOG_LEVEL": "ERROR",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuTwistedMysqlPipeline": 300,
@@ -71,8 +64,8 @@ class DemoFiveSpider(AyuSpider):
                 book_name=DataItem(book_name, "小说名称"),
                 book_href=DataItem(book_href, "小说链接"),
                 book_intro=DataItem(book_intro, "小说简介"),
-                _table=TableEnum.book_info_list_table.value["value"],
+                _table=DataItem("demo_five", "demo5表"),
             )
 
-            # self.slog.info(f"BookInfoItem: {BookInfoItem}")
+            self.slog.info(f"BookInfoItem: {BookInfoItem}")
             yield BookInfoItem

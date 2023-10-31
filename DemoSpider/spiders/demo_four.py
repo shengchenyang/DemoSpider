@@ -3,8 +3,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: CSDN - 专业开发者社区
@@ -73,7 +71,7 @@ class DemoFourSpider(AyuSpider):
                 comment_count=comment_count,
                 favor_count=favor_count,
                 nick_name=nick_name,
-                _table=TableEnum.article_list_table.value["value"],
+                _table="demo_four",
                 _mongo_update_rule={"article_detail_url": article_detail_url},
             )
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
