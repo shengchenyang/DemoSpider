@@ -7,8 +7,6 @@ from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 from scrapy.loader import ItemLoader
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: csdn.net - 采集 csdn 热榜数据
@@ -24,10 +22,6 @@ class DemoItemLoaderSpider(AyuSpider):
     name = "demo_item_loader"
     allowed_domains = ["zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-    mysql_engine_enabled = True
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
@@ -61,7 +55,7 @@ class DemoItemLoaderSpider(AyuSpider):
                 book_name=None,
                 book_href=None,
                 book_intro=None,
-                _table=TableEnum.article_list_table.value["value"],
+                _table="demo_item_loader",
             )
 
             book_name = ToolsForAyu.extract_with_xpath(
