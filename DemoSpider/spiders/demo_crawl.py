@@ -3,8 +3,6 @@ from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
-from DemoSpider.items import TableEnum
-
 """
 ########################################################################################################################
 # collection_website: https://www.book.zongheng.com/ - 纵横中文网
@@ -20,12 +18,7 @@ class DemoCrawlSpider(AyuCrawlSpider):
     name = "demo_crawl"
     allowed_domains = ["qidian.com"]
     start_urls = ["https://www.qidian.com/rank/hotsales/"]
-    # 数据库表的枚举信息
-    custom_table_enum = TableEnum
-    # 初始化配置的类型
-    settings_type = "debug"
     custom_settings = {
-        "LOG_LEVEL": "DEBUG",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
@@ -50,7 +43,7 @@ class DemoCrawlSpider(AyuCrawlSpider):
 
         NovelInfoItem = AyuItem(
             book_name=book_name,
-            _table=TableEnum.article_list_table.value["value"],
+            _table="demo_crawl",
         )
         self.slog.info(f"NovelInfoItem: {NovelInfoItem}")
         yield NovelInfoItem
