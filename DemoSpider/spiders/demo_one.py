@@ -96,11 +96,24 @@ class DemoOneSpider(AyuSpider):
                 comment_count=comment_count,
                 favor_count=favor_count,
                 nick_name=nick_name,
-                _table="demo_one_article_list",
+                _table=_save_table",
             )
             """
+
+            # 数据存储方式 3，当然也可以直接 yield dict
+            # 但 _table，_mongo_update_rule 等参数就没有 IDE 提示功能了
+            """
+            yield {
+                "article_detail_url": article_detail_url,
+                "article_title": article_title,
+                "comment_count": comment_count,
+                "favor_count": favor_count,
+                "nick_name": nick_name,
+                "_table": _save_table,
+            }
+            """
+
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
-            # yield ArticleInfoItem
 
             # 数据入库逻辑 -> 测试 mysql_engine 的去重功能，你可以自行实现。mysql_engine 也已经给你了
             sql = f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
