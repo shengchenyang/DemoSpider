@@ -15,15 +15,17 @@ pip install ayugespidertools
 
 ### 1.1. 运行方法
 
-> 本扩展库用于方便 `python` 开发，本项目的应用场景的运行方法为：
-
 只需要补充本项目中 `VIT` 下的 `.conf` 配置内容即可。
 
-项目中已给出 `.conf_example` 的示例文件，请对照你所复现的场景按需配置。
+项目中已给出 `.conf_example` 的示例文件，请对照你想复现的场景按需配置。
+
+`VIT` 文件夹路径默认在 `spiders` 文件夹同目录。当然，你也可以自定义。
 
 > 项目中各 `spiders` 脚本名称及其对应功能介绍：
 
 具体请在 `AyugeSpiderTools` 的 `readme` 中查看，这里不再重复。
+
+然后，运行你所关心的 `spider` 即可。
 
 ## 2. 运行结果图示
 
@@ -31,7 +33,7 @@ pip install ayugespidertools
 
 注：以下运行截图非覆盖全场景，请自行查看本项目中 `spdier` 的各脚本内容。
 
-> 下图为 `demo_one` 的 `Mysql` 取本地配置 `LOCAL_MYSQL_CONFIG` 下的运行示例：
+> 下图为 `demo_one` 的 `Mysql` 取本地配置下的运行示例：
 >
 
 ![image-20220803151448062](DemoSpider/docs/images/image-20220803151448062.png)
@@ -41,14 +43,14 @@ pip install ayugespidertools
 
 ![image-20220807170330444](DemoSpider/docs/images/image-20220807170330444.png)
 
-> 下图为 `demo_three` 的 `Mysql` 取 `consul` 应用管理中心的配置下的运行示例：
+> 下图为 `demo_three` 的 `Mysql` 取 `consul` 中的配置下的运行示例：
 >
 
-**要运行此示例时，只需配置 `APP_CONF_MANAGE` 为 `True`，且在 `.conf` 中设置 `CONSUL` 相关配置后，当前的 `spiders` 即从 `consul` 的应用管理中心中取相应配置。**
+**要运行此示例时，只需配置 `APP_CONF_MANAGE` 为 `True`，且在 `.conf` 中设置 `CONSUL` 相关配置后，当前的 `spiders` 即从 `consul` 中取相应配置。**
 
 ![image-20220807170520647](DemoSpider/docs/images/image-20220807170520647.png)
 
-> 下图为 `demo_four` 的 `MongoDB` 取 `consul` 应用管理中心的配置下的运行示例：
+> 下图为 `demo_four` 的 `MongoDB` 取 `consul` 中的配置下的运行示例：
 >
 
 ![image-20220807223716593](DemoSpider/docs/images/image-20220807223716593.png)
