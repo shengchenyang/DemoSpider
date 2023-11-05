@@ -1,17 +1,8 @@
+# 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据 consul 取值)
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-
-"""
-########################################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据 consul 的应用管理中心中取值)
-# create_time: 2022-08-02
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoFourSpider(AyuSpider):
