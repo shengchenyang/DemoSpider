@@ -1,18 +1,9 @@
+# async 存入 mongoDB 的示例，以 motor 实现
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
-
-"""
-####################################################################################################
-# collection_website: faloo.com - async 存入 mongoDB 的示例，以 motor 实现
-# collection_content: 飞卢小说网
-# create_time: 2023-05-08
-# explain:
-# demand_code_prefix = ""
-####################################################################################################
-"""
 
 
 class DemoMongoAsyncSpider(AyuSpider):
