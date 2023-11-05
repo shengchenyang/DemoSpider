@@ -1,3 +1,4 @@
+# 采集 csdn python 热榜的文章列表，并下载图片
 import json
 from pathlib import Path
 
@@ -6,16 +7,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
-
-"""
-####################################################################################################
-# collection_website: csdn.net - csdn python 热榜
-# collection_content: 采集 csdn python 热榜的文章列表，并下载图片
-# create_time: 2023-06-19
-# explain:
-# demand_code_prefix = ""
-####################################################################################################
-"""
 
 
 class DemoFileSpider(AyuSpider):
