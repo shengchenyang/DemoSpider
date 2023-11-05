@@ -1,17 +1,8 @@
+# 热榜文章排名 Demo 采集示例 - 内容推送到 RabbitMQ
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
-
-"""
-####################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 内容推送到 RabbitMQ
-# create_time: 2023-05-26
-# explain:
-# demand_code_prefix = ""
-####################################################################################################
-"""
 
 
 class DemoMqSpider(AyuSpider):
