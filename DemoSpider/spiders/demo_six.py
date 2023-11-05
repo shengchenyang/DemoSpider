@@ -1,17 +1,8 @@
+# 纵横中文网小说书库采集 - 异步存入 MongoDB (配置根据本地 .conf 取值)
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-
-"""
-########################################################################################################################
-# collection_website: http://book.zongheng.com/ - 纵横中文网
-# collection_content: 纵横中文网小说书库采集 - 异步存入 MongoDB (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
-# create_time: 2022-08-17
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoSixSpider(AyuSpider):
