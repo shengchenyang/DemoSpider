@@ -1,17 +1,8 @@
+# 热榜文章排名 Demo 采集示例 - 同时存入 Mysql 和 MongoDB 的场景
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-
-"""
-########################################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 同时存入 Mysql 和 MongoDB 的场景
-# create_time: 2022-08-22
-# explain: 根据本项目中的 demo_one 脚本修改而得
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoEightSpider(AyuSpider):
