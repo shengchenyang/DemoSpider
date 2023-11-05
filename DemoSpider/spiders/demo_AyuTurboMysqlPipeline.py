@@ -1,20 +1,9 @@
-#!/usr/bin/env python3
-# -*- coding:utf-8 -*-
+# 用于介绍使用 mysql 连接池的示例功能
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
-
-"""
-########################################################################################################################
-# collection_website: csdn.net - 采集的目标站点介绍
-# collection_content: 采集内容介绍，用于介绍使用 mysql 连接池的示例功能
-# create_time: xxxx-xx-xx
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoAyuturbomysqlpipelineSpider(AyuSpider):
