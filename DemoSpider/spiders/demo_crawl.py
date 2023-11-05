@@ -1,17 +1,8 @@
+# 纵横中文网小说书库采集 CrawlSpider 方式示例
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-
-"""
-########################################################################################################################
-# collection_website: https://www.book.zongheng.com/ - 纵横中文网
-# collection_content: 纵横中文网小说书库采集 CrawlSpider 方式示例
-# create_time: 2022-09-30
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoCrawlSpider(AyuCrawlSpider):
