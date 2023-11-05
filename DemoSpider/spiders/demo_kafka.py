@@ -1,18 +1,9 @@
+# 热榜文章排名采集，并推送至 kafka
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
-
-"""
-####################################################################################################
-# collection_website: csdn.net - 专业开发者社区
-# collection_content: 热榜文章排名采集，并推送至 kafka
-# create_time: 2023-06-05
-# explain:
-# demand_code_prefix = ""
-####################################################################################################
-"""
 
 
 class DemoKafkaSpider(AyuSpider):
