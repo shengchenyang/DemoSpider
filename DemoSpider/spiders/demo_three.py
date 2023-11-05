@@ -1,3 +1,4 @@
+# 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据 consul 取值)
 import json
 
 import pandas
@@ -6,16 +7,6 @@ from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from loguru import logger
 from scrapy.http import Request
-
-"""
-########################################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据 consul 的应用管理中心中取值)
-# create_time: 2022-08-07
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoThreeSpider(AyuSpider):
