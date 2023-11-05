@@ -1,3 +1,4 @@
+# 存储至 mysql 场景，配置从 nacos 获取
 import configparser
 
 from ayugespidertools.common.utils import ToolsForAyu
@@ -7,16 +8,6 @@ from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 
 from DemoSpider.settings import VIT_DIR
-
-"""
-####################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 存储至 mysql 场景，配置从 nacos 上获取的方式
-# create_time: xxxx-xx-xx
-# explain:
-# demand_code_prefix = ""
-####################################################################################################
-"""
 
 
 class DemoMysqlNacosSpider(AyuSpider):
