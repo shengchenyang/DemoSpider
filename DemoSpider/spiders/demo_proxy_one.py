@@ -1,15 +1,6 @@
+# 测试快代理动态隧道代理
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-
-"""
-########################################################################################################################
-# collection_website: myip - myip.ipip.net
-# collection_content: 测试快代理动态隧道代理
-# create_time: 2022-08-30
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoProxySpider(AyuSpider):
