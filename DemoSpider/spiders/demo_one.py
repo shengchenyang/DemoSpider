@@ -1,3 +1,4 @@
+# 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据本地 .conf 取值)
 import json
 from typing import Union
 
@@ -7,16 +8,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.html import HtmlResponse
 from scrapy.http.response.text import TextResponse
-
-"""
-########################################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
-# create_time: 2022-07-30
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoOneSpider(AyuSpider):
