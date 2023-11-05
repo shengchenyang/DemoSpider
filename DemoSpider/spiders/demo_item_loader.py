@@ -1,3 +1,4 @@
+# 用于介绍 scrapy item 的 itemloaders 的功能，提供调用示例
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -6,16 +7,6 @@ from loguru import logger
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 from scrapy.loader import ItemLoader
-
-"""
-########################################################################################################################
-# collection_website: csdn.net - 采集 csdn 热榜数据
-# collection_content: 用于介绍 scrapy item 的 itemloaders 的功能，提供调用示例
-# create_time: xxxx-xx-xx
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoItemLoaderSpider(AyuSpider):
