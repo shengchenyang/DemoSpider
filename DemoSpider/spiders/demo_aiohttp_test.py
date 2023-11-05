@@ -1,18 +1,9 @@
+# 纵横中文网小说书库采集 - 测试 aiohttp 请求的功能示例
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
-
-"""
-########################################################################################################################
-# collection_website: http://book.zongheng.com/ - 纵横中文网
-# collection_content: 纵横中文网小说书库采集 - 测试 aiohttp 请求的功能示例
-# create_time: 2022-09-01
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoAiohttpTestSpider(AyuSpider):

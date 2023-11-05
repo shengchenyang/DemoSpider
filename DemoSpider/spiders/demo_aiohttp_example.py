@@ -1,3 +1,4 @@
+# 测试将 scrapy Request 改为 aiohttp 的示例
 import json
 
 from ayugespidertools.common.typevars import AiohttpRequestArgs
@@ -7,16 +8,6 @@ from loguru import logger
 from scrapy.http.response.text import TextResponse
 
 from DemoSpider.common.AboutProj import Operations
-
-"""
-########################################################################################################################
-# collection_website: httpbin.org - http://httpbin.org/
-# collection_content: 测试将 scrapy Request 改为 aiohttp 的示例
-# create_time: 2022-08-30
-# explain:
-# demand_code_prefix = ""
-########################################################################################################################
-"""
 
 
 class DemoAiohttpSpider(AyuSpider):
