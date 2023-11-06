@@ -87,7 +87,7 @@ class DemoOneSpider(AyuSpider):
                 comment_count=comment_count,
                 favor_count=favor_count,
                 nick_name=nick_name,
-                _table=_save_table",
+                _table=_save_table,
             )
             """
 
