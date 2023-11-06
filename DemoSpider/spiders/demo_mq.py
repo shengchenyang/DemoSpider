@@ -69,3 +69,17 @@ class DemoMqSpider(AyuSpider):
                 "nick_name": nick_name,
                 "_table": "demo_mq",
             }
+
+            # 当然，返回其他格式也是可以的。具体请参考 demo_one:
+            """
+            from ayugespidertools.items import AyuItem, DataItem
+
+            yield AyuItem(
+                article_detail_url=DataItem(article_detail_url, "文章详情链接"),
+                article_title=DataItem(article_title, "文章标题"),
+                comment_count=DataItem(comment_count, "文章评论数量"),
+                favor_count=DataItem(favor_count, "文章赞成数量"),
+                nick_name=DataItem(nick_name, "文章作者昵称"),
+                _table=DataItem("demo_mq", "项目列表信息"),
+            )
+            """
