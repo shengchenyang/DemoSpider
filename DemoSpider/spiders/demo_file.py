@@ -23,7 +23,7 @@ class DemoFileSpider(AyuSpider):
         "DOWNLOADER_MIDDLEWARES": {
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
-        # 下载文件保存路径，不配置则默认为设置中的 DOC_DIR（需要确认此文件夹是否存在）
+        # 下载文件保存路径
         "FILES_STORE": Path(__file__).parent.parent / "docs",
     }
 
