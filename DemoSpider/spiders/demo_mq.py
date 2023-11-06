@@ -22,7 +22,6 @@ class DemoMqSpider(AyuSpider):
     start_urls = ["https://blog.csdn.net/"]
     custom_settings = {
         "ITEM_PIPELINES": {
-            # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuMQPipeline": 300,
         },
     }
