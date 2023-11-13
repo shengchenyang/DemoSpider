@@ -38,130 +38,122 @@ class DemoAiohttpSpider(AyuSpider):
     }
 
     def start_requests(self):
-        """
-        get 请求首页，获取项目列表数据
-        """
-        # 测试 GET 请求示例一
+        _get_url = "http://httpbin.org/get?get_args=1"
+        _ar_headers_ck = "headers_ck_key=ck; headers_ck_key2=ck"
+        _ar_ck = {"ck_key": "ck"}
+
+        # GET normal 示例
         yield AiohttpRequest(
-            url="http://httpbin.org/get?get_args=1",
+            url=_get_url,
             callback=self.parse_get_fir,
             headers={
-                "Cookie": "headers_ck_key=ck; headers_ck_key2=ck",
+                "Cookie": _ar_headers_ck,
             },
-            cookies={
-                "ck_key": "ck",
-            },
+            cookies=_ar_ck,
             meta={
-                "meta_data": "这是用来测试 parse_get_fir meta 的功能",
+                "meta_data": "GET normal",
             },
             cb_kwargs={
-                "request_name": "normal_get",
+                "request_name": 1,
             },
         )
 
+        # GET with aiohttp args 示例
         yield AiohttpRequest(
-            url="http://httpbin.org/get?get_args=1",
+            url=_get_url,
             callback=self.parse_get_fir,
             meta={
-                "meta_data": "这是用来测试 parse_get_fir meta 的功能",
+                "meta_data": "get_with_aiohttp_args",
             },
             cb_kwargs={
-                "request_name": "aiohttp_get",
+                "request_name": 2,
             },
             args=AiohttpRequestArgs(
                 method="GET",
                 headers={
-                    "Cookie": "headers_ck_key=ck; headers_ck_key2=ck",
+                    "Cookie": _ar_headers_ck,
                 },
-                cookies={
-                    "ck_key": "ck",
-                },
+                cookies=_ar_ck,
             ),
             dont_filter=True,
         )
 
-        # 测试 POST 请求示例一 - normal
+        # POST normal 示例
         post_data = {"post_key1": "post_value1", "post_key2": "post_value2"}
         yield AiohttpRequest(
             url="http://httpbin.org/post",
             method="POST",
             callback=self.parse_post_fir,
             headers={
-                "Cookie": "headers_ck_key=ck; headers_ck_key2=ck",
+                "Cookie": _ar_headers_ck,
             },
             body=json.dumps(post_data),
-            cookies={
-                "ck_key": "ck",
-            },
+            cookies=_ar_ck,
             meta={
-                "meta_data": "这是用来测试 parse_post_fir meta 的功能",
+                "meta_data": "post_normal",
             },
             cb_kwargs={
-                "request_name": "normal_post1",
+                "request_name": 3,
             },
             dont_filter=True,
         )
-        # 测试 POST 请求示例一 - aiohttp args
+
+        # POST with aiohttp args 示例
         yield AiohttpRequest(
             url="http://httpbin.org/post",
             callback=self.parse_post_fir,
             args=AiohttpRequestArgs(
                 method="POST",
                 headers={
-                    "Cookie": "headers_ck_key=ck; headers_ck_key2=ck",
+                    "Cookie": _ar_headers_ck,
                 },
-                cookies={
-                    "ck_key": "ck",
-                },
+                cookies=_ar_ck,
                 data=json.dumps(post_data),
             ),
             meta={
-                "meta_data": "这是用来测试 parse_post_fir meta 的功能",
+                "meta_data": "post_with_aiohttp_args",
             },
             cb_kwargs={
-                "request_name": "aiohttp_post1",
+                "request_name": 4,
             },
             dont_filter=True,
         )
 
-        # 测试 POST 请求示例二 - normal
+        # POST(FormRequest) 示例
         yield AiohttpFormRequest(
             url="http://httpbin.org/post",
             headers={
-                "Cookie": "headers_ck_key=ck; headers_ck_key2=ck",
+                "Cookie": _ar_headers_ck,
             },
-            cookies={
-                "ck_key": "ck",
-            },
+            cookies=_ar_ck,
             formdata=post_data,
             callback=self.parse_post_sec,
             meta={
-                "meta_data": "这是用来测试 parse_post_sec meta 的功能",
+                "meta_data": "POST(FormRequest)",
             },
             cb_kwargs={
-                "request_name": "normal_post2",
+                "request_name": 5,
             },
             dont_filter=True,
         )
-        # 测试 POST 请求示例二 - aiohttp args
+
+        # POST(FormRequest) with aiohttp args 示例
         yield AiohttpFormRequest(
             url="http://httpbin.org/post",
             callback=self.parse_post_sec,
             args=AiohttpRequestArgs(
                 method="POST",
                 headers={
-                    "Cookie": "headers_ck_key=ck; headers_ck_key2=ck",
+                    "Cookie": _ar_headers_ck,
                 },
-                cookies={
-                    "ck_key": "ck",
-                },
+                cookies=_ar_ck,
                 data=post_data,
             ),
             meta={
-                "meta_data": "这是用来测试 parse_post_sec meta 的功能",
+                "meta_data": "POST(FormRequest)_with_aiohttp_args",
             },
             cb_kwargs={
-                "request_name": "aiohttp_post2",
+                "request_name": 6,
             },
             dont_filter=True,
         )
