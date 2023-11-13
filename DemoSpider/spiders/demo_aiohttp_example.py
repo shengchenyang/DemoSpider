@@ -51,7 +51,7 @@ class DemoAiohttpSpider(AyuSpider):
             },
             cookies=_ar_ck,
             meta={
-                "meta_data": "GET normal",
+                "meta_data": "get_normal",
             },
             cb_kwargs={
                 "request_name": 1,
