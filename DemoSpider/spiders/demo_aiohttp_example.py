@@ -46,33 +46,21 @@ class DemoAiohttpSpider(AyuSpider):
         yield AiohttpRequest(
             url=_get_url,
             callback=self.parse_get_fir,
-            headers={
-                "Cookie": _ar_headers_ck,
-            },
+            headers={"Cookie": _ar_headers_ck},
             cookies=_ar_ck,
-            meta={
-                "meta_data": "get_normal",
-            },
-            cb_kwargs={
-                "request_name": 1,
-            },
+            meta={"meta_data": "get_normal"},
+            cb_kwargs={"request_name": 1},
         )
 
         # GET with aiohttp args 示例
         yield AiohttpRequest(
             url=_get_url,
             callback=self.parse_get_fir,
-            meta={
-                "meta_data": "get_with_aiohttp_args",
-            },
-            cb_kwargs={
-                "request_name": 2,
-            },
+            meta={"meta_data": "get_with_aiohttp_args"},
+            cb_kwargs={"request_name": 2},
             args=AiohttpRequestArgs(
                 method="GET",
-                headers={
-                    "Cookie": _ar_headers_ck,
-                },
+                headers={"Cookie": _ar_headers_ck},
                 cookies=_ar_ck,
             ),
             dont_filter=True,
@@ -84,17 +72,11 @@ class DemoAiohttpSpider(AyuSpider):
             url="http://httpbin.org/post",
             method="POST",
             callback=self.parse_post_fir,
-            headers={
-                "Cookie": _ar_headers_ck,
-            },
+            headers={"Cookie": _ar_headers_ck},
             body=json.dumps(post_data),
             cookies=_ar_ck,
-            meta={
-                "meta_data": "post_normal",
-            },
-            cb_kwargs={
-                "request_name": 3,
-            },
+            meta={"meta_data": "post_normal"},
+            cb_kwargs={"request_name": 3},
             dont_filter=True,
         )
 
@@ -104,36 +86,24 @@ class DemoAiohttpSpider(AyuSpider):
             callback=self.parse_post_fir,
             args=AiohttpRequestArgs(
                 method="POST",
-                headers={
-                    "Cookie": _ar_headers_ck,
-                },
+                headers={"Cookie": _ar_headers_ck},
                 cookies=_ar_ck,
                 data=json.dumps(post_data),
             ),
-            meta={
-                "meta_data": "post_with_aiohttp_args",
-            },
-            cb_kwargs={
-                "request_name": 4,
-            },
+            meta={"meta_data": "post_with_aiohttp_args"},
+            cb_kwargs={"request_name": 4},
             dont_filter=True,
         )
 
         # POST(FormRequest) 示例
         yield AiohttpFormRequest(
             url="http://httpbin.org/post",
-            headers={
-                "Cookie": _ar_headers_ck,
-            },
+            headers={"Cookie": _ar_headers_ck},
             cookies=_ar_ck,
             formdata=post_data,
             callback=self.parse_post_sec,
-            meta={
-                "meta_data": "POST(FormRequest)",
-            },
-            cb_kwargs={
-                "request_name": 5,
-            },
+            meta={"meta_data": "POST(FormRequest)"},
+            cb_kwargs={"request_name": 5},
             dont_filter=True,
         )
 
@@ -143,18 +113,12 @@ class DemoAiohttpSpider(AyuSpider):
             callback=self.parse_post_sec,
             args=AiohttpRequestArgs(
                 method="POST",
-                headers={
-                    "Cookie": _ar_headers_ck,
-                },
+                headers={"Cookie": _ar_headers_ck},
                 cookies=_ar_ck,
                 data=post_data,
             ),
-            meta={
-                "meta_data": "POST(FormRequest)_with_aiohttp_args",
-            },
-            cb_kwargs={
-                "request_name": 6,
-            },
+            meta={"meta_data": "POST(FormRequest)_with_aiohttp_args"},
+            cb_kwargs={"request_name": 6},
             dont_filter=True,
         )
 
