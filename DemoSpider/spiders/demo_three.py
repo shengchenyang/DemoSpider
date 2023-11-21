@@ -1,12 +1,12 @@
 # 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据 consul 取值)
 import json
 
-import pandas
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from loguru import logger
 from scrapy.http import Request
+from sqlalchemy import text
 
 
 class DemoThreeSpider(AyuSpider):
@@ -65,32 +65,30 @@ class DemoThreeSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
+            _save_table = "demo_three"
             ArticleInfoItem = AyuItem(
                 article_detail_url=DataItem(article_detail_url, "文章详情链接"),
                 article_title=DataItem(article_title, "文章标题"),
                 comment_count=DataItem(comment_count, "文章评论数量"),
                 favor_count=DataItem(favor_count, "文章赞成数量"),
                 nick_name=DataItem(nick_name, "文章作者昵称"),
-                _table=DataItem("demo_three", "项目列表信息"),
+                _table=DataItem(_save_table, "项目列表信息"),
             )
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             # yield ArticleInfoItem
 
             try:
-                # 测试 mysql_engine 的功能
-                sql = """select `id` from `{}` where `article_detail_url` = "{}" limit 1""".format(
-                    "demo_three",
-                    article_detail_url,
+                _sql = text(
+                    f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
                 )
-                df = pandas.read_sql(sql, self.mysql_engine)
-
-                # 如果为空，说明此数据不存在于数据库，则新增
-                if df.empty:
+                result = self.mysql_engine.execute(_sql).fetchone()
+                if not result:
                     yield ArticleInfoItem
-
-                # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    logger.debug(f"标题为 ”{article_title}“ 的数据已存在")
-
-            except Exception:
-                yield ArticleInfoItem
+                    self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
+            except Exception as e:
+                # 若数据库或数据表不存在时，直接返回 item 即可，会自动创建所依赖的数据库数据表及字段注释（前提是用户有对应权限）
+                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
+                    yield ArticleInfoItem
+                else:
+                    raise ValueError(f"请查看网络是否通畅，或 sql 是否正确！Error: {e}") from e

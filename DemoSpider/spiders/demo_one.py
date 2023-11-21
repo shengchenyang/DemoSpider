@@ -8,6 +8,7 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.html import HtmlResponse
 from scrapy.http.response.text import TextResponse
+from sqlalchemy import text
 
 
 class DemoOneSpider(AyuSpider):
@@ -69,7 +70,7 @@ class DemoOneSpider(AyuSpider):
             _save_table = "demo_one"
             # 数据存储方式 1，需要添加注释时的写法
             ArticleInfoItem = AyuItem(
-                # # 这里也可以写为 article_detail_url = DataItem(article_detail_url)，但没有注释
+                # 这里也可以写为 article_detail_url = DataItem(article_detail_url)，但没有注释
                 # 功能了，那不如使用下面的数据存储方式 2
                 article_detail_url=DataItem(article_detail_url, "文章详情链接"),
                 article_title=DataItem(article_title, "文章标题"),
@@ -105,11 +106,18 @@ class DemoOneSpider(AyuSpider):
             """
 
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
-
-            # 数据入库逻辑 -> 测试 mysql_engine 的去重功能，你可以自行实现。mysql_engine 也已经给你了
-            sql = f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
-            yield ToolsForAyu.filter_data_before_yield(
-                sql=sql,
-                mysql_engine=self.mysql_engine,
-                item=ArticleInfoItem,
-            )
+            try:
+                _sql = text(
+                    f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
+                )
+                result = self.mysql_engine.execute(_sql).fetchone()
+                if not result:
+                    yield ArticleInfoItem
+                else:
+                    self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
+            except Exception as e:
+                # 若数据库或数据表不存在时，直接返回 item 即可，会自动创建所依赖的数据库数据表及字段注释（前提是用户有对应权限）
+                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
+                    yield ArticleInfoItem
+                else:
+                    raise ValueError(f"请查看网络是否通畅，或 sql 是否正确！Error: {e}") from e
