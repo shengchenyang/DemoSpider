@@ -51,11 +51,12 @@ class DemoFiveSpider(AyuSpider):
                 response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
             )
 
+            _save_table = "demo_five"
             BookInfoItem = AyuItem(
                 book_name=DataItem(book_name, "小说名称"),
                 book_href=DataItem(book_href, "小说链接"),
                 book_intro=DataItem(book_intro, "小说简介"),
-                _table=DataItem("demo_five", "demo5表"),
+                _table=DataItem(_save_table, "demo5表"),
             )
 
             self.slog.info(f"BookInfoItem: {BookInfoItem}")
