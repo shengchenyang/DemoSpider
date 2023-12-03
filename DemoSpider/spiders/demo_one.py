@@ -17,7 +17,7 @@ class DemoOneSpider(AyuSpider):
     start_urls = ["https://blog.csdn.net/"]
     custom_settings = {
         # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
-        "MYSQL_ENGINE_ENABLED": True,
+        "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
@@ -106,18 +106,43 @@ class DemoOneSpider(AyuSpider):
             """
 
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
-            try:
-                _sql = text(
-                    f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
-                )
-                result = self.mysql_engine.execute(_sql).fetchone()
-                if not result:
+            # yield ArticleInfoItem
+
+            if self.mysql_engine_conn:
+                try:
+                    _sql = text(
+                        f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
+                    )
+                    result = self.mysql_engine_conn.execute(_sql).fetchone()
+                    if not result:
+                        self.mysql_engine_conn.rollback()
+                        yield ArticleInfoItem
+                    else:
+                        self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
+                except Exception as e:
+                    self.mysql_engine_conn.rollback()
                     yield ArticleInfoItem
+            else:
+                yield ArticleInfoItem
+
+            # 使用 pandas 结合 engine 去重的示例：
+            """
+            import pandas
+            try:
+                sql = f'''select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1'''
+                df = pandas.read_sql(sql, self.mysql_engine)
+
+                # 如果为空，说明此数据不存在于数据库，则新增
+                if df.empty:
+                    yield ArticleInfoItem
+
+                # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
+                    self.slog.debug(f"标题为 ”{article_title}“ 的数据已存在")
+
             except Exception as e:
-                # 若数据库或数据表不存在时，直接返回 item 即可，会自动创建所依赖的数据库数据表及字段注释（前提是用户有对应权限）
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
                     yield ArticleInfoItem
                 else:
-                    raise ValueError(f"请查看网络是否通畅，或 sql 是否正确！Error: {e}") from e
+                    self.slog.error(f"请查看数据库链接或网络是否通畅！Error: {e}")
+            """
