@@ -4,7 +4,6 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.http.response.text import TextResponse
 from sqlalchemy import text
-from DemoSpider.settings import logger
 
 
 class DemoNineSpider(AyuSpider):

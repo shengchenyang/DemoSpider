@@ -2,7 +2,6 @@ from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-from DemoSpider.settings import logger
 
 
 class DemoTenSpider(AyuSpider):
