@@ -1,8 +1,8 @@
 # 纵横中文网小说书库采集 CrawlSpider 方式示例
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import Rule
 
 
 class DemoCrawlSpider(AyuCrawlSpider):

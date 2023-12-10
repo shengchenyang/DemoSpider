@@ -1,6 +1,6 @@
 # 热榜文章排名 Demo 采集示例 - 同时存入 Mysql 和 MongoDB 的场景
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 

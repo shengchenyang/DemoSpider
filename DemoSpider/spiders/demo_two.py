@@ -1,6 +1,6 @@
 # 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据本地 .conf 取值)
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 

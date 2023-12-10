@@ -119,7 +119,7 @@ class DemoOneSpider(AyuSpider):
                         yield ArticleInfoItem
                     else:
                         self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
-                except Exception as e:
+                except Exception:
                     self.mysql_engine_conn.rollback()
                     yield ArticleInfoItem
             else:

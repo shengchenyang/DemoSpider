@@ -1,8 +1,8 @@
 # 纵横中文网小说书库采集 - 测试 aiohttp 请求的功能示例
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import AyuItem, DataItem
-from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
+from ayugespidertools.items import AyuItem
+from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
 
