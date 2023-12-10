@@ -16,7 +16,7 @@ class DemoOneSpider(AyuSpider):
     allowed_domains = ["blog.csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
     custom_settings = {
-        # 打开 mysql 引擎开关，用于数据入库前更新逻辑判断
+        # 打开数据库引擎开关，用于数据入库前更新逻辑判断
         "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
@@ -125,7 +125,7 @@ class DemoOneSpider(AyuSpider):
             else:
                 yield ArticleInfoItem
 
-            # 使用 pandas 结合 engine 去重的示例：
+            # 使用 pandas 结合对应 <db>_engine 去重的示例：
             """
             import pandas
             try:
