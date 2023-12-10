@@ -11,6 +11,7 @@ class DemoNineSpider(AyuSpider):
     allowed_domains = ["csdn.net"]
     start_urls = ["https://blog.csdn.net/"]
     custom_settings = {
+        # 打开数据库引擎开关，用于数据入库前更新逻辑判断
         "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
             "ayugespidertools.pipelines.AyuFtyPostgresPipeline": 300,
@@ -74,6 +75,8 @@ class DemoNineSpider(AyuSpider):
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             # yield ArticleInfoItem
 
+            # 同样也可使用之前的 pandas 结合对应的 <db>_engine 来去重，各有优缺点。
+            # 也可自行实现，本库模版中使用 SQLAlchemy 结合对应 <db>_engine_conn 的方式实现。
             if self.postgres_engine_conn:
                 try:
                     _sql = text(
