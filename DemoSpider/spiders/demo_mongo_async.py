@@ -13,7 +13,7 @@ class DemoMongoAsyncSpider(AyuSpider):
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
-            "ayugespidertools.pipelines.AsyncMongoPipeline": 300,
+            "ayugespidertools.pipelines.AyuAsyncMongoPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             # 随机请求头
