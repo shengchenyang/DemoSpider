@@ -13,9 +13,7 @@ class DemoAiohttpTestSpider(AyuSpider):
     custom_settings = {
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOADER_MIDDLEWARES": {
-            # 随机请求头
-            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
-            # 替换请求的中间件
+            # 使用 aiohttp 请求的中间件
             "ayugespidertools.middlewares.AiohttpDownloaderMiddleware": 543,
         },
         # scrapy Request 替换为 aiohttp 的配置示例
