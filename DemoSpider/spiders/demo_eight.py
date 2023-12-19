@@ -11,14 +11,8 @@ class DemoEightSpider(AyuSpider):
     start_urls = ["https://blog.csdn.net/"]
     custom_settings = {
         "ITEM_PIPELINES": {
-            # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
-            # 激活此项则数据会存储至 MongoDB
             "ayugespidertools.pipelines.AyuFtyMongoPipeline": 301,
-        },
-        "DOWNLOADER_MIDDLEWARES": {
-            # 随机请求头
-            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 
