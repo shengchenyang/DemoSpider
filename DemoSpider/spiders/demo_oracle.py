@@ -62,12 +62,12 @@ class DemoOracleSpider(AyuSpider):
 
             _save_table = "_article_info_list"
             ArticleInfoItem = AyuItem(
-                article_detail_url=DataItem(article_detail_url, "文章详情链接"),
-                article_title=DataItem(article_title, "文章标题"),
-                comment_count=DataItem(comment_count, "文章评论数量"),
-                favor_count=DataItem(favor_count, "文章赞成数量"),
-                nick_name=DataItem(nick_name, "文章作者昵称"),
-                _table=DataItem(_save_table, "文章信息列表"),
+                article_detail_url=article_detail_url,
+                article_title=article_title,
+                comment_count=comment_count,
+                favor_count=favor_count,
+                nick_name=nick_name,
+                _table=_save_table,
             )
             self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
             # yield ArticleInfoItem
