@@ -12,12 +12,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
     start_urls = ["http://csdn.net/"]
     custom_settings = {
         "ITEM_PIPELINES": {
-            # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuTurboMysqlPipeline": 300,
-        },
-        "DOWNLOADER_MIDDLEWARES": {
-            # 随机请求头
-            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
     }
 
