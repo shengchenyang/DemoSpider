@@ -1,70 +1,100 @@
-[notice]
-info=这是 .conf 文件的示例
-about_consul_and_nacos=使用远程配置服务时，优先从 consul 中获取配置信息
-detail=以下为所需的配置信息，具体值请自行添加。
+; Sample ayugespidertools config file.
+;
+; For more information on the config file, please see:
+; https://ayugespidertools.readthedocs.io/en/latest/topics/configuration.html
+;
+; Notes:
+;  - default value: 配置中若含有 default 注释，则说明其已有默认值，若与你所需内容一致可不用解开注释。
+;    也可删除它们。
 
-[mysql]
-host=***
-port=3306
-user=***
-password=***
-database=***
-charset=***
+; nacos 远程配置服务: 若管理的项目很多可选择此服务，或者以下的 consul 服务。
+; 若这两个都配置了，会优先从 consul 中获取。
+; format 对应的解析格式选择有 json, xml, yaml, hcl，默认 json 格式。
+; 如果需要有 token 配置请在 url 中构建。
 
-[mongodb]
-host=***
-port=27017
-database=***
-authsource=***
-user=***
-password=***
+;[nacos]
+;url=http://host:port/nacos/v1/cs/configs?dataId=*&group=*&tenant=*
+;format=json
 
-[postgresql]
-host=***
-port=5432
-user=***
-password=***
-database=***
-charset=UTF8
+; consul 远程配置服务:
+; token 为 consul ACLs token，可选参数。
 
-[mq]
-host=*.*.*.*
-port=5672
-username=***
-password=***
-virtualhost=***
-queue=***
-exchange=***
-routing_key=***
+;[consul]
+;url=http://host:port/v1/kv/...?dc=dc1&raw
+;token=
+;format=json
 
-[kafka]
-bootstrap_servers=127.0.0.1:9092
-topic=***
-key=***
+;[mysql]
+;user=
+;password=
+;database=
+;host=localhost
+;port=3306
+;charset=utf8mb4
 
-[consul]
-token=
-url=http://host:port/v1/kv/...?dc=dc1
-format=json
+; mongodb 的 uri 方式连接配置:
+; 其中 [mongodb:uri] 和 [mongodb] 按需选择一种即可。
+; 若两种都设置了，会优先从 mongodb:uri 中获取配置。
 
-[nacos]
-url=http://hsot:port/nacos/v1/cs/configs?dataId=***&group=***&tenant=***
-format=json
+;[mongodb:uri]
+;uri=mongodb://user:password@host:port/database?authSource=*&authMechanism=*
 
-[kdl_dynamic_proxy]
-proxy=o668.kdltps.com:15818
-username=***
-password=***
+;[mongodb]
+;database=
+;user=
+;password=
+;host=localhost
+;port=27017
+;authsource=admin
+;authMechanism=SCRAM-SHA-1
 
-[kdl_exclusive_proxy]
-proxy=http://kps.kdlapi.com/api/getkps?orderid=***&num=100&format=json
-username=***
-password=***
-index=1
+;[postgresql]
+;user=
+;password=
+;database=
+;host=localhost
+;port=5432
+;charset=UTF8
 
-[ali_oss]
-accesskeyid=LTA***
-accesskeysecret=***
-endpoint=https://oss-cn-***.aliyuncs.com
-bucket=***
-doc=***
+;[mq]
+;virtualhost=
+;queue=
+;exchange=
+;routing_key=
+;username=guest
+;password=guest
+;host=localhost
+;port=5672
+
+; oracle 存储场景所需的配置参数:
+; thick_lib_dir 为可选参数，类型可为 bool 和 str，默认为 false，按需配置。
+
+;[oracle]
+;user=
+;password=
+;service_name=
+;host=localhost
+;port=1521
+;encoding=utf8
+;thick_lib_dir=false
+
+; kafka 推送配置:
+; 若 bootstrap_servers 有多个，用逗号分隔。比如 x.x.x.x:9092,x.x.x.x:9093
+
+;[kafka]
+;bootstrap_servers=127.0.0.1:9092
+;topic=
+;key=
+
+;[kdl_dynamic_proxy]
+;proxy=o668.kdltps.com:15818
+;username=
+;password=
+
+; 快代理独享代理，比动态代理增加了一个 index 配置，表示取其索引值对应的代理。
+
+;[kdl_exclusive_proxy]
+;proxy=http://kps.kdlapi.com/api/getkps?orderid=*&num=100&format=json
+;username=
+;password=
+;index=1
