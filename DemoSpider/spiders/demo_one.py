@@ -8,7 +8,7 @@ from scrapy.http import Request
 from sqlalchemy import text
 
 if TYPE_CHECKING:
-    from ayugespidertools.common.typevars import ScrapyResponse
+    from scrapy.http.response.text import TextResponse
 
 
 class DemoOneSpider(AyuSpider):
@@ -41,7 +41,7 @@ class DemoOneSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: "TextResponse"):
         _save_table = "demo_one"
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
