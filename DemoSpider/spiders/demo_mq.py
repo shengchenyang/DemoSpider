@@ -1,8 +1,17 @@
 # 热榜文章排名 Demo 采集示例 - 内容推送到 RabbitMQ
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-from scrapy.http.response.text import TextResponse
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoMqSpider(AyuSpider):
@@ -31,7 +40,7 @@ class DemoMqSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: TextResponse, curr_site: str):
+    def parse_first(self, response: "ScrapyResponse", curr_site: str):
         # 日志使用: scrapy 的 self.logger 或本库的 self.slog 或直接使用全局的 logger handle 也行（根据场景自行选择）
         self.slog.info(f"当前采集的站点为: {curr_site}")
 

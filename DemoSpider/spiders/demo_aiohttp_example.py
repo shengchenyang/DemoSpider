@@ -1,13 +1,21 @@
 # 测试将 scrapy Request 改为 aiohttp 的示例
 import json
+from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 from loguru import logger
-from scrapy.http.response.text import TextResponse
 
 from DemoSpider.common.AboutProj import Operations
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoAiohttpSpider(AyuSpider):
@@ -122,17 +130,17 @@ class DemoAiohttpSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_get_fir(self, response: TextResponse, request_name: str):
+    def parse_get_fir(self, response: "ScrapyResponse", request_name: int):
         meta_data = response.meta.get("meta_data")
         logger.info(f"get {request_name} meta_data: {meta_data}")
         Operations.parse_response_data(response_data=response.text, mark="GET FIRST")
 
-    def parse_post_fir(self, response: TextResponse, request_name: str):
+    def parse_post_fir(self, response: "ScrapyResponse", request_name: int):
         meta_data = response.meta.get("meta_data")
         logger.info(f"post {request_name} first meta_data: {meta_data}")
         Operations.parse_response_data(response_data=response.text, mark="POST FIRST")
 
-    def parse_post_sec(self, response: TextResponse, request_name: str):
+    def parse_post_sec(self, response: "ScrapyResponse", request_name: int):
         meta_data = response.meta.get("meta_data")
         logger.info(f"post {request_name} second meta_data: {meta_data}")
         Operations.parse_response_data(response_data=response.text, mark="POST SECOND")

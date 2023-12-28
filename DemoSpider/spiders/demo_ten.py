@@ -1,7 +1,17 @@
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoTenSpider(AyuSpider):
@@ -28,7 +38,7 @@ class DemoTenSpider(AyuSpider):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(url=url, callback=self.parse_first, dont_filter=True)
 
-    def parse_first(self, response):
+    def parse_first(self, response: "ScrapyResponse"):
         book_info_list = ToolsForAyu.extract_with_xpath(
             response=response,
             query='//div[@class="TwoBox02_01"]/div',

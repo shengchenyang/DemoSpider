@@ -1,9 +1,18 @@
 # 用于介绍使用 mysql 连接池的示例功能
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-from scrapy.http.response.text import TextResponse
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoAyuturbomysqlpipelineSpider(AyuSpider):
@@ -31,7 +40,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: TextResponse, curr_site: str):
+    def parse_first(self, response: "ScrapyResponse", curr_site: str):
         self.slog.info(f"当前采集站点为: {curr_site}")
         book_info_list = ToolsForAyu.extract_with_xpath(
             response=response,

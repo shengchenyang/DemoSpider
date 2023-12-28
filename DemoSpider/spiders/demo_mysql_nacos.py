@@ -1,13 +1,21 @@
 # 存储至 mysql 场景，配置从 nacos 获取
 import configparser
+from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-from scrapy.http.response.text import TextResponse
 
 from DemoSpider.settings import VIT_DIR
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoMysqlNacosSpider(AyuSpider):
@@ -53,7 +61,7 @@ class DemoMysqlNacosSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: TextResponse):
+    def parse_first(self, response: "ScrapyResponse"):
         data_list = ToolsForAyu.extract_with_json(
             json_data=response.json(), query="data"
         )

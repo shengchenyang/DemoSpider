@@ -1,6 +1,16 @@
 # 测试快代理独享代理
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoProxyTwoSpider(AyuSpider):
@@ -22,5 +32,5 @@ class DemoProxyTwoSpider(AyuSpider):
             url=self.start_urls[0], callback=self.parse_first, dont_filter=True
         )
 
-    def parse_first(self, response):
+    def parse_first(self, response: "ScrapyResponse"):
         print(response.text)

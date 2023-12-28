@@ -1,9 +1,18 @@
 # 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据本地 .conf 取值)
 import json
+from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoTwoSpider(AyuSpider):
@@ -34,7 +43,7 @@ class DemoTwoSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response):
+    def parse_first(self, response: "ScrapyResponse"):
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
             article_detail_url = curr_data.get("articleDetailUrl")

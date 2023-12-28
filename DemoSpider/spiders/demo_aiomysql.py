@@ -1,18 +1,18 @@
 # 此场景不会自动创建数据库，数据表，表字段等，请手动管理
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-"""
-########################################################################################################################
-# collection_website: CSDN - 专业开发者社区
-# collection_content: 热榜文章排名 aiomysql Demo 采集示例 - 存入 Mysql (配置根据本地 settings 的 LOCAL_MYSQL_CONFIG 中取值)
-# create_time: 2023-12-18
-# explain:
-# demand_code_prefix = 
-########################################################################################################################
-"""
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoAiomysqlSpider(AyuSpider):
@@ -37,7 +37,7 @@ class DemoAiomysqlSpider(AyuSpider):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(url=url, callback=self.parse_first, dont_filter=True)
 
-    def parse_first(self, response):
+    def parse_first(self, response: "ScrapyResponse"):
         book_info_list = ToolsForAyu.extract_with_xpath(
             response=response,
             query='//div[@class="TwoBox02_01"]/div',

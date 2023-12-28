@@ -1,11 +1,19 @@
 # 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据 consul 取值)
 import json
+from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
-from loguru import logger
 from scrapy.http import Request
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoThreeSpider(AyuSpider):
@@ -38,10 +46,10 @@ class DemoThreeSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response):
+    def parse_first(self, response: "ScrapyResponse"):
+        _save_table = "demo_three"
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
-            # 这里的所有解析规则可选择自己习惯的
             article_detail_url = ToolsForAyu.extract_with_json(
                 json_data=curr_data, query="articleDetailUrl"
             )
@@ -62,7 +70,6 @@ class DemoThreeSpider(AyuSpider):
                 json_data=curr_data, query="nickName"
             )
 
-            _save_table = "demo_three"
             ArticleInfoItem = AyuItem(
                 article_detail_url=DataItem(article_detail_url, "文章详情链接"),
                 article_title=DataItem(article_title, "文章标题"),

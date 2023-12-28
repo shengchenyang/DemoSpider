@@ -1,9 +1,19 @@
 # 纵横中文网小说书库采集 - 测试 aiohttp 请求的功能示例
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoAiohttpTestSpider(AyuSpider):
@@ -48,7 +58,7 @@ class DemoAiohttpTestSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response):
+    def parse_first(self, response: "ScrapyResponse"):
         book_info_list = ToolsForAyu.extract_with_xpath(
             response=response, query='//div[@class="bookinfo"]', return_selector=True
         )

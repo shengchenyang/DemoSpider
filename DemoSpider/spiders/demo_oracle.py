@@ -1,10 +1,19 @@
 # oracle 场景不会添加自动创建数据库，表及字段等功能，请手动管理
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-from scrapy.http.response.text import TextResponse
 from sqlalchemy import text
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoOracleSpider(AyuSpider):
@@ -32,7 +41,7 @@ class DemoOracleSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: TextResponse, curr_site: str):
+    def parse_first(self, response: "ScrapyResponse", curr_site: str):
         self.slog.info(f"当前采集的站点为: {curr_site}")
 
         # 可自定义解析规则
