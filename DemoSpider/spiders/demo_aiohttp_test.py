@@ -59,21 +59,11 @@ class DemoAiohttpTestSpider(AyuSpider):
             )
 
     def parse_first(self, response: "ScrapyResponse"):
-        book_info_list = ToolsForAyu.extract_with_xpath(
-            response=response, query='//div[@class="bookinfo"]', return_selector=True
-        )
+        book_info_list = response.xpath('//div[@class="bookinfo"]')
         for book_info in book_info_list:
-            book_name = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[@class="bookname"]/a/text()'
-            )
-
-            book_href = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[@class="bookname"]/a/@href'
-            )
-
-            book_intro = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[@class="bookintro"]/text()'
-            )
+            book_name = book_info.xpath('div[@class="bookname"]/a/text()').get()
+            book_href = book_info.xpath('div[@class="bookname"]/a/@href').get()
+            book_intro = book_info.xpath('div[@class="bookintro"]/text()').get()
             BookInfoItem = AyuItem(
                 book_name=book_name,
                 book_href=book_href,

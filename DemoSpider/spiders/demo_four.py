@@ -1,7 +1,7 @@
 # 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据 consul 取值)
+import json
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
@@ -46,27 +46,15 @@ class DemoFourSpider(AyuSpider):
         )
 
     def parse_first(self, response: "ScrapyResponse"):
-        data_list = ToolsForAyu.extract_with_json(
-            json_data=response.json(), query="data"
-        )
+        data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
-            article_detail_url = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="articleDetailUrl"
-            )
-            article_title = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="articleTitle"
-            )
-            comment_count = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="commentCount"
-            )
-            favor_count = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="favorCount"
-            )
-            nick_name = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="nickName"
-            )
+            article_detail_url = curr_data.get("articleDetailUrl")
+            article_title = curr_data.get("articleTitle")
+            comment_count = curr_data.get("commentCount")
+            favor_count = curr_data.get("favorCount")
+            nick_name = curr_data.get("nickName")
 
-            ArticleInfoItem = AyuItem(
+            article_item = AyuItem(
                 article_detail_url=article_detail_url,
                 article_title=article_title,
                 comment_count=comment_count,
@@ -75,5 +63,5 @@ class DemoFourSpider(AyuSpider):
                 _table="demo_four",
                 _mongo_update_rule={"article_detail_url": article_detail_url},
             )
-            self.slog.info(f"ArticleInfoItem: {ArticleInfoItem}")
-            yield ArticleInfoItem
+            self.slog.info(f"article_item: {article_item}")
+            yield article_item

@@ -1,7 +1,6 @@
 # 用于介绍 scrapy item 的 itemloaders 的功能，提供调用示例
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from itemloaders.processors import TakeFirst
@@ -46,10 +45,7 @@ class DemoItemLoaderSpider(AyuSpider):
 
     def parse_first(self, response: "ScrapyResponse", curr_site: str):
         logger.info(f"当前采集站点为: {curr_site}")
-        book_info_list = ToolsForAyu.extract_with_xpath(
-            response=response, query='//div[@class="bookinfo"]', return_selector=True
-        )
-
+        book_info_list = response.xpath('//div[@class="bookinfo"]')
         for book_info in book_info_list:
             my_item = AyuItem(
                 book_name=None,
@@ -58,9 +54,7 @@ class DemoItemLoaderSpider(AyuSpider):
                 _table="demo_item_loader",
             )
 
-            book_name = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[@class="bookname"]/a/text()'
-            )
+            book_name = book_info.xpath('div[@class="bookname"]/a/text()').get()
 
             mine_item = ItemLoader(item=my_item.asitem(), selector=book_info)
             mine_item.default_output_processor = TakeFirst()

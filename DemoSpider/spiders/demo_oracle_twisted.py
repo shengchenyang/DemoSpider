@@ -1,7 +1,6 @@
 # oracle 场景不会添加自动创建数据库，表及字段等功能，请手动管理
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
@@ -35,33 +34,23 @@ class DemoOracleTwistedSpider(AyuSpider):
             yield Request(url=url, callback=self.parse_first, dont_filter=True)
 
     def parse_first(self, response: "ScrapyResponse"):
-        book_info_list = ToolsForAyu.extract_with_xpath(
-            response=response,
-            query='//div[@class="TwoBox02_01"]/div',
-            return_selector=True,
-        )
+        _save_table = "demo_oracle_twisted"
 
+        book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:
-            book_name = ToolsForAyu.extract_with_xpath(
-                response=book_info, query="div[2]//h1/@title"
-            )
+            book_name = book_info.xpath("div[2]//h1/@title").get()
+            _book_href = book_info.xpath("div[2]//h1/a/@href").get()
+            book_href = response.urljoin(_book_href)
+            book_intro = book_info.xpath(
+                'div[2]/div[@class="TwoBox02_06"]/a/text()'
+            ).get()
 
-            book_href = ToolsForAyu.extract_with_xpath(
-                response=book_info, query="div[2]//h1/a/@href"
-            )
-            book_href = response.urljoin(book_href)
-
-            book_intro = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
-            )
-
-            _save_table = "demo_oracle_twisted"
-            BookInfoItem = AyuItem(
+            book_info_item = AyuItem(
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,
                 _table=_save_table,
             )
 
-            self.slog.info(f"BookInfoItem: {BookInfoItem}")
-            yield BookInfoItem
+            self.slog.info(f"book_info_item: {book_info_item}")
+            yield book_info_item

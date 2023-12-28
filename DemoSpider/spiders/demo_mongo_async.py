@@ -1,7 +1,6 @@
 # async 存入 mongoDB 的示例，以 motor 实现
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
@@ -48,31 +47,22 @@ class DemoMongoAsyncSpider(AyuSpider):
     def parse_first(self, response: "ScrapyResponse", page: int):
         self.slog.info(f"当前采集的站点的第 {page} 页")
 
-        book_info_list = ToolsForAyu.extract_with_xpath(
-            response=response,
-            query='//div[@class="TwoBox02_01"]/div',
-            return_selector=True,
-        )
-
+        book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:
-            book_name = ToolsForAyu.extract_with_xpath(
-                response=book_info, query="div[2]//h1/@title"
-            )
+            book_name = book_info.xpath("div[2]//h1/@title").get()
+            _book_href = book_info.xpath("div[2]//h1/a/@href").get()
+            book_href = response.urljoin(_book_href)
+            book_intro = book_info.xpath(
+                'div[2]/div[@class="TwoBox02_06"]/a/text()'
+            ).get()
 
-            book_href = ToolsForAyu.extract_with_xpath(
-                response=book_info, query="div[2]//h1/a/@href"
-            )
-            book_href = response.urljoin(book_href)
-
-            book_intro = ToolsForAyu.extract_with_xpath(
-                response=book_info, query='div[2]/div[@class="TwoBox02_06"]/a/text()'
-            )
-
-            BookInfoItem = AyuItem(
+            book_info_item = AyuItem(
                 book_name=book_name,
                 book_href=book_href,
                 book_intro=book_intro,
                 _table="demo_mongo_async",
                 _mongo_update_rule={"book_name": book_name},
             )
-            yield BookInfoItem
+
+            self.slog.info(f"book_info_item: {book_info_item}")
+            yield book_info_item

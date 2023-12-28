@@ -58,5 +58,5 @@ class DemoFiveSpider(AyuSpider):
                 _table=DataItem(_save_table, "demo5表"),
             )
 
-            self.slog.info(f"BookInfoItem: {book_info_item}")
+            self.slog.info(f"book_info_item: {book_info_item}")
             yield book_info_item

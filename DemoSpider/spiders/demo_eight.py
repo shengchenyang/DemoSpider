@@ -1,7 +1,7 @@
 # 热榜文章排名 Demo 采集示例 - 同时存入 Mysql 和 MongoDB 的场景
+import json
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
@@ -41,31 +41,15 @@ class DemoEightSpider(AyuSpider):
         )
 
     def parse_first(self, response: "ScrapyResponse"):
-        data_list = ToolsForAyu.extract_with_json(
-            json_data=response.json(), query="data"
-        )
+        data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
-            article_detail_url = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="articleDetailUrl"
-            )
+            article_detail_url = curr_data.get("articleDetailUrl")
+            article_title = curr_data.get("articleTitle")
+            comment_count = curr_data.get("commentCount")
+            favor_count = curr_data.get("favorCount")
+            nick_name = curr_data.get("nickName")
 
-            article_title = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="articleTitle"
-            )
-
-            comment_count = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="commentCount"
-            )
-
-            favor_count = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="favorCount"
-            )
-
-            nick_name = ToolsForAyu.extract_with_json(
-                json_data=curr_data, query="nickName"
-            )
-
-            ArticleInfoItem = AyuItem(
+            yield AyuItem(
                 article_detail_url=article_detail_url,
                 article_title=article_title,
                 comment_count=comment_count,
@@ -73,4 +57,3 @@ class DemoEightSpider(AyuSpider):
                 nick_name=nick_name,
                 _table="demo_eight",
             )
-            yield ArticleInfoItem
