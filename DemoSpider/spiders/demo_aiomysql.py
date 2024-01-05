@@ -19,7 +19,6 @@ class DemoAiomysqlSpider(AyuSpider):
     allowed_domains = ["*"]
     start_urls = ["https://b.faloo.com/y_0_0_0_0_3_15_1.html"]
     custom_settings = {
-        "LOG_LEVEL": "ERROR",
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql，使用 aiomysql 实现
             "ayugespidertools.pipelines.AyuAsyncMysqlPipeline": 300,
