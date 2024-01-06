@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
-from elasticsearch_dsl import Keyword, Text
+from elasticsearch_dsl import Keyword, Search, Text
 from scrapy.http import Request
 
 if TYPE_CHECKING:
@@ -24,6 +24,7 @@ class DemoEsSpider(AyuSpider):
     allowed_domains = ["faloo.com"]
     start_urls = ["https://b.faloo.com/"]
     custom_settings = {
+        "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
             "ayugespidertools.pipelines.AyuESPipeline": 300,
         },
@@ -62,8 +63,17 @@ class DemoEsSpider(AyuSpider):
                 ),
                 book_href=DataItem(book_href, Keyword()),
                 book_intro=DataItem(book_intro, Keyword()),
-                _table=DataItem("demo_es"),
+                _table=DataItem(_save_table),
             )
-            self.slog.info(f"book_info_item: {book_info_item}")
-            yield book_info_item
+
+            # 查重逻辑自己设置，精确匹配还是全文搜索请自行设置，这里只是一种示例。
+            s = (
+                Search(using=self.es_engine, index=_save_table)
+                .query("term", book_href=book_href)
+                .execute()
+            )
+            if s.hits.total.value > 0:
+                self.slog.debug(f'链接为 "{book_href}" 的数据已存在')
+            else:
+                yield book_info_item
 """
