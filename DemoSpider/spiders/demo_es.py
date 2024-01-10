@@ -1,14 +1,16 @@
-# demo_es 的方式3实现示例已删除，可通过 commits 历史查看
-# 删除的原因是实现方式过于丑陋，会改变为方式2的形式来开发。
-# 这里先放上伪代码实现，es 支持会以以下风格开发。
-
-"""
+# elasticsearch 同步存储场景
+# 需要安装 ayugespidertools[database]
 from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
-from elasticsearch_dsl import Keyword, Search, Text
 from scrapy.http import Request
+
+try:
+    from elasticsearch_dsl import Keyword, Search, Text
+except ImportError:
+    # pip install ayugespidertools[database]
+    pass
 
 if TYPE_CHECKING:
     from scrapy.http import Response
@@ -26,7 +28,7 @@ class DemoEsSpider(AyuSpider):
     custom_settings = {
         "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
-            "ayugespidertools.pipelines.AyuESPipeline": 300,
+            "ayugespidertools.pipelines.AyuFtyESPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
@@ -67,6 +69,7 @@ class DemoEsSpider(AyuSpider):
             )
 
             # 查重逻辑自己设置，精确匹配还是全文搜索请自行设置，这里只是一种示例。
+            # 其它的查重和更新方式，比如使用查询并更新的语句。
             s = (
                 Search(using=self.es_engine, index=_save_table)
                 .query("term", book_href=book_href)
@@ -76,4 +79,3 @@ class DemoEsSpider(AyuSpider):
                 self.slog.debug(f'链接为 "{book_href}" 的数据已存在')
             else:
                 yield book_info_item
-"""
