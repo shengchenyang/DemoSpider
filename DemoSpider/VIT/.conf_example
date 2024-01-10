@@ -74,8 +74,7 @@
 ;password=elastic
 ;init=false
 ;verify_certs=true
-;ca_certs=C:\MyPorjects\Pycharm\DemoSpider\DemoSpider\test\once\http_ca.crt
-;ca_certs=/Users/ayuge/Documents/AyugeProjects/PycharmProjects/DemoSpider/DemoSpider/test/once/http_ca_mac.crt
+;ca_certs=/path/to/CA_certs
 ;client_cert=/path/to/clientcert.pem
 ;client_key=/path/to/clientkey.pem
 ;ssl_assert_fingerprint =
