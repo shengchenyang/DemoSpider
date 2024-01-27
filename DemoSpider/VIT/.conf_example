@@ -56,25 +56,28 @@
 ;port=5432
 ;charset=UTF8
 
+; 存储至 elasticsearch 的配置:
+; hosts 若有多个，用逗号分隔，比如 https://x.x.x.x:9200,https://x.x.x.x:9201
+; 其中 index_class 为 es Index class 的定义，可以配置除了 name 以外
+; 的所有内容，具体内容请查看 elasticsearch-dsl 的文档，如果在 index_class
+; 中还是配置了 name，那么会被 AyuItem 中的 _table 参数值覆盖；
+; init 参数为是否创建 es 索引，此设置一般只在第一次运行项目时打开，或者选择
+; 手动创建而配置此参数永远为 false。
+; TLS 证书身份验证的相关参数有: ca_certs, client_certs, client_key 及
+; ssl_assert_fingerprint，请按需设置；
+; 若不需要证书类参数的验证，则设置 verify_certs 为 false 即可。
+
 ;[elasticsearch]
 ;hosts=https://127.0.0.1:9200
 ;index_class={"settings":{"number_of_shards": 2}}
 ;user=elastic
 ;password=elastic
-;init=true
-;verify_certs=false
-
-; 存储至 elasticsearch 的配置:
-; 其中 index_class 为 es Index class 的定义，可以配置除了 name 以外
-; 的所有内容，具体内容请查看 elasticsearch-dsl 的文档，如果在 index_class
-; 中还是配置了 name，那么会被 AyuItem 中的 _table 覆盖；
-; init 参数为是否创建 es 索引，此设置一般只在第一次运行项目时打开，或者选择
-; 手动创建而配置此参数永远为 false。
-
-;[elasticsearch]
-;hosts=http://127.0.0.1:9200
-;index_class={"settings":{"number_of_shards": 2}}
 ;init=false
+;verify_certs=true
+;ca_certs=/path/to/CA_certs
+;client_cert=/path/to/clientcert.pem
+;client_key=/path/to/clientkey.pem
+;ssl_assert_fingerprint =
 
 ;[mq]
 ;virtualhost=

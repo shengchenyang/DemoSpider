@@ -1,4 +1,4 @@
-# elasticsearch 同步存储场景
+# elasticsearch asyncio 存储场景示例
 # 需要安装 ayugespidertools[database]
 from typing import TYPE_CHECKING, Union
 
@@ -7,7 +7,7 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
 try:
-    from elasticsearch_dsl import Keyword, Search, Text
+    from elasticsearch_dsl import Keyword, Text
 except ImportError:
     # pip install ayugespidertools[database]
     pass
@@ -21,14 +21,14 @@ if TYPE_CHECKING:
     ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
-class DemoEsSpider(AyuSpider):
-    name = "demo_es"
+class DemoEsAsyncSpider(AyuSpider):
+    name = "demo_es_async"
     allowed_domains = ["faloo.com"]
     start_urls = ["https://b.faloo.com/"]
     custom_settings = {
         "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
-            "ayugespidertools.pipelines.AyuFtyESPipeline": 300,
+            "ayugespidertools.pipelines.AyuAsyncESPipeline": 300,
         },
         "DOWNLOADER_MIDDLEWARES": {
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
@@ -36,7 +36,7 @@ class DemoEsSpider(AyuSpider):
     }
 
     def start_requests(self):
-        for page in range(1, 2):
+        for page in range(1, 21):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(
                 url=url,
@@ -67,15 +67,5 @@ class DemoEsSpider(AyuSpider):
                 book_intro=DataItem(book_intro, Keyword()),
                 _table=DataItem(_save_table),
             )
-
-            # 查重逻辑自己设置，精确匹配还是全文搜索请自行设置，这里只是一种示例。
-            # 其它的查重和更新方式，比如使用查询并更新的语句。
-            s = (
-                Search(using=self.es_engine, index=_save_table)
-                .query("term", book_href=book_href)
-                .execute()
-            )
-            if s.hits.total.value > 0:
-                self.slog.debug(f'链接为 "{book_href}" 的数据已存在')
-            else:
-                yield book_info_item
+            self.slog.info(f"book_info_item: {book_info_item}")
+            yield book_info_item
