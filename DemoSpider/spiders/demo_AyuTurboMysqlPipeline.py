@@ -1,7 +1,7 @@
 # 用于介绍使用 mysql 连接池的示例功能
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -51,10 +51,10 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
             ).get()
 
             book_info_item = AyuItem(
-                book_name=DataItem(book_name, "小说名称"),
-                book_href=DataItem(book_href, "小说链接"),
-                book_intro=DataItem(book_intro, "小说简介"),
-                _table=DataItem("demo_AyuTurboMysql", "demo_AyuTurboMysql表"),
+                book_name=book_name,
+                book_href=book_href,
+                book_intro=book_intro,
+                _table="demo_AyuTurboMysql",
             )
 
             self.slog.info(f"book_info_item: {book_info_item}")
