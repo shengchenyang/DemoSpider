@@ -1,7 +1,7 @@
 # oracle 场景不会添加自动创建数据库，表及字段等功能，请手动管理
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
