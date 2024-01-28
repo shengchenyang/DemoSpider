@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.common.utils import ToolsForAyu
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -62,10 +62,10 @@ class DemoFileSpider(AyuSpider):
 
             _save_table = "demo_file"
             img_item = AyuItem(
-                title=DataItem(title, "标题"),
-                file_url=DataItem(img_href, "图片链接"),
-                file_format=DataItem("png", "图片格式"),
-                _table=DataItem(_save_table, "demo_file表"),
+                title=title,
+                file_url=img_href,
+                file_format="png",
+                _table=_save_table,
             )
 
             # 同样地，也可以直接返回 dict，但记得 _table 特殊字段
