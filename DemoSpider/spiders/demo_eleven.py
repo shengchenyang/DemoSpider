@@ -1,7 +1,7 @@
 # postgresql asyncio 场景不会添加自动创建数据库，表及字段等功能，请手动管理
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -43,10 +43,10 @@ class DemoElevenSpider(AyuSpider):
             ).get()
 
             book_info_item = AyuItem(
-                book_name=DataItem(book_name, "小说名称"),
-                book_href=DataItem(book_href, "小说链接"),
-                book_intro=DataItem(book_intro, "小说简介"),
-                _table=DataItem(_save_table, "demo5表"),
+                book_name=book_name,
+                book_href=book_href,
+                book_intro=book_intro,
+                _table=_save_table,
             )
 
             self.slog.info(f"book_info_item: {book_info_item}")
