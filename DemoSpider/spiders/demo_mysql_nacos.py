@@ -3,7 +3,7 @@ import configparser
 import json
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -71,12 +71,12 @@ class DemoMysqlNacosSpider(AyuSpider):
             nick_name = curr_data.get("nickName")
 
             article_item = AyuItem(
-                article_detail_url=DataItem(article_detail_url, "文章详情链接"),
-                article_title=DataItem(article_title, "文章标题"),
-                comment_count=DataItem(comment_count, "文章评论数量"),
-                favor_count=DataItem(favor_count, "文章赞成数量"),
-                nick_name=DataItem(nick_name, "文章作者昵称"),
-                _table=DataItem("demo_mysql_nacos", "demo_mysql_nacos表"),
+                article_detail_url=article_detail_url,
+                article_title=article_title,
+                comment_count=comment_count,
+                favor_count=favor_count,
+                nick_name=nick_name,
+                _table="demo_mysql_nacos",
             )
             self.slog.info(f"article_item: {article_item}")
             yield article_item
