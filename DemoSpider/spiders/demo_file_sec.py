@@ -103,9 +103,9 @@ class DemoFileSecSpider(AyuSpider):
                 )
 
                 # 这里是需要下载到本地字段的对应本地路径字段名
-                # 这里对应的本地路径为原字段名添加 _ 前缀
-                # 比如，原字段为 title_pic，新增的下载路径字段为 _title_pic
+                # 这里对应的本地路径为原字段名添加 local_ 前缀
+                # 比如，原字段为 title_pic，新增的下载路径字段为 local_title_pic
                 # 你完全可以自定义
-                img_item.add_field(f"_{curr_cb_key}", file_name)
+                img_item.add_field(f"local_{curr_cb_key}", file_name)
             self.slog.info(f"img_item: {img_item}")
             yield img_item
