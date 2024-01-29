@@ -37,9 +37,10 @@ class DemoAiohttpSpider(AyuSpider):
             # 同时连接的总数
             "limit": 100,
             # 同时连接到一台主机的数量
-            "limit_per_host": 0,
+            "limit_per_host": 30,
             "retry_times": 3,
-            "verify_ssl": False,
+            "ssl": False,
+            # "verify_ssl": False,  # aiohttp 3.9.2 版本推荐使用 ssl 来设置，否则会有兼容问题
             "allow_redirects": False,
         },
         "DOWNLOAD_TIMEOUT": 35,
