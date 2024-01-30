@@ -63,8 +63,7 @@ class DemoFileSpider(AyuSpider):
             _save_table = "demo_file"
             img_item = AyuItem(
                 title=title,
-                file_url=img_href,
-                file_format="png",
+                img_file_url=img_href,
                 _table=_save_table,
             )
 
@@ -72,8 +71,7 @@ class DemoFileSpider(AyuSpider):
             """
             img_item = {
                 "title": title,
-                "file_url": img_href,
-                "file_format": "png",
+                "img_file_url": img_href,
                 "_table": _save_table,
             }
             """
