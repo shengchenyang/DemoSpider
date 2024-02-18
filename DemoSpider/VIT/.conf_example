@@ -30,7 +30,10 @@
 ;database=
 ;host=localhost
 ;port=3306
+;engine=InnoDB
 ;charset=utf8mb4
+;collate=utf8mb4_general_ci
+;odku_enable=false
 
 ; mongodb 的 uri 方式连接配置:
 ; 其中 [mongodb:uri] 和 [mongodb] 按需选择一种即可。
