@@ -1,0 +1,64 @@
+"""
+结合 scrapy-redis 的方式示例：
+Note:
+    1.为了方便展示和不干扰 DemoSpider 主项目 settings 的内容，所以将 scrapy-redis 相关
+配置放入了此 spider 的 custom_settings 中了。放入 settings.py 也是可以的。
+    2.运行此示例需要自行配置 custom_settings 中的 REDIS_HOST 和 REDIS_PARAMS 配置，也
+可以修改为 REDIS_URL 的方式。
+    3.其它配置不再展示，具体请查看 scrapy_redis 文档。
+    4.运行方式：执行此 spider，然后在 redis 中执行 lpush myspider:start_urls <start url> 即可。
+
+Supplement:
+    1. 由于 scrapy-redis 维护放缓很长时间了，目前最新版本包并不能兼容 2.6 及以上版本的 scrapy，所以
+推荐自行打包和安装最新代码。
+"""
+
+from typing import TYPE_CHECKING, Union
+
+from ayugespidertools.items import AyuItem
+from ayugespidertools.spiders import AyuSpider
+from scrapy_redis.spiders import RedisSpider
+
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+
+
+class MyspiderRedisSpider(AyuSpider, RedisSpider):
+    """Spider that reads urls from redis queue (myspider:start_urls)."""
+
+    name = "myspider_redis"
+    redis_key = "myspider:start_urls"
+    custom_settings = {
+        "USER_AGENT": "scrapy-redis (+https://github.com/rolando/scrapy-redis)",
+        "DUPEFILTER_CLASS": "scrapy_redis.dupefilter.RFPDupeFilter",
+        "SCHEDULER": "scrapy_redis.scheduler.Scheduler",
+        "SCHEDULER_PERSIST": True,
+        # "SCHEDULER_QUEUE_CLASS": "scrapy_redis.queue.SpiderPriorityQueue",
+        # "SCHEDULER_QUEUE_CLASS": "scrapy_redis.queue.SpiderQueue",
+        # "SCHEDULER_QUEUE_CLASS": "scrapy_redis.queue.SpiderStack",
+        "REDIS_HOST": "***",
+        "REDIS_PORT": 6379,
+        "REDIS_PARAMS": {"password": "***", "db": 8},
+        "ITEM_PIPELINES": {
+            # "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
+            "scrapy_redis.pipelines.RedisPipeline": 400,
+        },
+    }
+
+    def __init__(self, *args, **kwargs):
+        # Dynamically define the allowed domains list.
+        domain = kwargs.pop("domain", "")
+        self.allowed_domains = filter(None, domain.split(","))
+        super(MyspiderRedisSpider, self).__init__(*args, **kwargs)
+
+    def parse(self, response: "ScrapyResponse"):
+        yield AyuItem(
+            name=response.css("title::text").extract_first(),
+            url=response.url,
+            _table="demo_scrapy_redis",
+        ).asdict()
