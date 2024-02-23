@@ -58,7 +58,7 @@ class MyspiderRedisSpider(AyuSpider, RedisSpider):
 
     def parse(self, response: "ScrapyResponse"):
         yield AyuItem(
-            name=response.css("title::text").extract_first(),
+            name=response.css("title::text").get(),
             url=response.url,
             _table="demo_scrapy_redis",
         ).asdict()
