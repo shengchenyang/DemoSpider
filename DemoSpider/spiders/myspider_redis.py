@@ -13,7 +13,7 @@ Supplement:
 推荐自行打包和安装最新代码。
 """
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -56,7 +56,7 @@ class MyspiderRedisSpider(AyuSpider, RedisSpider):
         self.allowed_domains = filter(None, domain.split(","))
         super(MyspiderRedisSpider, self).__init__(*args, **kwargs)
 
-    def parse(self, response: "ScrapyResponse"):
+    def parse(self, response: "ScrapyResponse", **kwargs: Any) -> Any:
         """
         # 若不需要 ayugespidertools 的 pipelines 功能，那么直接 yield dict 的方式更好，且
         # 这种场景不需要 _table 参数，比如:
