@@ -57,6 +57,14 @@ class MyspiderRedisSpider(AyuSpider, RedisSpider):
         super(MyspiderRedisSpider, self).__init__(*args, **kwargs)
 
     def parse(self, response: "ScrapyResponse"):
+        """
+        # 若不需要 ayugespidertools 的 pipelines 功能，那么直接 yield dict 的方式更好，且
+        # 这种场景不需要 _table 参数，比如:
+        yield {
+            "name": response.css("title::text").get(),
+            "url": response.url,
+        }
+        """
         yield AyuItem(
             name=response.css("title::text").get(),
             url=response.url,
