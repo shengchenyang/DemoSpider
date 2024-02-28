@@ -1,14 +1,24 @@
 # 纵横中文网小说书库采集 CrawlSpider 方式示例
+from typing import TYPE_CHECKING, Union
+
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule
 
+if TYPE_CHECKING:
+    from scrapy.http import Response
+    from scrapy.http.response.html import HtmlResponse
+    from scrapy.http.response.text import TextResponse
+    from scrapy.http.response.xml import XmlResponse
+
+    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+
 
 class DemoCrawlSpider(AyuCrawlSpider):
     name = "demo_crawl"
-    allowed_domains = ["qidian.com"]
-    start_urls = ["https://www.qidian.com/rank/hotsales/"]
+    allowed_domains = ["iana.org"]
+    start_urls = ["https://www.iana.org/about"]
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
@@ -22,19 +32,15 @@ class DemoCrawlSpider(AyuCrawlSpider):
 
     rules = (
         Rule(
-            LinkExtractor(restrict_xpaths="//ul/li/div[@class='book-mid-info']/h2/a"),
+            LinkExtractor(restrict_xpaths="//article/main/ul/li/p/a"),
             callback="parse_item",
         ),
     )
 
-    def parse_item(self, response):
-        # 获取图书名称 - （获取的是详情页中的图书名称）
-        book_name_list = response.xpath("//h1[@id='bookName']//text()").extract()
-        book_name = "".join(book_name_list).strip()
-
-        NovelInfoItem = AyuItem(
-            book_name=book_name,
+    def parse_item(self, response: "ScrapyResponse"):
+        iana_item = AyuItem(
+            url=response.url,
             _table="demo_crawl",
         )
-        self.slog.info(f"NovelInfoItem: {NovelInfoItem}")
-        yield NovelInfoItem
+        self.slog.info(f"iana_item: {iana_item}")
+        yield iana_item
