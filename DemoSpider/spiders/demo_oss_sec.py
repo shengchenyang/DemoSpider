@@ -1,9 +1,10 @@
 """
 Note:
     上传 AyuItem 中的部分资源字段上传到 oss 的示例二：
-    更推荐使用这种方法，尽量不要使用本库 oss 相关的 pipeline，虽然本方式看起
-来比较繁琐，但是你可以优化并整理一些方法为独立模块使用。其实这样逻辑更明确清晰，
+    - 虽然此方式看起来比较繁琐，但是你可以优化并整理一些方法为独立模块使用。其实这样逻辑更明确清晰，
 如果不想把上传逻辑放在 spider 中，你也可以仿照着开发所需的 pipeline 模块。
+    - 若上传到 oss 的需求较简单可使用 demo_oss 的方式，若需求复杂且想要更可控，那就推荐此示例。
+请自行选择喜欢的方式。
 
 NOTICE:
     运行前先在 __init__ 的部分补充 access_key， access_secret 等参数。
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
     ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
+# 这是下载示例，在具体场景可适当修改优化
 async def _download(
     spider: "Spider",
     file_url: str,
@@ -101,6 +103,7 @@ class DemoOssSecSpider(AyuSpider):
                 title_pic=title_pic,
                 _table=_save_table,
             )
+            # 这里可以自行添加上传字段的链接有效性判断，错误重试等各种处理。
             if title_pic:
                 r, filename = await _download(
                     spider=self.crawler.spider, file_url=title_pic
