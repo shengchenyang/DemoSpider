@@ -10,6 +10,7 @@ NOTICE:
     运行前需要安装 ayugespidertools[all]
     虽然看上去方便了开发，但是规则限定这种方式不优雅，推荐查看 demo_oss_sec 的示例。
 """
+
 import json
 from typing import TYPE_CHECKING, Union
 
@@ -58,6 +59,7 @@ class DemoOssSpider(AyuSpider):
 
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]
         for curr_data in data_list:
+            # 这里的解析方式可换成你喜欢的风格
             title = ToolsForAyu.extract_with_json(
                 json_data=curr_data, query=["extend", "title"]
             )
@@ -69,9 +71,8 @@ class DemoOssSpider(AyuSpider):
             img_item = AyuItem(
                 title=title,
                 _table=_save_table,
+                # 不再需要对需要上传的字段进行判空处理了，但还是要保证链接的有效性。
+                title_pic_file_url=title_pic,
             )
-            # title_pic 不直接放入 AyuItem 中，是因为它们可能为空，那就无法下载它们了。
-            if title_pic:
-                img_item.add_field("title_pic_file_url", title_pic)
             self.slog.info(f"img_item: {img_item}")
             yield img_item
