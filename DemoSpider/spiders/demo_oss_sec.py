@@ -11,7 +11,7 @@ NOTICE:
 """
 import hashlib
 import json
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Union
 
 import scrapy
 from ayugespidertools.common.utils import ToolsForAyu
@@ -64,7 +64,7 @@ class DemoOssSecSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.01,
     }
 
-    def __init__(self):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # 这里和 _download 方法推荐自行封装成模块使用。
         self.oss_bucket = AliOssBase(
             access_key="xxx",
@@ -73,6 +73,7 @@ class DemoOssSecSpider(AyuSpider):
             bucket="xxx",
             doc="xxx",
         )
+        super(DemoOssSecSpider, self).__init__(*args, **kwargs)
 
     def start_requests(self):
         yield Request(
