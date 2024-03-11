@@ -1,0 +1,27 @@
+[flake8]
+
+max-line-length = 120
+ignore =
+    # W503: line break before binary operator
+    W503,
+    # E203: whitespace before ':'
+    E203
+    # E701: multiple statements on one line (colon)
+    E701
+    # E704: multiple statements on one line (def)
+    E704
+
+exclude =
+    .git,
+    docs,
+    DemoSpider/test,
+    DemoSpider/middlewares.py,
+    DemoSpider/pipelines.py,
+
+per-file-ignores =
+# E501: line too long
+    DemoSpider/spiders/demo_eight.py:E501
+    DemoSpider/spiders/demo_oracle.py:E501
+
+# F401: 'xxx' imported but unused
+    DemoSpider/settings.py:F401

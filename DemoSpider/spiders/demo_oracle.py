@@ -68,8 +68,7 @@ class DemoOracleSpider(AyuSpider):
                 _sql = text(
                     f"""select 1 from "{_save_table}" where "article_detail_url" = '{article_detail_url}' AND ROWNUM <= 1"""
                 )
-                result = self.oracle_engine_conn.execute(_sql).fetchone()
-                if not result:
-                    yield article_item
-                else:
+                if _ := self.oracle_engine_conn.execute(_sql).fetchone():
                     self.slog.debug(f'标题为 "{article_title}" 的数据已存在')
+                else:
+                    yield article_item

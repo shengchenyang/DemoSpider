@@ -1,5 +1,41 @@
+[tool.poetry]
+name = "DemoSpider"
+version = "3.9.7"
+package-mode = false
+description = "AyugeSpiderTools 的具体场景实现。"
+authors = ["ayuge <ayugesheng@gmail.com>"]
+maintainers = ["ayuge <ayugesheng@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/shengchenyang/DemoSpider"
+documentation = "https://ayugespidertools.readthedocs.io/en/latest/"
+keywords = ["crawler", "scraping", "aiohttp", "asyncio", "scrapy"]
+homepage = "https://www.ayuge.top/mkdocs-material/"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+ayugespidertools = "3.9.7"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "3.5.0"
+
 [tool.black]
 line-length = 88
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+python_version = "3.8"
+ignore_missing_imports = true
+disable_error_code = ["attr-defined", "arg-type", "union-attr"]
+
+[[tool.mypy.overrides]]
+module = [
+    "yaml",
+    "toml",
+    "pymysql",
+    "pymysql.connections",
+    "pymysql.cursors",
+    "requests",
+]
+ignore_missing_imports = true

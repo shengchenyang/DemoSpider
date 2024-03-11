@@ -2,10 +2,12 @@
 import json
 from typing import TYPE_CHECKING, Union
 
-from ayugespidertools.items import AyuItem, DataItem
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from sqlalchemy import text
+
+# from ayugespidertools.items import DataItem
 
 if TYPE_CHECKING:
     from scrapy.http import Response
@@ -99,7 +101,7 @@ class DemoOneSpider(AyuSpider):
             if self.mysql_engine_conn:
                 try:
                     _sql = text(
-                        f"""select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1"""
+                        f'select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1'
                     )
                     result = self.mysql_engine_conn.execute(_sql).fetchone()
                     if not result:
@@ -117,7 +119,7 @@ class DemoOneSpider(AyuSpider):
             """
             import pandas
             try:
-                sql = f'''select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1'''
+                sql = f'select `id` from `{_save_table}` where `article_detail_url` = "{article_detail_url}" limit 1'
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增

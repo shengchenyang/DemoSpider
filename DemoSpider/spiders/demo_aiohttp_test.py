@@ -2,7 +2,6 @@
 from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.common.typevars import AiohttpRequestArgs
-from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider

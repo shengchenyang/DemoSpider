@@ -3,6 +3,7 @@ NOTE:
     用于介绍使用 mysql 连接池的示例功能；
     只用于提供另一种示例，更推荐使用 twisted 或 async 的 pipline 方式。
 """
+
 from typing import TYPE_CHECKING, Union
 
 from ayugespidertools.items import AyuItem

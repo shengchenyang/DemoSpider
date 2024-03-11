@@ -27,9 +27,6 @@ class DemoEightSpider(AyuSpider):
     }
 
     def start_requests(self):
-        """
-        get 请求首页，获取项目列表数据
-        """
         yield Request(
             url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
             callback=self.parse_first,
@@ -37,7 +34,6 @@ class DemoEightSpider(AyuSpider):
                 "referer": "https://blog.csdn.net/rank/list",
                 "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
             },
-            dont_filter=True,
         )
 
     def parse_first(self, response: "ScrapyResponse"):

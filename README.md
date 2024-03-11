@@ -58,4 +58,3 @@ pip install ayugespidertools
 > 下图为 `demo_proxy_one` 的快代理动态隧道代理运行示例：
 
 ![image-20220905112615892](DemoSpider/docs/images/image-20220905112615892.png)
-

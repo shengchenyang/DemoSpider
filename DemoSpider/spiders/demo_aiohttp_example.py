@@ -52,10 +52,10 @@ class DemoAiohttpSpider(AyuSpider):
         _ar_ck = {"ck_key": "ck"}
 
         """
-        NOTE: 
+        NOTE:
             1.以下的示例中的 meta 和 cb_kwargs 参数都不是必须的，里面的配置也不是必须的，这里
         只是给出一个比较完整的示例，请按需配置。
-        
+
             2.特别是 meta，如果没有自己实现的中间件来使用其中的配置，那么推荐直接删除，开发者需
         要传递的参数更推荐放入 cb_kwargs 中。
         """

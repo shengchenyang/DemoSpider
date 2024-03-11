@@ -9,6 +9,7 @@ Note:
 NOTICE:
     运行前先在 __init__ 的部分补充 access_key， access_secret 等参数。
 """
+
 import hashlib
 import json
 from typing import TYPE_CHECKING, Any, Union
