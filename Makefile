@@ -6,7 +6,7 @@ start:
 	pre-commit install
 
 dev:
-	poetry install -E "all"
+	poetry install
 
 check:
 	pre-commit run --all-files
