@@ -1,17 +1,11 @@
 # 纵横中文网小说书库采集 - 异步存入 MongoDB (配置根据本地 .conf 取值)
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoSixSpider(AyuSpider):
@@ -31,7 +25,7 @@ class DemoSixSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.1,
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -46,7 +40,7 @@ class DemoSixSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse", page: int):
+    def parse_first(self, response: "ScrapyResponse", page: int) -> Any:
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:
             book_name = book_info.xpath("div[2]//h1/@title").get()
