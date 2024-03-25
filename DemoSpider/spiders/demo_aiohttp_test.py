@@ -1,18 +1,12 @@
 # 纵横中文网小说书库采集 - 测试 aiohttp 请求的功能示例
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.items import AyuItem
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoAiohttpTestSpider(AyuSpider):
@@ -36,7 +30,7 @@ class DemoAiohttpTestSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.01,
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[AiohttpRequest]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -57,7 +51,7 @@ class DemoAiohttpTestSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: "ScrapyResponse") -> Any:
         book_info_list = response.xpath('//div[@class="bookinfo"]')
         for book_info in book_info_list:
             book_name = book_info.xpath('div[@class="bookname"]/a/text()').get()
