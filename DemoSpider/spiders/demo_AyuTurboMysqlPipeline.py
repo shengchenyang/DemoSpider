@@ -38,7 +38,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse", curr_site: str) -> Any:
+    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
         self.slog.info(f"当前采集站点为: {curr_site}")
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:

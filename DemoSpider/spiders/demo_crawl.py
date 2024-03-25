@@ -1,18 +1,12 @@
 # 纵横中文网小说书库采集 CrawlSpider 方式示例
-from typing import TYPE_CHECKING, Union
+from typing import Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoCrawlSpider(AyuCrawlSpider):
@@ -37,7 +31,7 @@ class DemoCrawlSpider(AyuCrawlSpider):
         ),
     )
 
-    def parse_item(self, response: "ScrapyResponse"):
+    def parse_item(self, response: ScrapyResponse) -> Any:
         iana_item = AyuItem(
             url=response.url,
             _table="demo_crawl",

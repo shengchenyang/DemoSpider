@@ -24,7 +24,7 @@ class DemoElevenSpider(AyuSpider):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(url=url, callback=self.parse_first, dont_filter=True)
 
-    def parse_first(self, response: "ScrapyResponse") -> Any:
+    def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_eleven"
 
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')

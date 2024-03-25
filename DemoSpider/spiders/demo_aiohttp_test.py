@@ -51,7 +51,7 @@ class DemoAiohttpTestSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse") -> Any:
+    def parse_first(self, response: ScrapyResponse) -> Any:
         book_info_list = response.xpath('//div[@class="bookinfo"]')
         for book_info in book_info_list:
             book_name = book_info.xpath('div[@class="bookname"]/a/text()').get()

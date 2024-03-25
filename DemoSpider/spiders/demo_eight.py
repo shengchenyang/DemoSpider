@@ -30,7 +30,7 @@ class DemoEightSpider(AyuSpider):
             },
         )
 
-    def parse_first(self, response: "ScrapyResponse") -> Any:
+    def parse_first(self, response: ScrapyResponse) -> Any:
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
             article_detail_url = curr_data.get("articleDetailUrl")

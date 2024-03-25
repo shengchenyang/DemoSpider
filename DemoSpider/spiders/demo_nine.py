@@ -38,7 +38,7 @@ class DemoNineSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: "ScrapyResponse", curr_site: str) -> Any:
+    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
         _save_table = "demo_nine"
         self.slog.info(f"当前采集的站点为: {curr_site}")
 
