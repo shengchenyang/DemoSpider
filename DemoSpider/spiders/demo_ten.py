@@ -1,16 +1,10 @@
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoTenSpider(AyuSpider):
@@ -29,7 +23,7 @@ class DemoTenSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.01,
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -37,7 +31,7 @@ class DemoTenSpider(AyuSpider):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(url=url, callback=self.parse_first, dont_filter=True)
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: "ScrapyResponse") -> Any:
         _save_table = "demo_ten"
 
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
