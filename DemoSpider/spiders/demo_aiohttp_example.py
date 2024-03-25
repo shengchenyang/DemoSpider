@@ -6,7 +6,7 @@ from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
-from DemoSpider.common.AboutProj import Operations
+from DemoSpider.common.utils import Operations
 
 if TYPE_CHECKING:
     from scrapy.http import Response
