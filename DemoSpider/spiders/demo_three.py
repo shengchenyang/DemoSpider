@@ -1,6 +1,6 @@
 # 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据 consul 取值)
 import json
-from typing import Any
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -26,7 +26,7 @@ class DemoThreeSpider(AyuSpider):
         },
     }
 
-    def start_requests(self) -> Request:
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """

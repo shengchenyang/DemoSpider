@@ -1,5 +1,5 @@
 # 纵横中文网小说书库采集 - 异步存入 Mysql (配置根据本地 .conf 取值)
-from typing import Any
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -25,7 +25,7 @@ class DemoFiveSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.01,
     }
 
-    def start_requests(self) -> Request:
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """
