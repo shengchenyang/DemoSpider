@@ -1,12 +1,13 @@
 # 采集 csdn python 热榜的文章列表，并下载图片
 import json
 from pathlib import Path
-from typing import Iterable, Any
+from typing import Any, Iterable
 
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+
 from DemoSpider.common.types import ScrapyResponse
 
 

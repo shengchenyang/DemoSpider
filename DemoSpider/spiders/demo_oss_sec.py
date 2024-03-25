@@ -29,7 +29,7 @@ from DemoSpider.common.types import ScrapyResponse
 
 # 这是下载示例，在具体场景可适当修改优化
 async def _download(
-    spider: "Spider",
+    spider: AyuSpider,
     file_url: str,
 ):
     request = scrapy.Request(file_url, callback=NO_CALLBACK)

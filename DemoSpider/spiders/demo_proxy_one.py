@@ -1,5 +1,5 @@
 # 测试快代理动态隧道代理
-from typing import Any, Iterable
+from typing import Iterable
 
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
