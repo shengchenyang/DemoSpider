@@ -12,7 +12,7 @@ NOTICE:
 
 import hashlib
 import json
-from typing import TYPE_CHECKING, Any, Union
+from typing import Any, Iterable
 
 import scrapy
 from ayugespidertools.common.utils import ToolsForAyu
@@ -24,14 +24,7 @@ from scrapy.http.request import NO_CALLBACK
 from scrapy.utils.defer import maybe_deferred_to_future
 from scrapy.utils.python import to_bytes
 
-if TYPE_CHECKING:
-    from scrapy import Spider
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 # 这是下载示例，在具体场景可适当修改优化
@@ -76,7 +69,7 @@ class DemoOssSecSpider(AyuSpider):
         )
         super(DemoOssSecSpider, self).__init__(*args, **kwargs)
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         yield Request(
             url=self.start_urls[0],
             callback=self.parse_first,
@@ -86,7 +79,7 @@ class DemoOssSecSpider(AyuSpider):
             dont_filter=True,
         )
 
-    async def parse_first(self, response: "ScrapyResponse", curr_site: str):
+    async def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
         self.slog.info(f"当前采集的站点为: {curr_site}")
         _save_table = "demo_oss_sec"
 

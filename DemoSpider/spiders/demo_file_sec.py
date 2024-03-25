@@ -1,7 +1,7 @@
 import hashlib
 import json
 from pathlib import Path
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.common.utils import ToolsForAyu
 from ayugespidertools.items import AyuItem
@@ -10,13 +10,7 @@ from scrapy.http import Request
 from scrapy.utils.defer import maybe_deferred_to_future
 from twisted.internet.defer import DeferredList
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 def download(response, file_url, file_path):
@@ -45,7 +39,7 @@ class DemoFileSecSpider(AyuSpider):
         "FILES_STORE": Path(__file__).parent.parent / "docs",
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         yield Request(
             url="https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python",
             callback=self.parse_first,
@@ -55,7 +49,7 @@ class DemoFileSecSpider(AyuSpider):
             dont_filter=True,
         )
 
-    async def parse_first(self, response: "ScrapyResponse", curr_site: str):
+    async def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
         self.slog.info(f"当前采集的站点为: {curr_site}")
         _save_table = "demo_file_sec"
 

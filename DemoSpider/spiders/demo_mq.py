@@ -1,17 +1,11 @@
 # 热榜文章排名 Demo 采集示例 - 内容推送到 RabbitMQ
 import json
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoMqSpider(AyuSpider):
@@ -24,7 +18,7 @@ class DemoMqSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -40,7 +34,7 @@ class DemoMqSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: "ScrapyResponse", curr_site: str):
+    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
         self.slog.info(f"当前采集的站点为: {curr_site}")
 
         # 你可以自定义解析规则，使用 lxml 还是 response.css response.xpath 等等都可以。

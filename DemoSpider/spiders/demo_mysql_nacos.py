@@ -1,21 +1,15 @@
 # 存储至 mysql 场景，配置从 nacos 获取
 import configparser
 import json
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+from scrapy.settings import Settings
 
+from DemoSpider.common.types import ScrapyResponse
 from DemoSpider.settings import VIT_DIR
-
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoMysqlNacosSpider(AyuSpider):
@@ -31,7 +25,7 @@ class DemoMysqlNacosSpider(AyuSpider):
     }
 
     @classmethod
-    def update_settings(cls, settings):
+    def update_settings(cls, settings: Settings) -> None:
         """
         这个方法用于将远程应用管理服务设置为 nacos，正常方法应该是在 VIT 下的 .conf 中设置即可，
         而不需要在 spider 中做任何多余操作，就和 demo_three demo_four 一样；
@@ -50,7 +44,7 @@ class DemoMysqlNacosSpider(AyuSpider):
         super().update_settings(settings)
         settings.set("REMOTE_CONFIG", _remote_conf, priority="spider")
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """get 请求首页，获取项目列表数据"""
         yield Request(
             url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
@@ -61,7 +55,7 @@ class DemoMysqlNacosSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: ScrapyResponse) -> Any:
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
             article_detail_url = curr_data.get("articleDetailUrl")

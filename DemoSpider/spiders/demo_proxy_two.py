@@ -1,16 +1,10 @@
 # 测试快代理独享代理
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoProxyTwoSpider(AyuSpider):
@@ -24,7 +18,7 @@ class DemoProxyTwoSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -32,5 +26,5 @@ class DemoProxyTwoSpider(AyuSpider):
             url=self.start_urls[0], callback=self.parse_first, dont_filter=True
         )
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: ScrapyResponse) -> None:
         print(response.text)

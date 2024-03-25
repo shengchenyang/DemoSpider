@@ -1,5 +1,5 @@
 # 用于介绍 scrapy item 的 itemloaders 的功能，提供调用示例
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -8,13 +8,7 @@ from loguru import logger
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoItemLoaderSpider(AyuSpider):
@@ -32,7 +26,7 @@ class DemoItemLoaderSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         for page in range(1, 5):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
@@ -43,7 +37,7 @@ class DemoItemLoaderSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse", curr_site: str):
+    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
         logger.info(f"当前采集站点为: {curr_site}")
         book_info_list = response.xpath('//div[@class="bookinfo"]')
         for book_info in book_info_list:

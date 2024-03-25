@@ -1,24 +1,18 @@
 # elasticsearch 同步存储场景
 # 需要安装 ayugespidertools[database]
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
+
+from DemoSpider.common.types import ScrapyResponse
 
 try:
     from elasticsearch_dsl import Keyword, Search, Text
 except ImportError:
     # pip install ayugespidertools[database]
     pass
-
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoEsSpider(AyuSpider):
@@ -35,7 +29,7 @@ class DemoEsSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         for page in range(1, 2):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(
@@ -47,7 +41,7 @@ class DemoEsSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse", page: int):
+    def parse_first(self, response: ScrapyResponse, page: int) -> Any:
         _save_table = "demo_es"
 
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')

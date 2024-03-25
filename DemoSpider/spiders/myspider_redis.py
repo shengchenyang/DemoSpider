@@ -13,19 +13,13 @@ Supplement:
 推荐自行打包和安装最新代码。
 """
 
-from typing import TYPE_CHECKING, Any, Union
+from typing import Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy_redis.spiders import RedisSpider
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class MyspiderRedisSpider(AyuSpider, RedisSpider):
@@ -56,7 +50,7 @@ class MyspiderRedisSpider(AyuSpider, RedisSpider):
         self.allowed_domains = filter(None, domain.split(","))
         super(MyspiderRedisSpider, self).__init__(*args, **kwargs)
 
-    def parse(self, response: "ScrapyResponse", **kwargs: Any) -> Any:
+    def parse(self, response: ScrapyResponse, **kwargs: Any) -> Any:
         """
         # 若不需要 ayugespidertools 的 pipelines 功能，那么直接 yield dict 的方式更好，且
         # 这种场景不需要 _table 参数，比如:
