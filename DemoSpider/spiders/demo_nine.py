@@ -1,18 +1,12 @@
 import json
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from sqlalchemy import text
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoNineSpider(AyuSpider):
@@ -30,7 +24,7 @@ class DemoNineSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """get 请求首页，获取项目列表数据"""
         yield Request(
             url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
@@ -44,7 +38,7 @@ class DemoNineSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: "ScrapyResponse", curr_site: str):
+    def parse_first(self, response: "ScrapyResponse", curr_site: str) -> Any:
         _save_table = "demo_nine"
         self.slog.info(f"当前采集的站点为: {curr_site}")
 
