@@ -1,18 +1,12 @@
 # 热榜文章排名 Demo 采集示例 - 同时存入 Mysql 和 MongoDB 的场景
 import json
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoEightSpider(AyuSpider):
@@ -26,7 +20,7 @@ class DemoEightSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         yield Request(
             url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
             callback=self.parse_first,
@@ -36,7 +30,7 @@ class DemoEightSpider(AyuSpider):
             },
         )
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: "ScrapyResponse") -> Any:
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
             article_detail_url = curr_data.get("articleDetailUrl")
