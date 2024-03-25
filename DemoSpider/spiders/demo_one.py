@@ -1,21 +1,15 @@
 # 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据本地 .conf 取值)
 import json
-from typing import TYPE_CHECKING, Union
+from typing import Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from sqlalchemy import text
 
+from DemoSpider.common.types import ScrapyResponse
+
 # from ayugespidertools.items import DataItem
-
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoOneSpider(AyuSpider):
@@ -35,7 +29,7 @@ class DemoOneSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Request:
         """
         get 请求首页，获取项目列表数据
         """
@@ -48,7 +42,7 @@ class DemoOneSpider(AyuSpider):
             dont_filter=True,
         )
 
-    def parse_first(self, response: "ScrapyResponse"):
+    def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_one"
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:
