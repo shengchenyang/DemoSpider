@@ -13,7 +13,7 @@ class Operations(object):
     """
 
     @staticmethod
-    def parse_response_data(response_data: str, mark: str):
+    def parse_response_data(response_data: str, mark: str) -> None:
         """
         解析测试请求中的内容，并打印基本信息
         Args:
@@ -36,4 +36,3 @@ class Operations(object):
         logger.info(f"{mark} response, headers: {headers}")
         logger.info(f"{mark} response, origin: {origin}")
         logger.info(f"{mark} response, url: {url}")
-        return args, headers, origin, url

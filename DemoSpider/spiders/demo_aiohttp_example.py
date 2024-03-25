@@ -1,20 +1,13 @@
 # 测试将 scrapy Request 改为 aiohttp 的示例
 import json
-from typing import TYPE_CHECKING, Union
+from typing import Iterable, Union
 
 from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.request import AiohttpFormRequest, AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
+from DemoSpider.common.types import ScrapyResponse
 from DemoSpider.common.utils import Operations
-
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class DemoAiohttpSpider(AyuSpider):
@@ -45,7 +38,7 @@ class DemoAiohttpSpider(AyuSpider):
         "DOWNLOAD_TIMEOUT": 35,
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Union[AiohttpRequest, AiohttpFormRequest]]:
         # 这里是一些复用的参数，用于请求示例的功能展示
         _get_url = "http://httpbin.org/get?get_args=1"
         _ar_headers_ck = "headers_ck_key=ck; headers_ck_key2=ck"
@@ -141,17 +134,17 @@ class DemoAiohttpSpider(AyuSpider):
         )
 
     # 此处及后面所有的 parse_xx_xx 方法都是用于对响应信息的解析，用于测试
-    def parse_get_fir(self, response: "ScrapyResponse", request_name: int):
+    def parse_get_fir(self, response: "ScrapyResponse", request_name: int) -> None:
         meta_data = response.meta.get("meta_data")
         self.slog.info(f"get {request_name} meta_data: {meta_data}")
         Operations.parse_response_data(response_data=response.text, mark="GET FIRST")
 
-    def parse_post_fir(self, response: "ScrapyResponse", request_name: int):
+    def parse_post_fir(self, response: "ScrapyResponse", request_name: int) -> None:
         meta_data = response.meta.get("meta_data")
         self.slog.info(f"post {request_name} first meta_data: {meta_data}")
         Operations.parse_response_data(response_data=response.text, mark="POST FIRST")
 
-    def parse_post_sec(self, response: "ScrapyResponse", request_name: int):
+    def parse_post_sec(self, response: "ScrapyResponse", request_name: int) -> None:
         meta_data = response.meta.get("meta_data")
         self.slog.info(f"post {request_name} second meta_data: {meta_data}")
         Operations.parse_response_data(response_data=response.text, mark="POST SECOND")
