@@ -4,19 +4,13 @@ NOTE:
     只用于提供另一种示例，更推荐使用 twisted 或 async 的 pipline 方式。
 """
 
-from typing import TYPE_CHECKING, Union
+from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-if TYPE_CHECKING:
-    from scrapy.http import Response
-    from scrapy.http.response.html import HtmlResponse
-    from scrapy.http.response.text import TextResponse
-    from scrapy.http.response.xml import XmlResponse
-
-    ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
+from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoAyuturbomysqlpipelineSpider(AyuSpider):
@@ -29,7 +23,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
         },
     }
 
-    def start_requests(self):
+    def start_requests(self) -> Iterable[Request]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -44,7 +38,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: "ScrapyResponse", curr_site: str):
+    def parse_first(self, response: "ScrapyResponse", curr_site: str) -> Any:
         self.slog.info(f"当前采集站点为: {curr_site}")
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:
