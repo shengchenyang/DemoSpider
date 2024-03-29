@@ -32,14 +32,10 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
             yield Request(
                 url=url,
                 callback=self.parse_first,
-                cb_kwargs=dict(
-                    curr_site="zongheng",
-                ),
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
-        self.slog.info(f"当前采集站点为: {curr_site}")
+    def parse_first(self, response: ScrapyResponse) -> Any:
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:
             book_name = book_info.xpath("div[2]//h1/@title").get()

@@ -30,18 +30,15 @@ class DemoEsSpider(AyuSpider):
     }
 
     def start_requests(self) -> Iterable[Request]:
-        for page in range(1, 2):
+        for page in range(1, 3):
             url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
             yield Request(
                 url=url,
                 callback=self.parse_first,
-                cb_kwargs={
-                    "page": page,
-                },
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, page: int) -> Any:
+    def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_es"
 
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
@@ -63,7 +60,7 @@ class DemoEsSpider(AyuSpider):
             )
 
             # 查重逻辑自己设置，精确匹配还是全文搜索请自行设置，这里只是一种示例。
-            # 其它的查重和更新方式，比如使用查询并更新的语句。
+            # 请自定义查重和更新方式，比如使用查询并更新的语句。
             s = (
                 Search(using=self.es_engine, index=_save_table)
                 .query("term", book_href=book_href)
