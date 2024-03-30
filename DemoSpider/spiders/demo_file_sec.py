@@ -43,14 +43,9 @@ class DemoFileSecSpider(AyuSpider):
         yield Request(
             url="https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python",
             callback=self.parse_first,
-            cb_kwargs={
-                "curr_site": "csdn",
-            },
-            dont_filter=True,
         )
 
-    async def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
-        self.slog.info(f"当前采集的站点为: {curr_site}")
+    async def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_file_sec"
 
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]

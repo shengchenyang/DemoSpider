@@ -31,14 +31,10 @@ class DemoItemLoaderSpider(AyuSpider):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
-                cb_kwargs=dict(
-                    curr_site="zongheng",
-                ),
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
-        logger.info(f"当前采集站点为: {curr_site}")
+    def parse_first(self, response: ScrapyResponse) -> Any:
         book_info_list = response.xpath('//div[@class="bookinfo"]')
         for book_info in book_info_list:
             my_item = AyuItem(

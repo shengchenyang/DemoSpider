@@ -34,13 +34,10 @@ class DemoSixSpider(AyuSpider):
             yield Request(
                 url=url,
                 callback=self.parse_first,
-                cb_kwargs={
-                    "page": page,
-                },
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, page: int) -> Any:
+    def parse_first(self, response: ScrapyResponse) -> Any:
         book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
         for book_info in book_info_list:
             book_name = book_info.xpath("div[2]//h1/@title").get()

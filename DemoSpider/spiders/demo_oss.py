@@ -42,17 +42,9 @@ class DemoOssSpider(AyuSpider):
     }
 
     def start_requests(self) -> Iterable[Request]:
-        yield Request(
-            url=self.start_urls[0],
-            callback=self.parse_first,
-            cb_kwargs={
-                "curr_site": "csdn",
-            },
-            dont_filter=True,
-        )
+        yield Request(url=self.start_urls[0], callback=self.parse_first)
 
-    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
-        self.slog.info(f"当前采集的站点为: {curr_site}")
+    def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_oss"
 
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]

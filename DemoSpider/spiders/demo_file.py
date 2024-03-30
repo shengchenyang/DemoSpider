@@ -33,18 +33,9 @@ class DemoFileSpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        yield Request(
-            url=self.start_urls[0],
-            callback=self.parse_first,
-            cb_kwargs={
-                "curr_site": "csdn",
-            },
-            dont_filter=True,
-        )
+        yield Request(url=self.start_urls[0], callback=self.parse_first)
 
-    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
-        self.slog.info(f"当前采集的站点为: {curr_site}")
-
+    def parse_first(self, response: ScrapyResponse) -> Any:
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]
         for curr_data in data_list:
             title = ToolsForAyu.extract_with_json(

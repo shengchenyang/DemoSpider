@@ -29,15 +29,10 @@ class DemoOracleSpider(AyuSpider):
             headers={
                 "referer": "https://blog.csdn.net/rank/list",
             },
-            cb_kwargs={
-                "curr_site": "csdn",
-            },
-            dont_filter=True,
         )
 
-    def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
+    def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "_article_info_list"
-        self.slog.info(f"当前采集的站点为: {curr_site}")
 
         data_list = json.loads(response.text)["data"]
         for curr_data in data_list:

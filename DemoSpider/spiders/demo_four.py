@@ -36,7 +36,6 @@ class DemoFourSpider(AyuSpider):
             headers={
                 "referer": "https://blog.csdn.net/rank/list",
             },
-            dont_filter=True,
         )
 
     def parse_first(self, response: ScrapyResponse) -> Any:

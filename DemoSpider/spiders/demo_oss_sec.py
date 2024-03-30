@@ -70,17 +70,9 @@ class DemoOssSecSpider(AyuSpider):
         super(DemoOssSecSpider, self).__init__(*args, **kwargs)
 
     def start_requests(self) -> Iterable[Request]:
-        yield Request(
-            url=self.start_urls[0],
-            callback=self.parse_first,
-            cb_kwargs={
-                "curr_site": "csdn",
-            },
-            dont_filter=True,
-        )
+        yield Request(url=self.start_urls[0], callback=self.parse_first)
 
-    async def parse_first(self, response: ScrapyResponse, curr_site: str) -> Any:
-        self.slog.info(f"当前采集的站点为: {curr_site}")
+    async def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_oss_sec"
 
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]

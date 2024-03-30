@@ -22,9 +22,7 @@ class DemoProxySpider(AyuSpider):
         """
         get 请求首页，获取项目列表数据
         """
-        yield Request(
-            url=self.start_urls[0], callback=self.parse_first, dont_filter=True
-        )
+        yield Request(url=self.start_urls[0], callback=self.parse_first)
 
     def parse_first(self, response: ScrapyResponse) -> None:
         print(response.text)
