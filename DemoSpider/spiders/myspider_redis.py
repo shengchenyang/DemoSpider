@@ -11,6 +11,7 @@ Note:
 Supplement:
     1. 由于 scrapy-redis 维护放缓很长时间了，目前最新版本包并不能兼容较新版本的 scrapy，所以
 推荐自行打包和安装最新代码。
+    2. 本项目 DemoSpider/docs/libs 中也提供了 scrapy-redis 的最新包。
 """
 
 from typing import Any
