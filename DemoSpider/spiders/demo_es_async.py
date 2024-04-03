@@ -3,6 +3,7 @@ NOTE:
     - elasticsearch asyncio 存储场景示例
     - 需要安装 ayugespidertools[database]
 """
+
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem, DataItem
