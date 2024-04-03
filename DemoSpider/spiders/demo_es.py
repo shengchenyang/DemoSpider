@@ -1,5 +1,9 @@
-# elasticsearch 同步存储场景
-# 需要安装 ayugespidertools[database]
+"""
+NOTE:
+    - elasticsearch 同步存储场景
+    - 需要安装 ayugespidertools[database]
+"""
+
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem, DataItem

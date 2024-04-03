@@ -1,4 +1,4 @@
-# 热榜文章排名 Demo 采集示例 - 存入 Mysql (配置根据本地 .conf 取值)
+# 存入 Mysql 示例 (配置根据本地 .conf 取值)
 import json
 from typing import Any, Iterable
 

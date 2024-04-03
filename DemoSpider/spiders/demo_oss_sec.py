@@ -7,7 +7,8 @@ Note:
 请自行选择喜欢的方式。
 
 NOTICE:
-    运行前先在 __init__ 的部分补充 access_key， access_secret 等参数。
+    - 运行前先在 __init__ 的部分补充 access_key， access_secret 等参数。或者将其移出
+__init__，放入自定义模块或方法中。
 """
 
 import hashlib

@@ -1,4 +1,4 @@
-# 纵横中文网小说书库采集 - 测试 aiohttp 请求的功能示例
+# 测试 aiohttp 请求的功能示例
 from typing import Any, Iterable
 
 from ayugespidertools.common.typevars import AiohttpRequestArgs

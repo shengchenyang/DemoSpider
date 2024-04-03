@@ -1,4 +1,4 @@
-# 纵横中文网小说书库采集 CrawlSpider 方式示例
+# CrawlSpider 方式示例
 from typing import Any
 
 from ayugespidertools.items import AyuItem

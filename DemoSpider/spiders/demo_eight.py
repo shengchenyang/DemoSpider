@@ -1,4 +1,4 @@
-# 热榜文章排名 Demo 采集示例 - 同时存入 Mysql 和 MongoDB 的场景
+# 同时存入 Mysql 和 MongoDB 的场景（其它各种结合场景不再举例）
 import json
 from typing import Any, Iterable
 

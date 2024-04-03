@@ -1,4 +1,4 @@
-# 热榜文章排名 Demo 采集示例 - 存入 MongoDB (配置根据 consul 取值)
+# 存入 MongoDB 示例 (配置根据 consul 取值)
 import json
 from typing import Any, Iterable
 

@@ -1,4 +1,4 @@
-# 纵横中文网小说书库采集 - 异步存入 MongoDB (配置根据本地 .conf 取值)
+# 异步存入 MongoDB 示例 (配置根据本地 .conf 取值)
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
