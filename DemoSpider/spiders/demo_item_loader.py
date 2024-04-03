@@ -4,7 +4,6 @@ from typing import Any, Iterable
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from itemloaders.processors import TakeFirst
-from loguru import logger
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 
@@ -52,4 +51,5 @@ class DemoItemLoaderSpider(AyuSpider):
             mine_item.add_css("book_href", "div.bookname > a::attr(href)")
             mine_item.add_xpath("book_intro", 'div[@class="bookintro"]/text()')
             item = mine_item.load_item()
+            self.slog.info(f"{item=}")
             yield item
