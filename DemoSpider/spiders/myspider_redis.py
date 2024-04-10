@@ -18,9 +18,14 @@ from typing import Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
-from scrapy_redis.spiders import RedisSpider
 
 from DemoSpider.common.types import ScrapyResponse
+
+try:
+    from scrapy_redis.spiders import RedisSpider
+except ImportError:
+    # pip install scrapy-redis
+    from DemoSpider.common.types import RedisSpider
 
 
 class MyspiderRedisSpider(AyuSpider, RedisSpider):
