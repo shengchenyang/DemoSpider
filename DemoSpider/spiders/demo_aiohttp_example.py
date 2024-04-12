@@ -133,6 +133,27 @@ class DemoAiohttpSpider(AyuSpider):
             dont_filter=True,
         )
 
+        # POST(FormRequest) with aiohttp args 的另一种示例
+        # 此示例是把 aiohttp 运行参数放入 meta 的 aiohttp 的 args 中，只是提供另一种风格
+        # 还是推荐 args=AiohttpRequestArgs() 的方式，有参数提示，比较方便。
+        yield AiohttpFormRequest(
+            url="http://httpbin.org/post",
+            callback=self.parse_post_sec,
+            meta={
+                "meta_data": "POST(FormRequest)_with_aiohttp_args_other",
+                "aiohttp": {
+                    "args": {
+                        "method": "POST",
+                        "headers": {"Cookie": _ar_headers_ck},
+                        "cookies": _ar_ck,
+                        "data": post_data,
+                    }
+                },
+            },
+            cb_kwargs={"request_name": 7},
+            dont_filter=True,
+        )
+
     # 此处及后面所有的 parse_xx_xx 方法都是用于对响应信息的解析，用于测试
     def parse_get_fir(self, response: ScrapyResponse, request_name: int) -> None:
         meta_data = response.meta.get("meta_data")
