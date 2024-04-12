@@ -53,6 +53,7 @@ class DemoTwoSpider(AyuSpider):
                 favor_count=favor_count,
                 nick_name=nick_name,
                 _table="demo_two",
+                # 可选参数: 用于入库前的去重逻辑，也可自行实现其它去重方式
                 _mongo_update_rule={"article_detail_url": article_detail_url},
             )
 
