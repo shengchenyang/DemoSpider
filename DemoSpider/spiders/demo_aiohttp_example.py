@@ -32,7 +32,7 @@ class DemoAiohttpSpider(AyuSpider):
             "limit_per_host": 30,
             "retry_times": 3,
             "ssl": False,
-            # "verify_ssl": False,  # aiohttp 3.9.2 版本推荐使用 ssl 来设置，否则会有兼容问题
+            # "verify_ssl": False,
             "allow_redirects": False,
         },
         "DOWNLOAD_TIMEOUT": 35,
@@ -59,7 +59,6 @@ class DemoAiohttpSpider(AyuSpider):
             callback=self.parse_get_fir,
             headers={"Cookie": _ar_headers_ck},
             cookies=_ar_ck,
-            meta={"meta_data": "get_normal"},
             cb_kwargs={"request_name": 1},
         )
 
@@ -67,7 +66,6 @@ class DemoAiohttpSpider(AyuSpider):
         yield AiohttpRequest(
             url=_get_url,
             callback=self.parse_get_fir,
-            meta={"meta_data": "get_with_aiohttp_args"},
             cb_kwargs={"request_name": 2},
             args=AiohttpRequestArgs(
                 method="GET",
@@ -86,7 +84,6 @@ class DemoAiohttpSpider(AyuSpider):
             headers={"Cookie": _ar_headers_ck},
             body=json.dumps(post_data),
             cookies=_ar_ck,
-            meta={"meta_data": "post_normal"},
             cb_kwargs={"request_name": 3},
             dont_filter=True,
         )
@@ -101,7 +98,6 @@ class DemoAiohttpSpider(AyuSpider):
                 cookies=_ar_ck,
                 data=json.dumps(post_data),
             ),
-            meta={"meta_data": "post_with_aiohttp_args"},
             cb_kwargs={"request_name": 4},
             dont_filter=True,
         )
@@ -113,7 +109,6 @@ class DemoAiohttpSpider(AyuSpider):
             cookies=_ar_ck,
             formdata=post_data,
             callback=self.parse_post_sec,
-            meta={"meta_data": "POST(FormRequest)"},
             cb_kwargs={"request_name": 5},
             dont_filter=True,
         )
@@ -128,19 +123,17 @@ class DemoAiohttpSpider(AyuSpider):
                 cookies=_ar_ck,
                 data=post_data,
             ),
-            meta={"meta_data": "POST(FormRequest)_with_aiohttp_args"},
             cb_kwargs={"request_name": 6},
             dont_filter=True,
         )
 
-        # POST(FormRequest) with aiohttp args 的另一种示例
-        # 此示例是把 aiohttp 运行参数放入 meta 的 aiohttp 的 args 中，只是提供另一种风格
-        # 还是推荐 args=AiohttpRequestArgs() 的方式，有参数提示，比较方便。
+        # 另一种风格示例，以 POST(FormRequest) with aiohttp args 为例：
+        # 将 aiohttp 参数放入 meta 的 aiohttp 的 args 中；
+        # 但还是推荐 args=AiohttpRequestArgs() 的方式，有参数提示，比较方便。
         yield AiohttpFormRequest(
             url="http://httpbin.org/post",
             callback=self.parse_post_sec,
             meta={
-                "meta_data": "POST(FormRequest)_with_aiohttp_args_other",
                 "aiohttp": {
                     "args": {
                         "method": "POST",
@@ -156,16 +149,13 @@ class DemoAiohttpSpider(AyuSpider):
 
     # 此处及后面所有的 parse_xx_xx 方法都是用于对响应信息的解析，用于测试
     def parse_get_fir(self, response: ScrapyResponse, request_name: int) -> None:
-        meta_data = response.meta.get("meta_data")
-        self.slog.info(f"get {request_name} meta_data: {meta_data}")
+        self.slog.info(f"get & request_name: {request_name}")
         Operations.parse_response_data(response_data=response.text, mark="GET FIRST")
 
     def parse_post_fir(self, response: ScrapyResponse, request_name: int) -> None:
-        meta_data = response.meta.get("meta_data")
-        self.slog.info(f"post {request_name} first meta_data: {meta_data}")
+        self.slog.info(f"post & request_name: {request_name}")
         Operations.parse_response_data(response_data=response.text, mark="POST FIRST")
 
     def parse_post_sec(self, response: ScrapyResponse, request_name: int) -> None:
-        meta_data = response.meta.get("meta_data")
-        self.slog.info(f"post {request_name} second meta_data: {meta_data}")
+        self.slog.info(f"post && request_name {request_name}")
         Operations.parse_response_data(response_data=response.text, mark="POST SECOND")
