@@ -157,5 +157,5 @@ class DemoAiohttpSpider(AyuSpider):
         Operations.parse_response_data(response_data=response.text, mark="POST FIRST")
 
     def parse_post_sec(self, response: ScrapyResponse, request_name: int) -> None:
-        self.slog.info(f"post && request_name {request_name}")
+        self.slog.info(f"post & request_name {request_name}")
         Operations.parse_response_data(response_data=response.text, mark="POST SECOND")
