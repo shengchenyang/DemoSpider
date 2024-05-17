@@ -1,5 +1,4 @@
 # 同时存入 Mysql 和 MongoDB 的场景（其它各种结合场景不再举例）
-import json
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
@@ -11,8 +10,8 @@ from DemoSpider.common.types import ScrapyResponse
 
 class DemoEightSpider(AyuSpider):
     name = "demo_eight"
-    allowed_domains = ["blog.csdn.net"]
-    start_urls = ["https://blog.csdn.net/"]
+    allowed_domains = ["readthedocs.io"]
+    start_urls = ["https://readthedocs.io"]
     custom_settings = {
         "ITEM_PIPELINES": {
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
@@ -22,28 +21,17 @@ class DemoEightSpider(AyuSpider):
 
     def start_requests(self) -> Iterable[Request]:
         yield Request(
-            url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
+            url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
-            headers={
-                "referer": "https://blog.csdn.net/rank/list",
-                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-            },
         )
 
     def parse_first(self, response: ScrapyResponse) -> Any:
-        data_list = json.loads(response.text)["data"]
-        for curr_data in data_list:
-            article_detail_url = curr_data.get("articleDetailUrl")
-            article_title = curr_data.get("articleTitle")
-            comment_count = curr_data.get("commentCount")
-            favor_count = curr_data.get("favorCount")
-            nick_name = curr_data.get("nickName")
-
+        li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
+        for curr_li in li_list:
+            octree_text = curr_li.xpath("a/text()").get()
+            octree_href = curr_li.xpath("a/@href").get()
             yield AyuItem(
-                article_detail_url=article_detail_url,
-                article_title=article_title,
-                comment_count=comment_count,
-                favor_count=favor_count,
-                nick_name=nick_name,
+                octree_text=octree_text,
+                octree_href=octree_href,
                 _table="demo_eight",
             )
