@@ -1,4 +1,3 @@
-import json
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
@@ -48,7 +47,7 @@ class DemoNineSpider(AyuSpider):
             if self.postgres_engine_conn:
                 try:
                     _sql = text(
-                        f"""select id from {_save_table} where octree_text = '{octree_text}' limit 1"""
+                        f"select id from {_save_table} where octree_text = '{octree_text}' limit 1"
                     )
                     result = self.postgres_engine_conn.execute(_sql).fetchone()
                     if not result:
