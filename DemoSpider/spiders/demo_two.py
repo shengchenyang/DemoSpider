@@ -1,5 +1,4 @@
 # 存入 MongoDB 示例（配置根据本地 .conf 取值）
-import json
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
@@ -11,8 +10,8 @@ from DemoSpider.common.types import ScrapyResponse
 
 class DemoTwoSpider(AyuSpider):
     name = "demo_two"
-    allowed_domains = ["csdn.net"]
-    start_urls = ["https://blog.csdn.net/"]
+    allowed_domains = ["readthedocs.io"]
+    start_urls = ["https://readthedocs.io"]
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 MongoDB
@@ -25,37 +24,25 @@ class DemoTwoSpider(AyuSpider):
     }
 
     def start_requests(self) -> Iterable[Request]:
-        """
-        get 请求首页，获取项目列表数据
-        """
         yield Request(
-            url="https://blog.csdn.net/phoenix/web/blog/hot-rank?page=0&pageSize=25&type=",
+            url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
-            headers={
-                "referer": "https://blog.csdn.net/rank/list",
-            },
-            dont_filter=True,
         )
 
     def parse_first(self, response: ScrapyResponse) -> Any:
-        data_list = json.loads(response.text)["data"]
-        for curr_data in data_list:
-            article_detail_url = curr_data.get("articleDetailUrl")
-            article_title = curr_data.get("articleTitle")
-            comment_count = curr_data.get("commentCount")
-            favor_count = curr_data.get("favorCount")
-            nick_name = curr_data.get("nickName")
+        li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
+        for curr_li in li_list:
+            octree_text = curr_li.xpath("a/text()").get()
+            octree_href = curr_li.xpath("a/@href").get()
 
-            article_item = AyuItem(
-                article_detail_url=article_detail_url,
-                article_title=article_title,
-                comment_count=comment_count,
-                favor_count=favor_count,
-                nick_name=nick_name,
-                _table="demo_two",
+            # NOTE: 数据存储方式 1，推荐此风格写法。
+            octree_item = AyuItem(
+                octree_text=octree_text,
+                octree_href=octree_href,
                 # 可选参数: 用于入库前的去重逻辑，也可自行实现其它去重方式
-                _mongo_update_rule={"article_detail_url": article_detail_url},
+                _mongo_update_rule={"octree_text": octree_text},
+                _table="demo_two",
             )
 
-            self.slog.info(f"article_item: {article_item}")
-            yield article_item
+            self.slog.info(f"octree_item: {octree_item}")
+            yield octree_item
