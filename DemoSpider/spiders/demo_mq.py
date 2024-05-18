@@ -40,8 +40,8 @@ class DemoMqSpider(AyuSpider):
             from ayugespidertools.items import AyuItem, DataItem
 
             yield AyuItem(
-                octree_text=DataItem(octree_text, "文章详情链接"),
-                octree_href=DataItem(octree_href, "文章标题"),
+                octree_text=DataItem(octree_text, "标题"),
+                octree_href=DataItem(octree_href, "标题链接"),
                 _table=DataItem("demo_mq", "项目列表信息"),
             )
             """
