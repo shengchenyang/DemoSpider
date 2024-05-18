@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "DemoSpider"
-version = "3.9.7"
+version = "3.9.8"
 package-mode = false
 description = "AyugeSpiderTools 的具体场景实现。"
 authors = ["ayuge <ayugesheng@gmail.com>"]
@@ -13,7 +13,7 @@ homepage = "https://www.ayuge.top/mkdocs-material/"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-ayugespidertools = "3.9.7"
+ayugespidertools = "3.9.8"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "3.5.0"
