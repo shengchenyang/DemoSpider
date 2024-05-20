@@ -1,16 +1,16 @@
 """
 结合 scrapy-redis 的方式示例：
 Note:
-    1.为了方便展示和不干扰 DemoSpider 主项目 settings 的内容，所以将 scrapy-redis 相关
-配置放入了此 spider 的 custom_settings 中了。放入 settings.py 也是可以的。
-    2.运行此示例需要自行配置 custom_settings 中的 REDIS_HOST 和 REDIS_PARAMS 配置，也
-可以修改为 REDIS_URL 的方式。
-    3.其它配置不再展示，具体请查看 scrapy_redis 文档。
-    4.运行方式：执行此 spider，然后在 redis 中执行 lpush myspider:start_urls <start url> 即可。
+    1. 为了方便展示和不干扰 DemoSpider 主项目 settings 的内容，所以将 scrapy-redis 相关
+    配置放入了此 spider 的 custom_settings 中了。放入 settings.py 也是可以的。
+    2. 运行此示例需要自行配置 custom_settings 中的 REDIS_HOST 和 REDIS_PARAMS 配置，也
+    可以修改为 REDIS_URL 的方式。
+    3. 其它配置不再展示，具体请查看 scrapy_redis 文档。
+    4. 运行方式：执行此 spider，然后在 redis 中执行 lpush myspider:start_urls <start url> 即可。
 
 Supplement:
     1. 由于 scrapy-redis 维护放缓很长时间了，目前最新版本包并不能兼容较新版本的 scrapy，所以
-推荐自行打包和安装最新代码。
+    推荐自行打包和安装最新代码。
     2. 本项目 DemoSpider/docs/libs 中也提供了 scrapy-redis 的最新包。
 """
 
