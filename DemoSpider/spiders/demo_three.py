@@ -1,5 +1,4 @@
 # 存入 Mysql 示例（配置根据 consul 取值）
-import json
 from typing import Any, Iterable
 
 from ayugespidertools.items import AyuItem
