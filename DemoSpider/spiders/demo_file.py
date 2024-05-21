@@ -36,6 +36,8 @@ class DemoFileSpider(AyuSpider):
         yield Request(url=self.start_urls[0], callback=self.parse_first)
 
     def parse_first(self, response: ScrapyResponse) -> Any:
+        _save_table = "demo_file"
+
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]
         for curr_data in data_list:
             title = ToolsForAyu.extract_with_json(
@@ -45,14 +47,13 @@ class DemoFileSpider(AyuSpider):
                 json_data=curr_data, query=["extend", "pic"]
             )
 
-            _save_table = "demo_file"
             img_item = AyuItem(
                 title=title,
                 img_file_url=img_href,
                 _table=_save_table,
             )
 
-            # 同样地，也可以直接返回 dict，但记得 _table 特殊字段
+            # 同样地，也可以直接返回 dict，但记得 _table 字段
             """
             img_item = {
                 "title": title,
