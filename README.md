@@ -27,6 +27,10 @@ pip install ayugespidertools
 
 然后，运行你所关心的 `spider` 即可。
 
+### 1.2. 关于项目结构
+
+如果想快速生成类似此项目的结构，推荐使用 [LazyScraper](https://github.com/shengchenyang/LazyScraper) 来快速创建工程项目。
+
 ## 2. 运行结果图示
 
 如果不存在目标数据库，数据表或表字段，则自动创建项目所依赖的数据库，数据表和表字段及字段说明。
