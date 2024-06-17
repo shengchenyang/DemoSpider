@@ -28,7 +28,6 @@ from DemoSpider.common.types import ScrapyResponse
 
 class DemoOssSpider(AyuSpider):
     name = "demo_oss"
-    allowed_domains = ["csdn.net"]
     start_urls = [
         "https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python"
     ]
