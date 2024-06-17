@@ -47,7 +47,6 @@ async def _download(
 
 class DemoOssSecSpider(AyuSpider):
     name = "demo_oss_sec"
-    allowed_domains = ["csdn.net"]
     start_urls = [
         "https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python"
     ]
