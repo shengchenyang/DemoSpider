@@ -13,7 +13,6 @@ from DemoSpider.common.types import ScrapyResponse
 
 class DemoFileSpider(AyuSpider):
     name = "demo_file"
-    allowed_domains = ["csdn.net"]
     start_urls = [
         "https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python"
     ]
