@@ -11,21 +11,21 @@
 
 ```shell
 pip install ayugespidertools
+
+# 某些场景可能需要安装全部依赖，可查看对应的 spider 脚本头注释，会有相关提示：
+pip install ayugespidertools[all]
 ```
 
 ### 1.1. 运行方法
 
-只需要补充本项目中 `VIT` 下的 `.conf` 配置内容即可。
+1. 只需要补充本项目中 `VIT` 下的 `.conf` 配置内容即可。
+2. 然后，运行你所关心的 `spider` 即可。（是选择通过 `run.py`，`run.sh` 还是直接 `scrapy` 命令都可以。）
 
-项目中已给出 `.conf_example` 的示例文件，请对照你想复现的场景按需配置。
+> 补充：
 
-`VIT` 文件夹路径默认在 `spiders` 文件夹同目录。当然，你也可以自定义。
-
-> 项目中各 `spiders` 脚本名称及其对应功能介绍：
-
-具体请在 `AyugeSpiderTools` 的 `readme` 中查看，这里不再重复。
-
-然后，运行你所关心的 `spider` 即可。
+- 若不清楚 `.conf` 如何配置，项目中已给出 `.conf_example` 的示例文件，请对照你想复现的场景按需配置。
+- 如果对各项配置不太了解，请在对应的 [readthedocs](https://ayugespidertools.readthedocs.io/en/latest/topics/configuration.html) 文档中查看介绍。
+- 项目中各 `spiders` 脚本功能及场景介绍请在 `AyugeSpiderTools` 的 `readme` 中查看，这里不再重复。
 
 ### 1.2. 关于项目结构
 
