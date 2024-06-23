@@ -1,6 +1,7 @@
 # 存入 Mysql 示例 (配置根据本地 .conf 取值)
 from typing import Any, Iterable
 
+import pandas
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
@@ -78,14 +79,14 @@ class DemoOneSpider(AyuSpider):
             if self.mysql_engine_conn:
                 try:
                     _sql = text(
-                        f'select `id` from `{_save_table}` where `octree_text` = "{octree_text}" limit 1'
+                        f"select `id` from `{_save_table}` where `octree_text` = {octree_text!r} limit 1"
                     )
                     result = self.mysql_engine_conn.execute(_sql).fetchone()
                     if not result:
                         self.mysql_engine_conn.rollback()
                         yield octree_item
                     else:
-                        self.slog.debug(f'标题为 "{octree_text}" 的数据已存在')
+                        self.slog.debug(f"标题为 {octree_text!r} 的数据已存在")
                 except Exception:
                     self.mysql_engine_conn.rollback()
                     yield octree_item
@@ -95,7 +96,7 @@ class DemoOneSpider(AyuSpider):
             # 示例二：使用 pandas 结合对应 <db>_engine 去重的示例：
             """
             try:
-                sql = f'select `id` from `{_save_table}` where `octree_text` = "{octree_text}" limit 1'
+                sql = f"select `id` from `{_save_table}` where `octree_text` = {octree_text!r} limit 1"
                 df = pandas.read_sql(sql, self.mysql_engine)
 
                 # 如果为空，说明此数据不存在于数据库，则新增
@@ -104,7 +105,7 @@ class DemoOneSpider(AyuSpider):
 
                 # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
                 else:
-                    self.slog.debug(f"标题为 ”{octree_text}“ 的数据已存在")
+                    self.slog.debug(f"标题为 {octree_text!r} 的数据已存在")
 
             except Exception as e:
                 if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
