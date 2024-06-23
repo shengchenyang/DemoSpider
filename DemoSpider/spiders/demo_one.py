@@ -1,7 +1,7 @@
 # 存入 Mysql 示例 (配置根据本地 .conf 取值)
 from typing import Any, Iterable
 
-import pandas
+# import pandas
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
