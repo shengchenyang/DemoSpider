@@ -9,9 +9,7 @@ Note:
     4. 运行方式：执行此 spider，然后在 redis 中执行 lpush myspider:start_urls <start url> 即可。
 
 Supplement:
-    1. 由于 scrapy-redis 维护放缓很长时间了，目前最新版本包并不能兼容较新版本的 scrapy，所以
-    推荐自行打包和安装最新代码。
-    2. 本项目 DemoSpider/docs/libs 中也提供了 scrapy-redis 的最新包。
+    1. 需要自行安装 scrapy-redis，且版本要大于等于 v0.8.0。
 """
 
 from typing import Any
