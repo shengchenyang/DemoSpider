@@ -192,3 +192,9 @@
 ;upload_fields_suffix=_file_url
 ;oss_fields_prefix=_
 ;full_link_enable=false
+
+; 自定义 section 配置，用于在 settings.py 中隐藏隐私内容的赋值，并统一配置至此文件中管理。
+;[my_add_redis]
+;host=localhost
+;port=6379
+;password=please_write_your_password_here
