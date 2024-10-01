@@ -26,6 +26,7 @@ pip install ayugespidertools[all]
 - 若不清楚 `.conf` 如何配置，项目中已给出 `.conf_example` 的示例文件，请对照你想复现的场景按需配置。
 - 如果对各项配置不太了解，请在对应的 [readthedocs](https://ayugespidertools.readthedocs.io/en/latest/topics/configuration.html) 文档中查看介绍。
 - 项目中各 `spiders` 脚本功能及场景介绍请在 `AyugeSpiderTools` 的 `readme` 中查看，这里不再重复。
+- 本项目有不同分支，请根据不同版本分支来测试对应版本的 `ayugespidertools` 库，`main` 则表示为最新版本分支。
 
 ### 1.2. 关于项目结构
 
