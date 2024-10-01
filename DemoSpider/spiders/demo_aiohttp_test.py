@@ -1,7 +1,6 @@
 # 测试 aiohttp 请求的功能示例
 from typing import Any, Iterable
 
-from ayugespidertools.common.typevars import AiohttpRequestArgs
 from ayugespidertools.items import AyuItem
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
@@ -38,16 +37,6 @@ class DemoAiohttpTestSpider(AyuSpider):
             yield AiohttpRequest(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
                 callback=self.parse_first,
-                meta={
-                    "meta_data": "这是用来测试 parse_first meta 的功能",
-                    "aiohttp_args": {
-                        "timeout": 10,
-                        "tmp": "tmp_data",
-                    },
-                },
-                args=AiohttpRequestArgs(
-                    timeout=35,
-                ),
                 dont_filter=True,
             )
 

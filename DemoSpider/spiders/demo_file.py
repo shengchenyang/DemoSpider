@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
-from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.common.utils import Tools
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
@@ -39,10 +39,10 @@ class DemoFileSpider(AyuSpider):
 
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]
         for curr_data in data_list:
-            title = ToolsForAyu.extract_with_json(
+            title = Tools.extract_with_json(
                 json_data=curr_data, query=["extend", "title"]
             )
-            img_href = ToolsForAyu.extract_with_json(
+            img_href = Tools.extract_with_json(
                 json_data=curr_data, query=["extend", "pic"]
             )
 

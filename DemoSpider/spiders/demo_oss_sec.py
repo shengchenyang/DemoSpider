@@ -16,7 +16,7 @@ import json
 from typing import Any, Iterable
 
 import scrapy
-from ayugespidertools.common.utils import ToolsForAyu
+from ayugespidertools.common.utils import Tools
 from ayugespidertools.extras.oss import AliOssBase
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -35,7 +35,7 @@ async def _download(
 ):
     request = scrapy.Request(file_url, callback=NO_CALLBACK)
     response = await maybe_deferred_to_future(spider.crawler.engine.download(request))
-    headers_dict = ToolsForAyu.get_dict_form_scrapy_req_headers(
+    headers_dict = Tools.get_dict_form_scrapy_req_headers(
         scrapy_headers=response.headers
     )
     content_type = headers_dict.get("Content-Type")
@@ -77,10 +77,10 @@ class DemoOssSecSpider(AyuSpider):
 
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]
         for curr_data in data_list:
-            title = ToolsForAyu.extract_with_json(
+            title = Tools.extract_with_json(
                 json_data=curr_data, query=["extend", "title"]
             )
-            title_pic = ToolsForAyu.extract_with_json(
+            title_pic = Tools.extract_with_json(
                 json_data=curr_data, query=["extend", "pic"]
             )
             title_pic = title_pic.split("?x-oss-process")[0] if title_pic else ""
