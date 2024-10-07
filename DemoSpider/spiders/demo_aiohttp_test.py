@@ -20,8 +20,6 @@ class DemoAiohttpTestSpider(AyuSpider):
         },
         # scrapy Request 替换为 aiohttp 的配置示例
         "AIOHTTP_CONFIG": {
-            "timeout": 5,
-            # "proxy": "127.0.0.1:1080",
             "sleep": 0,
             "retry_times": 3,
         },
