@@ -1,9 +1,9 @@
 """
 场景介绍：
 一些 scrapy 第三方扩展需要在 settings.py 中设置一些配置，涉及到 host，密码等隐私配置，直接展
-示在 settings.py 里是不可接受的，这里预发布包提供一种功能来解决。
+示在 settings.py 里是不可接受的，这里提供一种功能来解决。
 
-测试介绍：
+示例介绍：
 测试在 settings.py 中赋值重要参数时，可以从 VIT_DIR 的 .conf 中获取自定义配置内容，来达到隐
 藏隐私内容和保持配置内容统一存放的目的；
 
@@ -22,7 +22,7 @@ password=please_write_your_password_here
 
 请注意：
     - 可以在 settings.py 中使用 get_cfg 方法来获取自定义的隐私配置，也可以在对应的 spider
-     (比如此处)中的 custom_settings 中直接使用，不再举例。
+     (比如此文件)中的 custom_settings 中直接使用，不再举例。
 """
 
 from typing import Any
