@@ -1,7 +1,7 @@
 # DemoSpider 项目说明文档
 
 ## 前言
-本文是对 `AyugeSpiderTools` 工具的使用进行具体场景实现，由于此项目会经常变动和修改，所以独立成为一个专属项目，而不是放入 `AyugeSpiderTools` 项目的示例中。
+本项目用于提供 `AyugeSpiderTools` 具体场景示例，由于此项目会经常变动，所以独立成为一个专属项目，而不是放入 `AyugeSpiderTools` 项目的示例中。
 
 详细的文档说明，还是根据 [ayugespidertools readthedocs](https://ayugespidertools.readthedocs.io/en/latest/) 说明为主。
 
@@ -18,10 +18,22 @@ pip install ayugespidertools[all]
 
 ### 1.1. 运行方法
 
-1. 只需要补充本项目中 `VIT` 下的 `.conf` 配置内容即可。
-2. 然后，运行你所关心的 `spider` 即可。（是选择通过 `run.py`，`run.sh` 还是直接 `scrapy` 命令都可以。）
+先根据复现场景配置本项目中 `VIT` 下的 `.conf` 对应信息，后续运行方式和普通 `scrapy` 项目一致，比如：
+1. 直接运行你所关心的 `spider` 即可，是选择通过 `run.py`，`run.sh` 还是直接 `scrapy` 命令都可以；
+2. 使用各种爬虫管理平台运行也可以，比如 `scrapydweb`，`crawlab` 等；
+3. 也可以使用 `docker` 运行的方式，项目中也给出了 `Dockerfile` 示例。
 
-> 补充：
+> 这里补充下 `docker` 运行部分：
+
+```shell
+# 构建镜像，在 Dockerfile 所在的项目目录中执行：
+docker build -t demo_spider .
+
+# 执行命令示例，这里以 demo_five 的 spider 为例：
+docker run -e spider_name=demo_five demo_spider
+```
+
+> NOTE：
 
 - 若不清楚 `.conf` 如何配置，项目中已给出 `.conf_example` 的示例文件，请对照你想复现的场景按需配置。
 - 如果对各项配置不太了解，请在对应的 [readthedocs](https://ayugespidertools.readthedocs.io/en/latest/topics/configuration.html) 文档中查看介绍。
