@@ -10,8 +10,8 @@ from DemoSpider.common.types import ScrapyResponse
 
 class DemoFiveSpider(AyuSpider):
     name = "demo_five"
-    allowed_domains = ["book.zongheng.com"]
-    start_urls = ["http://book.zongheng.com"]
+    allowed_domains = ["readthedocs.io"]
+    start_urls = ["https://readthedocs.io"]
     custom_settings = {
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
@@ -26,31 +26,30 @@ class DemoFiveSpider(AyuSpider):
     }
 
     def start_requests(self) -> Iterable[Request]:
-        """
-        get 请求首页，获取项目列表数据
-        """
-        for page in range(1, 11):
-            url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
-            yield Request(url=url, callback=self.parse_first, dont_filter=True)
-
-    def parse_first(self, response: ScrapyResponse) -> Any:
-        _save_table = "demo_five"
-
-        book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
-        for book_info in book_info_list:
-            book_name = book_info.xpath("div[2]//h1/@title").get()
-            _book_href = book_info.xpath("div[2]//h1/a/@href").get()
-            book_href = response.urljoin(_book_href)
-            book_intro = book_info.xpath(
-                'div[2]/div[@class="TwoBox02_06"]/a/text()'
-            ).get()
-
-            book_info_item = AyuItem(
-                book_name=book_name,
-                book_href=book_href,
-                book_intro=book_intro,
-                _table=_save_table,
+        # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，你可自行测试其它目标网站
+        for idx, _ in enumerate(range(10)):
+            yield Request(
+                url="https://ayugespidertools.readthedocs.io/en/latest/",
+                callback=self.parse_first,
+                cb_kwargs={"index": idx},
+                dont_filter=True,
             )
 
-            self.slog.info(f"book_info_item: {book_info_item}")
-            yield book_info_item
+    def parse_first(self, response: ScrapyResponse, index: str) -> Any:
+        _save_table = "demo_five"
+
+        li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
+        for curr_li in li_list:
+            octree_text = curr_li.xpath("a/text()").get()
+            octree_href = curr_li.xpath("a/@href").get()
+
+            # NOTE: 数据存储方式 1，推荐此风格写法。
+            octree_item = AyuItem(
+                octree_text=octree_text,
+                octree_href=octree_href,
+                start_index=index,
+                _table=_save_table,
+                _mongo_update_rule={"octree_text": octree_text, "start_index": index},
+            )
+            self.slog.info(f"octree_item: {octree_item}")
+            yield octree_item
