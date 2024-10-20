@@ -49,7 +49,6 @@ class DemoFiveSpider(AyuSpider):
                 octree_href=octree_href,
                 start_index=index,
                 _table=_save_table,
-                _mongo_update_rule={"octree_text": octree_text, "start_index": index},
             )
             self.slog.info(f"octree_item: {octree_item}")
             yield octree_item
