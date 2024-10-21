@@ -21,8 +21,8 @@ except ImportError:
 
 class DemoEsSpider(AyuSpider):
     name = "demo_es"
-    allowed_domains = ["faloo.com"]
-    start_urls = ["https://b.faloo.com/"]
+    allowed_domains = ["readthedocs.io"]
+    start_urls = ["https://readthedocs.io"]
     custom_settings = {
         "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
@@ -34,43 +34,35 @@ class DemoEsSpider(AyuSpider):
     }
 
     def start_requests(self) -> Iterable[Request]:
-        for page in range(1, 3):
-            url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
-            yield Request(
-                url=url,
-                callback=self.parse_first,
-                dont_filter=True,
-            )
+        yield Request(
+            url="https://ayugespidertools.readthedocs.io/en/latest/",
+            callback=self.parse_first,
+        )
 
     def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_es"
 
-        book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
-        for book_info in book_info_list:
-            book_name = book_info.xpath("div[2]//h1/@title").get()
-            _book_href = book_info.xpath("div[2]//h1/a/@href").get()
-            book_href = response.urljoin(_book_href)
-            book_intro = book_info.xpath(
-                'div[2]/div[@class="TwoBox02_06"]/a/text()'
-            ).get()
+        li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
+        for curr_li in li_list:
+            octree_text = curr_li.xpath("a/text()").get()
+            octree_href = curr_li.xpath("a/@href").get()
 
-            book_info_item = AyuItem(
-                book_name=DataItem(
-                    book_name, Text(analyzer="snowball", fields={"raw": Keyword()})
+            octree_item = AyuItem(
+                octree_text=DataItem(
+                    octree_text, Text(analyzer="snowball", fields={"raw": Keyword()})
                 ),
-                book_href=DataItem(book_href, Keyword()),
-                book_intro=DataItem(book_intro, Keyword()),
+                octree_href=DataItem(octree_href, Keyword()),
                 _table=DataItem(_save_table),
             )
-
+            self.slog.info(f"octree_item: {octree_item}")
             # 查重逻辑自己设置，精确匹配还是全文搜索请自行设置，这里只是一种示例。
             # 请自定义查重和更新方式，比如使用查询并更新的语句。
             s = (
                 Search(using=self.es_engine, index=_save_table)
-                .query("term", book_href=book_href)
+                .query("term", octree_href=octree_href)
                 .execute()
             )
             if s.hits.total.value > 0:
-                self.slog.debug(f'链接为 "{book_href}" 的数据已存在')
+                self.slog.debug(f'链接为 "{octree_href}" 的数据已存在')
             else:
-                yield book_info_item
+                yield octree_item
