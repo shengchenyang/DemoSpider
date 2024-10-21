@@ -21,8 +21,8 @@ except ImportError:
 
 class DemoEsAsyncSpider(AyuSpider):
     name = "demo_es_async"
-    allowed_domains = ["faloo.com"]
-    start_urls = ["https://b.faloo.com/"]
+    allowed_domains = ["readthedocs.io"]
+    start_urls = ["https://readthedocs.io"]
     custom_settings = {
         "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
@@ -34,33 +34,31 @@ class DemoEsAsyncSpider(AyuSpider):
     }
 
     def start_requests(self) -> Iterable[Request]:
-        for page in range(1, 21):
-            url = f"https://b.faloo.com/y_0_0_0_0_3_15_{page}.html"
+        # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，你可自行测试其它目标网站
+        for idx, _ in enumerate(range(10)):
             yield Request(
-                url=url,
+                url="https://ayugespidertools.readthedocs.io/en/latest/",
                 callback=self.parse_first,
+                cb_kwargs={"index": idx},
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse) -> Any:
+    def parse_first(self, response: ScrapyResponse, index: str) -> Any:
         _save_table = "demo_es"
 
-        book_info_list = response.xpath('//div[@class="TwoBox02_01"]/div')
-        for book_info in book_info_list:
-            book_name = book_info.xpath("div[2]//h1/@title").get()
-            _book_href = book_info.xpath("div[2]//h1/a/@href").get()
-            book_href = response.urljoin(_book_href)
-            book_intro = book_info.xpath(
-                'div[2]/div[@class="TwoBox02_06"]/a/text()'
-            ).get()
+        li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
+        for curr_li in li_list:
+            octree_text = curr_li.xpath("a/text()").get()
+            octree_href = curr_li.xpath("a/@href").get()
 
-            book_info_item = AyuItem(
-                book_name=DataItem(
-                    book_name, Text(analyzer="snowball", fields={"raw": Keyword()})
+            # NOTE: 数据存储方式 1，推荐此风格写法。
+            octree_item = AyuItem(
+                octree_text=DataItem(
+                    octree_text, Text(analyzer="snowball", fields={"raw": Keyword()})
                 ),
-                book_href=DataItem(book_href, Keyword()),
-                book_intro=DataItem(book_intro, Keyword()),
+                octree_href=DataItem(octree_href, Keyword()),
+                start_index=index,
                 _table=DataItem(_save_table),
             )
-            self.slog.info(f"book_info_item: {book_info_item}")
-            yield book_info_item
+            self.slog.info(f"octree_item: {octree_item}")
+            yield octree_item
