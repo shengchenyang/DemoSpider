@@ -39,7 +39,6 @@ class DemoSSpider(AyuSpider):
             # 随机请求头
             "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
         },
-        # "LOGURU_ENABLED": False,
         "CONCURRENT_REQUESTS": 100,
         "DOWNLOAD_DELAY": 0.01,
     }
