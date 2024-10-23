@@ -4,14 +4,18 @@
 
 Note:
     1. 跑通这个示例需要安装 aio-pika，可通过此项目根目录中 pip install -r requirements.txt 安装；
-    2. 可通过项目根目录下的 AsyncDockerfile 来打包和运行，打包命令为：
+    2. 由于依赖 mq 链接配置，此项目使用的是 .conf 中 [mq] 部分的配置，当然你可以在 .conf 中自定义，防
+        止与你的 mq 存储场景有影响；
+    3. 可通过项目根目录下的 AsyncDockerfile 来打包和运行，打包命令为：
         docker build -t demo_s -f AsyncDockerfile .
 
         运行命令为：
         docker run -d --name="demos" -e task_num=2 demo_s
         这个命令是指在命令运行的设备上开启 task_num 个 demo_s 的程序，然后也可以在其它各种地方也部署
         此命令，来完成分布式部署。当然也可以不用 docker 的方式，使用 scrapy 管理平台等都行，看你自己
-        的工作流水线设计。
+        的工作流水线设计；
+    4. 此程序中的消费任务需要你自行去目标 mq 的队列中推送消息，才会激发这个程序运行，这里就不提供推送消息
+        的示例了。
 """
 
 import json
@@ -44,6 +48,7 @@ class DemoSSpider(AyuSpider):
     }
 
     async def parse(self, response: ScrapyResponse, **kwargs: Any) -> Any:
+        # 这里的 mq 配置是从 .conf 中获取的，你也可以自行在 .conf 自定义配置
         connection = await aio_pika.connect_robust(
             host=self.rabbitmq_conf.host,
             port=self.rabbitmq_conf.port,
