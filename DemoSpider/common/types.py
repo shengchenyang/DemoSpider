@@ -9,3 +9,9 @@ ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response]
 
 
 class RedisSpider: ...
+
+
+class AIO_PIKA: ...
+
+
+aio_pika = AIO_PIKA()
