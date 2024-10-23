@@ -71,8 +71,9 @@ class DemoSSpider(AyuSpider):
                         body = message.body
                         task_info = json.loads(body.decode())
 
-                        # 这里就可以写消费 mq 的任务消息，来分发采集新增/更新任务，配合 mongodb 场景
-                        # 的 _mongo_update_rule 或 mysql 场景的
+                        # 这里就可以写消费 mq 的任务消息了，来分发采集新增/更新任务，配合 mongodb 场
+                        # 景的 _mongo_update_rule 或 mysql 场景的 odku_enable，你甚至不用自己写
+                        # 入库前的查询，一切都是那么地简单优雅。
                         yield Request(
                             url="https://ayugespidertools.readthedocs.io/en/latest/",
                             callback=self.parse_next,
@@ -81,4 +82,5 @@ class DemoSSpider(AyuSpider):
                         )
 
     def parse_next(self, response: ScrapyResponse, task_info: dict) -> Any:
+        # 剩下的示例及功能就需要自行按需求完成了
         self.slog.warning(f"{response.url} --- {task_info}")
