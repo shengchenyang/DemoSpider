@@ -27,10 +27,10 @@ pip install ayugespidertools[all]
 
 ```shell
 # 构建镜像，在 Dockerfile 所在的项目目录中执行：
-docker build -t demo_spider .
+docker build -t demo_spider -f Dockerfile .
 
 # 执行命令示例，这里以 demo_five 的 spider 为例：
-docker run -e spider_name=demo_five demo_spider
+docker run --name demo_five -e spider_name=demo_five demo_spider
 ```
 
 > NOTE：
