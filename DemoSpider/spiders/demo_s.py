@@ -10,7 +10,7 @@ Note:
         docker build -t demo_s -f AsyncDockerfile .
 
         运行命令为：
-        docker run -d --name="demos" -e task_num=2 demo_s
+        docker run -d --name=demos -e task_num=2 demo_s
         这个命令是指在命令运行的设备上开启 task_num 个 demo_s 的程序，然后也可以在其它各种地方也部署
         此命令，来完成分布式部署。当然也可以不用 docker 的方式，使用 scrapy 管理平台等都行，看你自己
         的工作流水线设计；
@@ -87,4 +87,4 @@ class DemoSSpider(AyuSpider):
 
     def parse_next(self, response: ScrapyResponse, task_info: dict) -> Any:
         # 剩下的示例及功能就需要自行按需求完成了
-        self.slog.warning(f"{response.url} --- {task_info}")
+        self.slog.debug(f"{response.url} --- {task_info}")
