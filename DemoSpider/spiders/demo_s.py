@@ -5,7 +5,7 @@
 Note:
     1. 跑通这个示例需要安装 aio-pika，可通过此项目根目录中 pip install -r requirements.txt 安装；
     2. 由于依赖 mq 链接配置，此项目使用的是 .conf 中 [mq] 部分的配置，当然你可以在 .conf 中自定义，防
-        止与你的 mq 存储场景有影响；
+        止与你的 mq 存储场景有影响（自定义 .conf 配置的示例在 demo_conf 中）；
     3. 可通过项目根目录下的 AsyncDockerfile 来打包和运行，打包命令为：
         docker build -t demo_s -f AsyncDockerfile .
 
@@ -77,7 +77,7 @@ class DemoSSpider(AyuSpider):
 
                         # 这里就可以写消费 mq 的任务消息了，来分发采集新增/更新任务，配合 mongodb 场
                         # 景的 _mongo_update_rule 或 mysql 场景的 odku_enable，你甚至不用自己写
-                        # 入库前的查询，一切都是那么地简单优雅。
+                        # 入库前的去重查询或更新，一切都是那么地简单优雅。
                         yield Request(
                             url="https://ayugespidertools.readthedocs.io/en/latest/",
                             callback=self.parse_next,
