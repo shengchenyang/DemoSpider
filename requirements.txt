@@ -1,1 +1,1 @@
-ayugespidertools==3.6.1
+ayugespidertools==3.7.0
