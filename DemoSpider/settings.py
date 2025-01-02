@@ -9,8 +9,7 @@
 
 from pathlib import Path
 
-from ayugespidertools.config import get_cfg
-from loguru import logger
+from ayugespidertools.config import get_cfg, logger
 
 BOT_NAME = "DemoSpider"
 
@@ -41,6 +40,7 @@ redis_password = _my_cfg["my_add_redis"].get("password", None)
 # Log configuration example
 LOG_LEVEL = "ERROR"
 LOG_FILE = _ / "logs/DemoSpider.log"
+logger.remove()
 logger.add(
     _ / "logs/error.log",
     level="ERROR",
