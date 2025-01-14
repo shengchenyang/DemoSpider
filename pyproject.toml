@@ -17,6 +17,8 @@ ayugespidertools = "3.11.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "3.5.0"
+black = "24.4.2"
+isort = "5.13.2"
 
 [tool.black]
 line-length = 88
