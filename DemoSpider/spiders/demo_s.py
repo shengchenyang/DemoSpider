@@ -3,7 +3,7 @@
 此部分是简单实现分布式及并发 spider 程序的示例，使得优雅和方便地实现分布式，并发及部署运行
 
 Note:
-    1. 跑通这个示例需要安装 aio-pika，可通过此项目根目录中 pip install -r requirements.txt 安装；
+    1. 跑通这个示例需要安装 aio-pika，可通过此项目根目录中 pip install ayugespidertools[database] 安装；
     2. 由于依赖 mq 链接配置，此项目使用的是 .conf 中 [mq] 部分的配置，当然你可以在 .conf 中自定义，防
         止与你的 mq 存储场景有影响（自定义 .conf 配置的示例在 demo_conf 中）；
     3. 可通过项目根目录下的 AsyncDockerfile 来打包和运行，打包命令为：
@@ -29,7 +29,7 @@ from DemoSpider.common.types import ScrapyResponse
 try:
     import aio_pika
 except ImportError:
-    # pip install aio-pika
+    # pip install ayugespidertools[database]
     from DemoSpider.common.types import aio_pika
 
 
