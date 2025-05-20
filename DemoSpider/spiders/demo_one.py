@@ -1,24 +1,29 @@
 # 存入 Mysql 示例 (配置根据本地 .conf 取值)
-from typing import Any, Iterable
+from __future__ import annotations
 
-# import pandas
+from typing import TYPE_CHECKING, Any
+
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
+from ayugespidertools.utils.database import MysqlAsyncPortal
 from scrapy.http import Request
-from sqlalchemy import text
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
 
-# from ayugespidertools.items import DataItem
+    from aiomysql import Pool
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoOneSpider(AyuSpider):
+    # 可用于入库前查询使用等场景，名称等可自定义
+    mysql_conn_pool: Pool
+
     name = "demo_one"
     allowed_domains = ["readthedocs.io"]
     start_urls = ["https://readthedocs.io"]
     custom_settings = {
-        # 打开数据库引擎开关，用于数据入库前更新逻辑判断
-        "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
             # 激活此项则数据会存储至 Mysql
             "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
@@ -29,13 +34,14 @@ class DemoOneSpider(AyuSpider):
         },
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
+        self.mysql_conn_pool = await MysqlAsyncPortal(db_conf=self.mysql_conf).connect()
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
         )
 
-    def parse_first(self, response: ScrapyResponse) -> Any:
+    async def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_one"
 
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
@@ -72,44 +78,14 @@ class DemoOneSpider(AyuSpider):
             """
             self.slog.info(f"octree_item: {octree_item}")
 
-            # 数据入库逻辑 -> 测试 mysql_engine / mysql_engine_conn 的去重功能。
-            # 场景对应的 engine 和 engine_conn 也已经给你了，你可自行实现。以下给出示例：
-
-            # 示例一：使用 sqlalchemy2 结合 <db>_engine_conn 实现查询如下：
-            if self.mysql_engine_conn:
-                try:
-                    _sql = text(
-                        f"select `id` from `{_save_table}` where `octree_text` = {octree_text!r} limit 1"
+            # 数据入库逻辑 -> 测试 ayugespidertools.utils.database.MysqlAsyncPortal 的去重功能。
+            # 使用此方法时需要提前建库建表
+            async with self.mysql_conn_pool.acquire() as conn:
+                async with conn.cursor() as cursor:
+                    exists = await cursor.execute(
+                        f"SELECT `id` from `{_save_table}` where `octree_text` = {octree_text!r} limit 1"
                     )
-                    result = self.mysql_engine_conn.execute(_sql).fetchone()
-                    if not result:
-                        self.mysql_engine_conn.rollback()
+                    if not exists:
                         yield octree_item
                     else:
-                        self.slog.debug(f"标题为 {octree_text!r} 的数据已存在")
-                except Exception:
-                    self.mysql_engine_conn.rollback()
-                    yield octree_item
-            else:
-                yield octree_item
-
-            # 示例二：使用 pandas 结合对应 <db>_engine 去重的示例：
-            """
-            try:
-                sql = f"select `id` from `{_save_table}` where `octree_text` = {octree_text!r} limit 1"
-                df = pandas.read_sql(sql, self.mysql_engine)
-
-                # 如果为空，说明此数据不存在于数据库，则新增
-                if df.empty:
-                    yield octree_item
-
-                # 如果已存在，1). 若需要更新，请自定义更新数据结构和更新逻辑；2). 若不用更新，则跳过即可。
-                else:
-                    self.slog.debug(f"标题为 {octree_text!r} 的数据已存在")
-
-            except Exception as e:
-                if any(["1146" in str(e), "1054" in str(e), "doesn't exist" in str(e)]):
-                    yield octree_item
-                else:
-                    self.slog.error(f"请查看数据库链接或网络是否通畅！Error: {e}")
-            """
+                        self.slog.debug(f'标题为 "{octree_text}" 的数据已存在')
