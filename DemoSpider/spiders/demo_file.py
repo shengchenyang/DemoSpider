@@ -1,14 +1,19 @@
 # 采集 csdn python 热榜的文章列表，并下载图片
+from __future__ import annotations
+
 import json
 from pathlib import Path
-from typing import Any, Iterable
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.common.utils import Tools
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoFileSpider(AyuSpider):
@@ -28,7 +33,7 @@ class DemoFileSpider(AyuSpider):
         "FILES_STORE": Path(__file__).parent.parent / "docs",
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         """
         get 请求首页，获取项目列表数据
         """
@@ -36,7 +41,6 @@ class DemoFileSpider(AyuSpider):
 
     def parse_first(self, response: ScrapyResponse) -> Any:
         _save_table = "demo_file"
-
         data_list = json.loads(response.text)["data"]["www-blog-recommend"]["info"]
         for curr_data in data_list:
             title = Tools.extract_with_json(
