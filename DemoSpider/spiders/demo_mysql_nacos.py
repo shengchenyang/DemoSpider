@@ -1,14 +1,20 @@
 # 存储至 mysql 场景，配置从 nacos 获取
+from __future__ import annotations
+
 import configparser
-from typing import Any, Iterable
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 from scrapy.settings import Settings
 
-from DemoSpider.common.types import ScrapyResponse
 from DemoSpider.settings import VIT_DIR
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoMysqlNacosSpider(AyuSpider):
@@ -43,7 +49,7 @@ class DemoMysqlNacosSpider(AyuSpider):
         super().update_settings(settings)
         settings.set("REMOTE_CONFIG", _remote_conf, priority="spider")
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
