@@ -1,11 +1,16 @@
 # 测试 aiohttp 请求的功能示例
-from typing import Any, Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoAiohttpTestSpider(AyuSpider):
@@ -13,7 +18,6 @@ class DemoAiohttpTestSpider(AyuSpider):
     allowed_domains = ["book.zongheng.com"]
     start_urls = ["http://book.zongheng.com"]
     custom_settings = {
-        "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOADER_MIDDLEWARES": {
             # 使用 aiohttp 请求的中间件
             "ayugespidertools.middlewares.AiohttpDownloaderMiddleware": 543,
@@ -27,7 +31,7 @@ class DemoAiohttpTestSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.01,
     }
 
-    def start_requests(self) -> Iterable[AiohttpRequest]:
+    async def start(self) -> AsyncIterator[Any]:
         """
         get 请求首页，获取项目列表数据
         """
