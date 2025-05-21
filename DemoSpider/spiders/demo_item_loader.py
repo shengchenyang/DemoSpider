@@ -1,5 +1,7 @@
 # 用于介绍 scrapy item 的 itemloaders 的功能，提供调用示例
-from typing import Any, Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
@@ -7,7 +9,10 @@ from itemloaders.processors import TakeFirst
 from scrapy.http import Request
 from scrapy.loader import ItemLoader
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoItemLoaderSpider(AyuSpider):
@@ -25,7 +30,7 @@ class DemoItemLoaderSpider(AyuSpider):
         },
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         for page in range(1, 5):
             yield Request(
                 url=f"http://book.zongheng.com/store/c0/c0/b0/u0/p{page}/v9/s9/t0/u0/i1/ALL.html",
