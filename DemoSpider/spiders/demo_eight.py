@@ -1,11 +1,21 @@
-# 同时存入 Mysql 和 MongoDB 的场景（其它各种结合场景不再举例）
-from typing import Any, Iterable
+"""
+同时存入 Mysql 和 MongoDB 的场景（其它各种结合场景不再举例）
+可以使用 ayugespidertools.pipelines.AyuFtyMysqlPipeline 的 pipeline 就可以不用手动创建 mysql 数
+据库及数据表了，但我还是推荐使用当前配置更高效。
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoEightSpider(AyuSpider):
@@ -14,12 +24,12 @@ class DemoEightSpider(AyuSpider):
     start_urls = ["https://readthedocs.io"]
     custom_settings = {
         "ITEM_PIPELINES": {
-            "ayugespidertools.pipelines.AyuFtyMysqlPipeline": 300,
-            "ayugespidertools.pipelines.AyuFtyMongoPipeline": 301,
+            "ayugespidertools.pipelines.AyuAsyncMysqlPipeline": 300,
+            "ayugespidertools.pipelines.AyuAsyncMongoPipeline": 301,
         },
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
