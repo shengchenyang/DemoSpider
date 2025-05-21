@@ -1,11 +1,16 @@
 # 存入 MongoDB 示例 (配置根据 consul 取值)
-from typing import Any, Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoFourSpider(AyuSpider):
@@ -21,7 +26,7 @@ class DemoFourSpider(AyuSpider):
         },
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
