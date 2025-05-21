@@ -4,13 +4,18 @@ NOTE:
     - 只用于提供另一种示例，更推荐使用 twisted 或 async 的 pipline 方式。
 """
 
-from typing import Any, Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoAyuturbomysqlpipelineSpider(AyuSpider):
@@ -23,7 +28,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
         },
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，你可自行测试其它目标网站
         for idx, _ in enumerate(range(10)):
             yield Request(
@@ -35,7 +40,6 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
 
     def parse_first(self, response: ScrapyResponse, index: str) -> Any:
         _save_table = "demo_AyuTurboMysql"
-
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
