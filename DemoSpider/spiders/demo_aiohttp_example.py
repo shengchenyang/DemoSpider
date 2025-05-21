@@ -1,11 +1,17 @@
 # 测试将 scrapy Request 改为 aiohttp 的示例
-from typing import Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
 
-from DemoSpider.common.types import ScrapyResponse
 from DemoSpider.common.utils import Operations
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoAiohttpSpider(AyuSpider):
@@ -30,7 +36,7 @@ class DemoAiohttpSpider(AyuSpider):
         "DOWNLOAD_TIMEOUT": 35,
     }
 
-    def start_requests(self) -> Iterable[AiohttpRequest]:
+    async def start(self) -> AsyncIterator[Any]:
         # 这里是一些复用的参数，用于请求示例的功能展示
         _get_url = "http://httpbin.org/get?get_args=1"
         _ar_headers_ck = "headers_ck_key=ck; headers_ck_key2=ck"
