@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Iterable
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.common.utils import Tools
 from ayugespidertools.items import AyuItem
@@ -10,7 +12,10 @@ from scrapy.http import Request
 from scrapy.utils.defer import maybe_deferred_to_future
 from twisted.internet.defer import DeferredList
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 def download(response, file_url, file_path):
@@ -39,7 +44,7 @@ class DemoFileSecSpider(AyuSpider):
         "FILES_STORE": Path(__file__).parent.parent / "docs",
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         yield Request(
             url="https://cms-api.csdn.net/v1/web_home/select_content?componentIds=www-blog-recommend&cate1=python",
             callback=self.parse_first,
