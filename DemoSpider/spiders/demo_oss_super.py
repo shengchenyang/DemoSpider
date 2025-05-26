@@ -9,15 +9,20 @@ NOTICE:
     - 常规场景中 oss 管道优先级要高于存储
 """
 
+from __future__ import annotations
+
 import json
-from typing import Any, Iterable
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.common.utils import Tools
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoOssSuperSpider(AyuSpider):
@@ -34,7 +39,7 @@ class DemoOssSuperSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.01,
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         yield Request(url=self.start_urls[0], callback=self.parse_first)
 
     def parse_first(self, response: ScrapyResponse) -> Any:
