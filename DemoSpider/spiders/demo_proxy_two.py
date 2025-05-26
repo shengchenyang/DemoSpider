@@ -1,10 +1,15 @@
 # 测试快代理独享代理
-from typing import Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoProxyTwoSpider(AyuSpider):
@@ -18,7 +23,7 @@ class DemoProxyTwoSpider(AyuSpider):
         },
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         """
         get 请求首页，获取项目列表数据
         """
