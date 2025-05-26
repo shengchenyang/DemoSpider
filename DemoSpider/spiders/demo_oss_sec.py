@@ -11,9 +11,11 @@ NOTICE:
       __init__，放入自定义模块或方法中。
 """
 
+from __future__ import annotations
+
 import hashlib
 import json
-from typing import Any, Iterable
+from typing import TYPE_CHECKING, Any
 
 import scrapy
 from ayugespidertools.common.utils import Tools
@@ -25,7 +27,10 @@ from scrapy.http.request import NO_CALLBACK
 from scrapy.utils.defer import maybe_deferred_to_future
 from scrapy.utils.python import to_bytes
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 # 这是下载示例，在具体场景可适当修改优化
@@ -69,7 +74,7 @@ class DemoOssSecSpider(AyuSpider):
         )
         super(DemoOssSecSpider, self).__init__(*args, **kwargs)
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         yield Request(url=self.start_urls[0], callback=self.parse_first)
 
     async def parse_first(self, response: ScrapyResponse) -> Any:
