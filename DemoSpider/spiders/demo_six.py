@@ -1,11 +1,16 @@
 # 异步存入 MongoDB 示例 (配置根据本地 .conf 取值)
-from typing import Any, Iterable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
-from DemoSpider.common.types import ScrapyResponse
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoSixSpider(AyuSpider):
@@ -25,7 +30,7 @@ class DemoSixSpider(AyuSpider):
         "DOWNLOAD_DELAY": 0.1,
     }
 
-    def start_requests(self) -> Iterable[Request]:
+    async def start(self) -> AsyncIterator[Any]:
         # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，你可自行测试其它目标网站
         for idx, _ in enumerate(range(10)):
             yield Request(
