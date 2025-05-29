@@ -39,6 +39,7 @@ docker run --name demo_five -e spider_name=demo_five demo_spider
 - 如果对各项配置不太了解，请在对应的 [readthedocs](https://ayugespidertools.readthedocs.io/en/latest/topics/configuration.html) 文档中查看介绍。
 - 项目中各 `spiders` 脚本功能及场景介绍请在 `AyugeSpiderTools` 的 `readme` 中查看，这里不再重复。
 - 本项目有不同分支，请根据不同版本分支来测试对应版本的 `ayugespidertools` 库，`main` 则表示为最新版本分支。
+- 此项目中的各个场景的 `spiders` 过多，如果感觉场景复现繁琐，建议创建一个新项目来实现你感兴趣的 `spider`。
 
 ### 1.2. 关于项目结构
 
