@@ -1,5 +1,7 @@
-/.git
-/.idea
+.git/
+.idea/
+.venv
+.poetry
 /DemoSpider/VIT/.conf
 /DemoSpider/logs/
 /DemoSpider/logs/error.log

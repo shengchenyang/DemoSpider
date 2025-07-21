@@ -1,19 +1,29 @@
-[tool.poetry]
+[project]
 name = "DemoSpider"
-version = "3.9.8"
-package-mode = false
+dynamic = ["version", "readme"]
+requires-python = ">=3.9,<4.0"
 description = "AyugeSpiderTools 的具体场景实现。"
-authors = ["ayuge <ayugesheng@gmail.com>"]
-maintainers = ["ayuge <ayugesheng@gmail.com>"]
-readme = "README.md"
+authors = [
+    { name = "ayuge", email = "ayugesheng@gmail.com" },
+]
+maintainers = [
+    { name = "ayuge", email = "ayugesheng@gmail.com" },
+]
+keywords = ["crawler", "scraping", "aiohttp", "asyncio", "scrapy"]
+dependencies = [
+    "ayugespidertools[all]==3.12.2",
+]
+
+[project.urls]
+homepage = "https://www.ayuge.top/mkdocs-material/"
 repository = "https://github.com/shengchenyang/DemoSpider"
 documentation = "https://ayugespidertools.readthedocs.io/en/latest/"
-keywords = ["crawler", "scraping", "aiohttp", "asyncio", "scrapy"]
-homepage = "https://www.ayuge.top/mkdocs-material/"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-ayugespidertools = "3.12.0"
+[tool.poetry]
+version = "3.12.2"
+package-mode = false
+readme = ["README.md"]
+requires-poetry = "2.1.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "3.5.0"
@@ -27,7 +37,7 @@ line-length = 88
 profile = "black"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 ignore_missing_imports = true
 disable_error_code = ["attr-defined", "arg-type", "union-attr"]
 
