@@ -1,9 +1,12 @@
 .PHONY: start git dev check
 
 start:
-	pip install poetry
+	pyenv local 3.9.20
+	pip install poetry==2.1.1
+	poetry config virtualenvs.in-project true
+	poetry env use python
 	poetry install
-	pre-commit install
+	poetry run pre-commit install
 
 git:
 	git config --global core.eol lf
