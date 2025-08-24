@@ -1,6 +1,7 @@
 # 此场景不会自动创建数据库，数据表，表字段等，请手动管理；但更推荐此写法，效率更高
 from __future__ import annotations
 
+import random
 from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
@@ -11,15 +12,10 @@ from scrapy.http import Request
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from aiomysql import Pool
-
     from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoAiomysqlSpider(AyuSpider):
-    # 可用于入库前查询使用等场景
-    mysql_conn_pool: Pool
-
     name = "demo_aiomysql"
     allowed_domains = ["readthedocs.io"]
     start_urls = ["https://readthedocs.io"]
@@ -34,7 +30,8 @@ class DemoAiomysqlSpider(AyuSpider):
 
     async def start(self) -> AsyncIterator[Any]:
         self.mysql_conn_pool = await MysqlAsyncPortal(db_conf=self.mysql_conf).connect()
-        # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，你可自行测试其它目标网站
+        # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，也是为了测试更新功能是否正常，你也可
+        # 自行测试其它目标网站。
         for idx, _ in enumerate(range(10)):
             yield Request(
                 url="https://ayugespidertools.readthedocs.io/en/latest/",
@@ -48,24 +45,17 @@ class DemoAiomysqlSpider(AyuSpider):
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
-            octree_href = curr_li.xpath("a/@href").get()
+            # 这里加随机数用于测试更新功能
+            octree_href = curr_li.xpath("a/@href").get("") + str(random.randint(0, 100))
 
-            # NOTE: 数据存储方式 1，推荐此风格写法。
+            # 更新逻辑介绍请在 demo_one 中查看
             octree_item = AyuItem(
                 octree_text=octree_text,
                 octree_href=octree_href,
                 start_index=index,
                 _table=_save_table,
+                _update_rule={"octree_text": octree_text},
+                _update_keys={"octree_href"},
             )
             self.slog.info(f"octree_item: {octree_item}")
-
-            # 使用此方法时需要提前建库建表
-            async with self.mysql_conn_pool.acquire() as conn:
-                async with conn.cursor() as cursor:
-                    exists = await cursor.execute(
-                        f"SELECT `id` from `{_save_table}` where `octree_text` = {octree_text!r} limit 1"
-                    )
-                    if not exists:
-                        yield octree_item
-                    else:
-                        self.slog.debug(f'标题为 "{octree_text}" 的数据已存在')
+            yield octree_item

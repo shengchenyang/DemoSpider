@@ -10,22 +10,21 @@ from scrapy.http import Request
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
+    from aiomysql import Pool
+
     from DemoSpider.common.types import ScrapyResponse
 
 
-class DemoTenSpider(AyuSpider):
-    name = "demo_ten"
-    allowed_domains = ["readthedocs.io"]
-    start_urls = ["https://readthedocs.io"]
+class DemoOracleAsyncSpider(AyuSpider):
+    mysql_conn_pool: Pool
+
+    name = "demo_oracle_async"
+    allowed_domains = ["csdn.net"]
+    start_urls = ["https://csdn.net"]
     custom_settings = {
         "ITEM_PIPELINES": {
-            "ayugespidertools.pipelines.AyuTwistedPostgresPipeline": 300,
+            "ayugespidertools.pipelines.AyuAsyncOraclePipeline": 300,
         },
-        "DOWNLOADER_MIDDLEWARES": {
-            "ayugespidertools.middlewares.RandomRequestUaMiddleware": 400,
-        },
-        "CONCURRENT_REQUESTS": 64,
-        "DOWNLOAD_DELAY": 0.01,
     }
 
     async def start(self) -> AsyncIterator[Any]:
@@ -38,15 +37,13 @@ class DemoTenSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, index: str) -> Any:
-        _save_table = "demo_ten"
-
+    async def parse_first(self, response: ScrapyResponse, index: str) -> Any:
+        _save_table = "demo_oracle_async"
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
             octree_href = curr_li.xpath("a/@href").get("") + str(random.randint(0, 100))
 
-            # 更新逻辑介绍请在 demo_nine 中查看。
             octree_item = AyuItem(
                 octree_text=octree_text,
                 octree_href=octree_href,

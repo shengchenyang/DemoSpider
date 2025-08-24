@@ -6,28 +6,20 @@ AyuFtyPostgresPipeline 就可以自动创库创表及所需字段了。
 
 from __future__ import annotations
 
+import random
 from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
-from ayugespidertools.utils.database import PostgreSQLAsyncPortal
-from scrapy import signals
 from scrapy.http import Request
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from psycopg_pool import AsyncConnectionPool
-    from scrapy.crawler import Crawler
-    from typing_extensions import Self
-
     from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoNineSpider(AyuSpider):
-    # 可用于入库前查询使用等场景，名称等可自定义
-    psycopg_conn_pool: AsyncConnectionPool
-
     name = "demo_nine"
     allowed_domains = ["readthedocs.io"]
     start_urls = ["https://readthedocs.io"]
@@ -37,21 +29,8 @@ class DemoNineSpider(AyuSpider):
         },
     }
 
-    @classmethod
-    def from_crawler(cls, crawler: Crawler, *args: Any, **kwargs: Any) -> Self:
-        spider = super(DemoNineSpider, cls).from_crawler(crawler, *args, **kwargs)
-        crawler.signals.connect(spider.spider_closed, signal=signals.spider_closed)
-        return spider
-
-    async def spider_closed(self, spider: AyuSpider) -> None:
-        await self.psycopg_conn_pool.close()
-
     async def start(self) -> AsyncIterator[Any]:
         """get 请求首页，获取项目列表数据"""
-        self.psycopg_conn_pool = PostgreSQLAsyncPortal(
-            db_conf=self.postgres_conf
-        ).connect()
-        await self.psycopg_conn_pool.open()
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
@@ -62,21 +41,20 @@ class DemoNineSpider(AyuSpider):
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
-            octree_href = curr_li.xpath("a/@href").get()
+            octree_href = curr_li.xpath("a/@href").get("") + str(random.randint(0, 100))
 
+            # 更新逻辑使用方法大致和 demo_one 的 mysql 一样，只是多了个 _conflict_cols 字段来指定
+            # 唯一索引字段(用于在设置了唯一索引时指定此字段来实现 upsert 功能)，至于为什么不使用
+            # MERGE INTO 就可以不用指定 _conflict_cols 了呢？因为此语法最低需要 postgresql 15
+            # 才能支持，为了兼容性考虑。
+            # 注意：没有设置唯一索引就不能设置 _conflict_cols 参数。
             octree_item = AyuItem(
                 octree_text=octree_text,
                 octree_href=octree_href,
                 _table=_save_table,
+                _update_rule={"octree_text": octree_text},
+                _update_keys={"octree_href"},
+                _conflict_cols={"octree_text"},
             )
             self.slog.info(f"octree_item: {octree_item}")
-
-            async with self.psycopg_conn_pool.connection() as conn:
-                async with conn.cursor() as cursor:
-                    sql = f"select id from {_save_table} where octree_text = '{octree_text}' limit 1"
-                    await cursor.execute(sql)
-                    exists = await cursor.fetchone()
-                    if not exists:
-                        yield octree_item
-                    else:
-                        self.slog.debug(f'标题为 "{octree_text}" 的数据已存在')
+            yield octree_item

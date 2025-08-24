@@ -42,7 +42,8 @@ class DemoFourSpider(AyuSpider):
                 octree_text=octree_text,
                 octree_href=octree_href,
                 _table="demo_four",
-                _mongo_update_rule={"octree_text": octree_text},
+                _update_rule={"octree_text": octree_text},
+                _update_keys={"octree_href"},
             )
             self.slog.info(f"octree_item: {octree_item}")
             yield octree_item

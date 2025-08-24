@@ -1,6 +1,7 @@
 # async 存入 mongoDB 的示例，以 motor 实现
 from __future__ import annotations
 
+import random
 from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
@@ -43,7 +44,7 @@ class DemoMongoAsyncSpider(AyuSpider):
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
-            octree_href = curr_li.xpath("a/@href").get()
+            octree_href = curr_li.xpath("a/@href").get("") + str(random.randint(0, 100))
 
             # NOTE: 数据存储方式 1，推荐此风格写法
             octree_item = AyuItem(
@@ -51,7 +52,8 @@ class DemoMongoAsyncSpider(AyuSpider):
                 octree_href=octree_href,
                 start_index=index,
                 _table=_save_table,
-                _mongo_update_rule={"octree_text": octree_text, "start_index": index},
+                _update_rule={"octree_text": octree_text, "start_index": index},
+                _update_keys={"octree_href"},
             )
 
             self.slog.info(f"octree_item: {octree_item}")
