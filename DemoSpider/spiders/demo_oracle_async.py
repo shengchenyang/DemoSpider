@@ -10,14 +10,10 @@ from scrapy.http import Request
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from aiomysql import Pool
-
     from DemoSpider.common.types import ScrapyResponse
 
 
 class DemoOracleAsyncSpider(AyuSpider):
-    mysql_conn_pool: Pool
-
     name = "demo_oracle_async"
     allowed_domains = ["csdn.net"]
     start_urls = ["https://csdn.net"]

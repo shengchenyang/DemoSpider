@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
-from ayugespidertools.utils.database import MysqlAsyncPortal
 from scrapy.http import Request
 
 if TYPE_CHECKING:
@@ -29,7 +28,6 @@ class DemoAiomysqlSpider(AyuSpider):
     }
 
     async def start(self) -> AsyncIterator[Any]:
-        self.mysql_conn_pool = await MysqlAsyncPortal(db_conf=self.mysql_conf).connect()
         # 这里请求十次同样 url 是为了测试示例的简单和示例的稳定性，也是为了测试更新功能是否正常，你也可
         # 自行测试其它目标网站。
         for idx, _ in enumerate(range(10)):

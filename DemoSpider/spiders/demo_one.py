@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
-from ayugespidertools.utils.database import MysqlAsyncPortal
 from scrapy.http import Request
 
 if TYPE_CHECKING:
@@ -31,7 +30,6 @@ class DemoOneSpider(AyuSpider):
     }
 
     async def start(self) -> AsyncIterator[Any]:
-        self.mysql_conn_pool = await MysqlAsyncPortal(db_conf=self.mysql_conf).connect()
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
