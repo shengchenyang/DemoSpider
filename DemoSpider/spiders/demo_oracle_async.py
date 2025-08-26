@@ -33,7 +33,7 @@ class DemoOracleAsyncSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    async def parse_first(self, response: ScrapyResponse, index: str) -> Any:
+    async def parse_first(self, response: ScrapyResponse, index: int) -> Any:
         _save_table = "demo_oracle_async"
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:

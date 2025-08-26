@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import random
 from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
@@ -39,9 +40,14 @@ class DemoEightSpider(AyuSpider):
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
-            octree_href = curr_li.xpath("a/@href").get()
+            octree_href = curr_li.xpath("a/@href").get("") + str(random.randint(0, 100))
             yield AyuItem(
                 octree_text=octree_text,
                 octree_href=octree_href,
                 _table="demo_eight",
+                # 这里的更新新增逻辑会在各自的 pipeline 中生效且互不影响，当然你也可以一同设置 postgresql,
+                # oracle 的 pipeline，它们会互不影响且一同生效。
+                _update_rule={"octree_text": octree_text},
+                _update_keys={"octree_href"},
+                _conflict_cols={"octree_href"},
             )

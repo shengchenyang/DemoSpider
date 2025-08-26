@@ -38,7 +38,7 @@ class DemoAyuturbomysqlpipelineSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, index: str) -> Any:
+    def parse_first(self, response: ScrapyResponse, index: int) -> Any:
         _save_table = "demo_AyuTurboMysql"
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:

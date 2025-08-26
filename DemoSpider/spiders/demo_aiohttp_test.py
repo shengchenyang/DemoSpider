@@ -54,4 +54,5 @@ class DemoAiohttpTestSpider(AyuSpider):
                 book_intro=book_intro,
                 _table="demo_aiohttp_test",
             )
+            # 这里只是记录并没有入库
             self.slog.info(f"BookInfoItem: {BookInfoItem}")

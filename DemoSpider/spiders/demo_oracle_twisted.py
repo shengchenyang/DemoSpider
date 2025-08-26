@@ -36,7 +36,7 @@ class DemoOracleTwistedSpider(AyuSpider):
                 dont_filter=True,
             )
 
-    def parse_first(self, response: ScrapyResponse, index: str) -> Any:
+    def parse_first(self, response: ScrapyResponse, index: int) -> Any:
         _save_table = "demo_oracle_twisted"
 
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
