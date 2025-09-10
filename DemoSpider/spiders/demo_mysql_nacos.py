@@ -7,12 +7,13 @@ from typing import TYPE_CHECKING, Any
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
-from scrapy.settings import Settings
 
 from DemoSpider.settings import VIT_DIR
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
+
+    from scrapy.settings import Settings
 
     from DemoSpider.common.types import ScrapyResponse
 

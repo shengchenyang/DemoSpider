@@ -7,7 +7,7 @@ __all__ = [
 ]
 
 
-class Operations(object):
+class Operations:
     """
     项目依赖方法
     """

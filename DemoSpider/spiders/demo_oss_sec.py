@@ -72,7 +72,7 @@ class DemoOssSecSpider(AyuSpider):
             bucket="xxx",
             doc="xxx",
         )
-        super(DemoOssSecSpider, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     async def start(self) -> AsyncIterator[Any]:
         yield Request(url=self.start_urls[0], callback=self.parse_first)

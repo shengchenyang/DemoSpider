@@ -52,7 +52,7 @@ class MyspiderRedisSpider(AyuSpider, RedisSpider):
         # Dynamically define the allowed domains list.
         domain = kwargs.pop("domain", "")
         self.allowed_domains = filter(None, domain.split(","))
-        super(MyspiderRedisSpider, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def parse(self, response: ScrapyResponse, **kwargs: Any) -> Any:
         """
