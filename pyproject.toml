@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "DemoSpider"
 dynamic = ["version", "readme"]
-requires-python = ">=3.9,<4.0"
+requires-python = ">=3.9"
 description = "AyugeSpiderTools 的具体场景实现。"
 authors = [
     { name = "ayuge", email = "ayugesheng@gmail.com" },
@@ -24,7 +24,7 @@ repository = "https://github.com/shengchenyang/DemoSpider"
 documentation = "https://ayugespidertools.readthedocs.io/en/latest/"
 
 [tool.poetry]
-version = "3.12.2"
+version = "0.0.1"
 package-mode = false
 readme = ["README.md"]
 requires-poetry = "2.1.1"
@@ -32,6 +32,9 @@ requires-poetry = "2.1.1"
 [tool.poetry.group.dev.dependencies]
 ruff = "0.12.12"
 pre-commit = "3.5.0"
+
+[tool.ruff]
+unsafe-fixes = true
 
 [tool.ruff.lint]
 extend-select = [
@@ -198,4 +201,4 @@ convention = "pep257"
 
 [tool.ruff.lint.pyupgrade]
 # Preserve types, even if a file imports `from __future__ import annotations`.
-keep-runtime-typing = true
+keep-runtime-typing = false
