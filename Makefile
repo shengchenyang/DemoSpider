@@ -1,4 +1,4 @@
-.PHONY: start git install check format clean
+.PHONY: start git check format clean
 
 path = $(subst /,$(strip $(PATHSEP)),$1)
 
