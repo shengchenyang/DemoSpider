@@ -36,14 +36,12 @@ else
 endif
 
 start:
-	$(UVINSTALL)
-	uv python install 3.9.20
-	uv tool install poetry==2.1.1
-	uv tool run poetry config virtualenvs.in-project true
-	uv tool run poetry self add poetry-bumpversion
-	uv tool run poetry env use $(shell uv python find 3.9.20)
-	uv tool run poetry install
-	uv tool run poetry run pre-commit install
+	pyenv local 3.9.20
+	pip install poetry==2.1.1
+	poetry config virtualenvs.in-project true
+	poetry env use python
+	poetry install
+	poetry run pre-commit install
 
 git:
 	git config --global core.eol lf
@@ -53,12 +51,12 @@ git:
 	git config --global https.proxy http://127.0.0.1:7897
 
 check:
-	- uv tool run poetry run pre-commit run --all-files
-	- uv tool run poetry run ruff check --fix
+	- poetry run pre-commit run --all-files
+	- poetry run ruff check --fix
 
 format:
-	- uv tool run poetry run ruff format
-	- uv tool run poetry run ruff check --fix
+	- poetry run ruff format
+	- poetry run ruff check --fix
 
 clean:
 	-$(CLEAN_PYCACHE)

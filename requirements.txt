@@ -1,2 +1,2 @@
-ayugespidertools==3.13.0
+ayugespidertools==3.13.1
 scrapy==2.13.3
