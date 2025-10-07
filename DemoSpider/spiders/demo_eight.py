@@ -49,5 +49,6 @@ class DemoEightSpider(AyuSpider):
                 # oracle 的 pipeline，它们会互不影响且一同生效。
                 _update_rule={"octree_text": octree_text},
                 _update_keys={"octree_href"},
-                _conflict_cols={"octree_href"},
+                # postgresql 存储场景才需要配置此参数
+                # _conflict_cols={"octree_href"},
             )
