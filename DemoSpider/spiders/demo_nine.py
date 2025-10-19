@@ -37,7 +37,7 @@ class DemoNineSpider(AyuSpider):
         )
 
     async def parse_first(self, response: ScrapyResponse) -> Any:
-        # 也可以直接写 demo_ten，pg 默认 public
+        # 也可以直接写 demo_nine，pg 默认 public
         _save_table = "public.demo_nine"
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
