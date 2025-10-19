@@ -39,8 +39,8 @@ class DemoTenSpider(AyuSpider):
             )
 
     def parse_first(self, response: ScrapyResponse, index: int) -> Any:
-        _save_table = "demo_ten"
-
+        # 也可以直接写 demo_ten，pg 默认 public
+        _save_table = "public.demo_ten"
         li_list = response.xpath('//div[@aria-label="Navigation menu"]/ul/li')
         for curr_li in li_list:
             octree_text = curr_li.xpath("a/text()").get()
