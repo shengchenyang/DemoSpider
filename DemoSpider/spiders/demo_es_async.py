@@ -61,7 +61,7 @@ class DemoEsAsyncSpider(AyuSpider):
                     octree_text, Text(analyzer="snowball", fields={"raw": Keyword()})
                 ),
                 octree_href=DataItem(octree_href, Keyword()),
-                start_index=index,
+                start_index=DataItem(index, Keyword()),
                 _table=DataItem(_save_table),
             )
             self.slog.info(f"octree_item: {octree_item}")
