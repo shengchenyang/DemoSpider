@@ -38,7 +38,6 @@ class DemoKafkaSpider(AyuSpider):
             octree_item = AyuItem(
                 octree_text=octree_text,
                 octree_href=octree_href,
-                _table="demo_kafka",
             )
             self.slog.info(f"octree_item: {octree_item}")
             yield octree_item

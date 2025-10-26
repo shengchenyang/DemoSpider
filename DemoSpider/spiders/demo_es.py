@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem, DataItem
 from ayugespidertools.spiders import AyuSpider
+from ayugespidertools.utils.database import ElasticSearchPortal
 from scrapy.http import Request
 
 try:
@@ -39,6 +40,7 @@ class DemoEsSpider(AyuSpider):
     }
 
     async def start(self) -> AsyncIterator[Any]:
+        self.es_conn = ElasticSearchPortal(db_conf=self.es_conf).connect()
         yield Request(
             url="https://ayugespidertools.readthedocs.io/en/latest/",
             callback=self.parse_first,
@@ -62,8 +64,8 @@ class DemoEsSpider(AyuSpider):
             # 查重逻辑自己设置，精确匹配还是全文搜索请自行设置，这里只是一种示例。
             # 请自定义查重和更新方式，比如使用查询并更新的语句。
             s = (
-                Search(using=self.es_engine, index=_save_table)
-                .query("term", octree_href=octree_href)
+                Search(using=self.es_conn, index=_save_table)
+                .filter("term", **{"octree_href.keyword": octree_href})
                 .execute()
             )
             if s.hits.total.value > 0:

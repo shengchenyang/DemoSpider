@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
@@ -34,14 +35,20 @@ class DemoMqSpider(AyuSpider):
             octree_text = curr_li.xpath("a/text()").get()
             octree_href = curr_li.xpath("a/@href").get()
 
-            yield {
-                "octree_text": octree_text,
-                "octree_href": octree_href,
-                "_table": "demo_mq",
-            }
+            # 推荐数据存储格式
+            yield AyuItem(
+                octree_text=octree_text,
+                octree_href=octree_href,
+            )
 
             # 当然，返回其他格式也是可以的。具体请参考 demo_one:
             """
+            yield {
+                "octree_text": octree_text,
+                "octree_href": octree_href,
+            }
+
+            # 或者使用 DataItem 格式，不推荐，只是兼容
             from ayugespidertools.items import AyuItem, DataItem
 
             yield AyuItem(
