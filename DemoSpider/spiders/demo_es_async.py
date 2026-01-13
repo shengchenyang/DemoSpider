@@ -29,7 +29,6 @@ class DemoEsAsyncSpider(AyuSpider):
     allowed_domains = ["readthedocs.io"]
     start_urls = ["https://readthedocs.io"]
     custom_settings = {
-        "DATABASE_ENGINE_ENABLED": True,
         "ITEM_PIPELINES": {
             "ayugespidertools.pipelines.AyuAsyncESPipeline": 300,
         },
