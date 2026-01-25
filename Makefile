@@ -36,7 +36,7 @@ else
 endif
 
 start:
-	pyenv local 3.9.20
+	pyenv local 3.10.11
 	pip install poetry==2.1.1
 	poetry config virtualenvs.in-project true
 	poetry env use python

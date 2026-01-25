@@ -1,7 +1,7 @@
 [project]
 name = "DemoSpider"
 dynamic = ["version", "readme"]
-requires-python = ">=3.9"
+requires-python = ">=3.10,<4.0"
 description = "AyugeSpiderTools 的具体场景实现。"
 authors = [
     { name = "ayuge", email = "ayugesheng@gmail.com" },
@@ -11,7 +11,7 @@ maintainers = [
 ]
 keywords = ["crawler", "scraping", "aiohttp", "asyncio", "scrapy"]
 dependencies = [
-    "ayugespidertools (==3.13.1)",
+    "ayugespidertools (==3.14.0)",
 ]
 
 [project.urls]
