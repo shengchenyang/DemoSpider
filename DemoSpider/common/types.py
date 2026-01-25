@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from scrapy.http import Response
 from scrapy.http.response.html import HtmlResponse
@@ -6,7 +6,7 @@ from scrapy.http.response.json import JsonResponse
 from scrapy.http.response.text import TextResponse
 from scrapy.http.response.xml import XmlResponse
 
-ScrapyResponse = Union[TextResponse, XmlResponse, HtmlResponse, Response, JsonResponse]
+ScrapyResponse = TextResponse | XmlResponse | HtmlResponse | Response | JsonResponse
 
 
 class RedisSpider: ...
