@@ -72,7 +72,3 @@ docker run --name demo_five -e spider_name=demo_five demo_spider
 >
 
 ![image-20220807223716593](DemoSpider/docs/images/image-20220807223716593.png)
-
-> 下图为 `demo_proxy_one` 的快代理动态隧道代理运行示例：
-
-![image-20220905112615892](DemoSpider/docs/images/image-20220905112615892.png)
