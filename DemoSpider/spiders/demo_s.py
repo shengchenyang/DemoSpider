@@ -52,7 +52,7 @@ class DemoSSpider(AyuSpider):
         connection = await aio_pika.connect_robust(
             host=self.rabbitmq_conf.host,
             port=self.rabbitmq_conf.port,
-            user=self.rabbitmq_conf.username,
+            login=self.rabbitmq_conf.username,
             password=self.rabbitmq_conf.password,
             virtualhost=self.rabbitmq_conf.virtualhost,
         )
