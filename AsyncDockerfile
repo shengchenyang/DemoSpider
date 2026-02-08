@@ -1,5 +1,5 @@
 FROM nikolaik/python-nodejs:python3.10-nodejs20
-RUN apt update && apt-get -y install libgl1-mesa-glx
+RUN apt update && apt-get -y install libgl1
 WORKDIR /data/DemoSpider
 COPY . .
 RUN pip install -r requirements.txt
