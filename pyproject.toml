@@ -11,7 +11,7 @@ maintainers = [
 ]
 keywords = ["crawler", "scraping", "aiohttp", "asyncio", "scrapy"]
 dependencies = [
-    "ayugespidertools (==3.14.0)",
+    "ayugespidertools (==3.14.1)",
 ]
 
 [project.urls]
