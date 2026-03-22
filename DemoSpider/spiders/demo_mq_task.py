@@ -31,6 +31,8 @@ class DemoMqTaskSpider(AyuRabbitMQSpider):
         )
 
     async def parse_first(self, response: Response) -> Any:
+        # 这里具体是推送结果到 mq 结果队列，还是保存到不同数据库 pipeline 中请自行选择；
+        # 也可以结合使用。
         _save_table = "demo_mq_task_table"
         yield AyuItem(
             octree_text="octree_text",
