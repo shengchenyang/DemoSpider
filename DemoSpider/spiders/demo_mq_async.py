@@ -42,4 +42,7 @@ class DemoMqAsyncSpider(AyuSpider):
             yield AyuItem(
                 octree_text=octree_text,
                 octree_href=octree_href,
+                # 这里的 _table 指保存到 mq 的队列名，此值优先级大于 .conf 中 [mq] 的 queue，
+                # 用于 spider 中可能推送到多个不同队列的需求。
+                # _table="demo_mq_table",
             )
