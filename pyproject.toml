@@ -182,6 +182,7 @@ split-on-trailing-comma = false
 "DemoSpider/spiders/demo_mongo_async.py" = ["S311"]
 "DemoSpider/spiders/demo_five.py" = ["S311"]
 "DemoSpider/spiders/demo_nine.py" = ["S311"]
+"DemoSpider/spiders/demo_mq_task.py" = ["S311"]
 "DemoSpider/spiders/demo_one.py" = ["S311"]
 "DemoSpider/spiders/demo_oracle.py" = ["S311"]
 "DemoSpider/spiders/demo_oracle_async.py" = ["S311"]

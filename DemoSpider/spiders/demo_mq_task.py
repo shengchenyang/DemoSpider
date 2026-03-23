@@ -5,10 +5,10 @@
 
 from __future__ import annotations
 
+import random
 from typing import TYPE_CHECKING, Any
 
 from ayugespidertools import AyuRabbitMQSpider
-from ayugespidertools.items import AyuItem
 from scrapy.http import Request
 
 if TYPE_CHECKING:
@@ -24,6 +24,7 @@ class DemoMqTaskSpider(AyuRabbitMQSpider):
         # 从任务 mq 中取出具体信息，这里以获取 example_param 为例
         example_param = task_info.get("example_param")
         self.slog.info(f"取出的信息: {example_param}")
+        # 这里一般是根据 task_info 中的各种参数来构造采集请求，这里不再演示，请自行按需求实现
         yield Request(
             url="data:,",
             callback=self.parse_first,
@@ -33,9 +34,7 @@ class DemoMqTaskSpider(AyuRabbitMQSpider):
     async def parse_first(self, response: Response) -> Any:
         # 这里具体是推送结果到 mq 结果队列，还是保存到不同数据库 pipeline 中请自行选择；
         # 也可以结合使用。
-        _save_table = "demo_mq_task_table"
-        yield AyuItem(
-            octree_text="octree_text",
-            octree_href="octree_href",
-            _table="_save_table",
-        )
+        random_int = random.randint(0, 100)
+        # 这里你可以结合各种数据库 pipeline 实现数据存储，也可结合 mq pipeline 或 RabbitMQAsyncPortal
+        # 实现任务消费和分发的功能，具体请根据场景自行选择，不再演示。
+        self.slog.info(random_int)
