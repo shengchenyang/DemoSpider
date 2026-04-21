@@ -8,7 +8,7 @@ from __future__ import annotations
 import random
 from typing import TYPE_CHECKING, Any
 
-from ayugespidertools import AyuRabbitMQSpider
+from ayugespidertools.spiders import AyuRabbitMQSpider
 from scrapy.http import Request
 
 if TYPE_CHECKING:
