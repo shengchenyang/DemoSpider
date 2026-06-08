@@ -1,3 +1,12 @@
+"""
+使用 curl_cffi 库请求的示例：
+CurlCffiRequest 的请求参数与 curl_cffi 一致。
+
+当然如果你不想显性地传递和 curl_cffi 一致的参数，你可以选择使用和 https://github.com/jxlil/scrapy-impersonate
+那样通过设置 DOWNLOAD_HANDLERS 来保持发送请求统一还是 scrapy.Request 的方式。
+具体使用偏好按需选择，都兼容的。
+"""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
