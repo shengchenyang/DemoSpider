@@ -30,7 +30,7 @@ try:
     import aio_pika
 except ImportError:
     # pip install ayugespidertools[database]
-    from DemoSpider.common.types import aio_pika
+    from DemoSpider.common.types import aio_pika  # type: ignore[no-redef]
 
 
 class DemoSSpider(AyuSpider):

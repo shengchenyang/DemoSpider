@@ -12,12 +12,15 @@ Supplement:
     1. 需要自行安装 scrapy-redis，且版本要大于等于 v0.8.0。
 """
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.items import AyuItem
 from ayugespidertools.spiders import AyuSpider
 
 from DemoSpider.common.types import ScrapyResponse
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 try:
     from scrapy_redis.spiders import RedisSpider
@@ -51,7 +54,7 @@ class MyspiderRedisSpider(AyuSpider, RedisSpider):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         # Dynamically define the allowed domains list.
         domain = kwargs.pop("domain", "")
-        self.allowed_domains = filter(None, domain.split(","))
+        self.allowed_domains: Iterator[str] = filter(None, domain.split(","))
         super().__init__(*args, **kwargs)
 
     def parse(self, response: ScrapyResponse, **kwargs: Any) -> Any:

@@ -1,7 +1,8 @@
 [project]
 name = "DemoSpider"
-dynamic = ["version", "readme"]
 requires-python = ">=3.10,<4.0"
+readme = "README.md"
+version = "3.15.0"
 description = "AyugeSpiderTools 的具体场景实现。"
 authors = [
     { name = "ayuge", email = "ayugesheng@gmail.com" },
@@ -11,7 +12,7 @@ maintainers = [
 ]
 keywords = ["crawler", "scraping", "aiohttp", "asyncio", "scrapy"]
 dependencies = [
-    "ayugespidertools (==3.15.0)",
+    "ayugespidertools[all] (==3.15.0)",
 ]
 
 [project.urls]
@@ -19,18 +20,30 @@ homepage = "https://www.ayuge.top/mkdocs-material/"
 repository = "https://github.com/shengchenyang/DemoSpider"
 documentation = "https://ayugespidertools.readthedocs.io/en/latest/"
 
-[tool.poetry]
-version = "0.0.1"
-package-mode = false
-readme = ["README.md"]
-requires-poetry = "2.1.1"
+[dependency-groups]
+lint = [
+    "mypy==1.10.1",
+    "pre-commit==3.5.0",
+    "ruff==0.12.12",
+]
 
-[tool.poetry.group.dev.dependencies]
-ruff = "0.12.12"
-pre-commit = "3.5.0"
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+disable_error_code = ["attr-defined", "arg-type", "union-attr"]
 
 [tool.ruff]
 unsafe-fixes = true
+exclude = [
+    ".github",
+    ".venv",
+]
 
 [tool.ruff.lint]
 extend-select = [
@@ -199,7 +212,3 @@ convention = "pep257"
 [tool.ruff.lint.pyupgrade]
 # Preserve types, even if a file imports `from __future__ import annotations`.
 keep-runtime-typing = false
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"

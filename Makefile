@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
     RM = cmd.exe /C del /F /Q
     RMDIR = cmd.exe /C rd /S /Q
     PATHSEP = \\
-    PIPINSTALL = cmd.exe /C "FOR %%i in (dist\*.whl) DO uv tool run poetry run python -m pip install --no-index --no-deps %%i"
+    PIPINSTALL = cmd.exe /C "FOR %%i in (dist\*.whl) DO uv  pip install --no-index --no-deps %%i"
     UVINSTALL = powershell -ExecutionPolicy ByPass -c "irm 'https://astral.sh/uv/install.ps1' | iex"
     CLEAN_PYCACHE = for /d /r . %%d in (__pycache__) do @(if exist "%%d" (rd /s /q "%%d"))
     CLEAN_PYTESTCACHE = for /d /r . %%d in (.pytest_cache) do @(if exist "%%d" (rd /s /q "%%d"))
@@ -17,7 +17,7 @@ else
         RM = rm -f
         RMDIR = rm -rf
         PATHSEP = /
-        PIPINSTALL = uv tool run poetry run python -m pip install dist/*.tar.gz
+        PIPINSTALL = uv pip install dist/*.tar.gz
         UVINSTALL = curl -LsSf https://astral.sh/uv/install.sh | sh
         CLEAN_PYCACHE = find . -type d -name '__pycache__' -print0 | xargs -0 rm -rf
         CLEAN_PYTESTCACHE = find . -type d -name '.pytest_cache' -print0 | xargs -0 rm -rf
@@ -27,7 +27,7 @@ else
         RM = rm -f
         RMDIR = rm -rf
         PATHSEP = /
-        PIPINSTALL = uv tool run poetry run python -m pip install dist/*.tar.gz
+        PIPINSTALL = uv pip install dist/*.tar.gz
         UVINSTALL = curl -LsSf https://astral.sh/uv/install.sh | sh
         CLEAN_PYCACHE = find . -type d -name '__pycache__' -print0 | xargs -0 rm -rf
         CLEAN_PYTESTCACHE = find . -type d -name '.pytest_cache' -print0 | xargs -0 rm -rf
@@ -36,12 +36,8 @@ else
 endif
 
 start:
-	pyenv local 3.10.11
-	pip install poetry==2.1.1
-	poetry config virtualenvs.in-project true
-	poetry env use python
-	poetry install
-	poetry run pre-commit install
+	uv sync --python 3.10.11 --all-extras --all-groups
+	uv run pre-commit install
 
 git:
 	git config --global core.eol lf
@@ -51,12 +47,13 @@ git:
 	git config --global https.proxy http://127.0.0.1:7897
 
 check:
-	- poetry run pre-commit run --all-files
-	- poetry run ruff check --fix
+	uv run pre-commit run --all-files
+	uv run mypy .
+	uv run ruff check --fix
 
 format:
-	- poetry run ruff format
-	- poetry run ruff check --fix
+	- uv run ruff format
+	- uv run ruff check --fix
 
 clean:
 	-$(CLEAN_PYCACHE)
