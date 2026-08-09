@@ -13,7 +13,7 @@ from ayugespidertools.spiders import AyuSpider
 from scrapy.http import Request
 
 try:
-    from elasticsearch_dsl import Keyword, Text
+    from elasticsearch.dsl import Keyword, Text
 except ImportError:
     # pip install ayugespidertools[database]
     pass

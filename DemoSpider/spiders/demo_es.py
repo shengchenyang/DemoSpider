@@ -14,7 +14,7 @@ from ayugespidertools.utils.database import ElasticSearchPortal
 from scrapy.http import Request
 
 try:
-    from elasticsearch_dsl import Keyword, Search, Text
+    from elasticsearch.dsl import Keyword, Search, Text
 except ImportError:
     # pip install ayugespidertools[database]
     pass
