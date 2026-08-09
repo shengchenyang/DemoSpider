@@ -204,8 +204,6 @@ split-on-trailing-comma = false
 "DemoSpider/spiders/demo_es_async.py" = ["SIM105"]
 "DemoSpider/spiders/demo_file_sec.py" = ["S324"]
 "DemoSpider/spiders/demo_oss_sec.py" = ["S324", "S106"]
-"tests/b.py" = ["S324", "S106", "S108"]
-
 
 [tool.ruff.lint.pydocstyle]
 convention = "pep257"
