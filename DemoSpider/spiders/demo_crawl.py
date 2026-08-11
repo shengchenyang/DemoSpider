@@ -26,7 +26,7 @@ class DemoCrawlSpider(AyuCrawlSpider):
 
     rules = (
         Rule(
-            LinkExtractor(restrict_xpaths="//article/main/ul/li/p/a"),
+            LinkExtractor(restrict_xpaths="//article/main/ul/li/a"),
             callback="parse_item",
         ),
     )
