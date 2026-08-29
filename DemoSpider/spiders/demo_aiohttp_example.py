@@ -1,12 +1,11 @@
 # 测试将 scrapy Request 改为 aiohttp 的示例
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, Any
 
 from ayugespidertools.request import AiohttpRequest
 from ayugespidertools.spiders import AyuSpider
-
-from DemoSpider.common.utils import Operations
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -16,8 +15,7 @@ if TYPE_CHECKING:
 
 class DemoAiohttpSpider(AyuSpider):
     name = "demo_aiohttp_example"
-    allowed_domains = ["httpbin.org"]
-    start_urls = ["http://httpbin.org/"]
+    allowed_domains = ["postman-echo.com"]
     custom_settings = {
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOADER_MIDDLEWARES": {
@@ -38,7 +36,7 @@ class DemoAiohttpSpider(AyuSpider):
 
     async def start(self) -> AsyncIterator[Any]:
         # 这里是一些复用的参数，用于请求示例的功能展示
-        _get_url = "http://httpbin.org/get?get_args=1"
+        _get_url = "https://postman-echo.com/get?get_args=1"
         _ar_headers_ck = "headers_ck_key=ck; headers_ck_key2=ck"
         _ar_ck = {"ck_key": "ck"}
 
@@ -63,7 +61,7 @@ class DemoAiohttpSpider(AyuSpider):
         # POST 示例 1
         post_data = {"post_key1": "post_value1", "post_key2": "post_value2"}
         yield AiohttpRequest(
-            url="http://httpbin.org/post",
+            url="https://postman-echo.com/post",
             method="POST",
             callback=self.parse_post,
             headers={"Cookie": _ar_headers_ck},
@@ -75,7 +73,7 @@ class DemoAiohttpSpider(AyuSpider):
 
         # POST 示例 2
         yield AiohttpRequest(
-            url="http://httpbin.org/post",
+            url="https://postman-echo.com/post",
             method="POST",
             callback=self.parse_post,
             headers={"Cookie": _ar_headers_ck},
@@ -87,9 +85,14 @@ class DemoAiohttpSpider(AyuSpider):
 
     # 此处及后面所有的 parse_xx_xx 方法都是用于对响应信息的解析，用于测试
     def parse_get_fir(self, response: ScrapyResponse, request_name: int) -> None:
-        self.slog.info(f"get & request_name: {request_name}")
-        Operations.parse_response_data(response_data=response.text, mark="GET_DEMO")
+        json_data = json.loads(response.text)
+        self.slog.info(
+            f"get & request_name: {request_name}; response_data: {json_data}"
+        )
 
     def parse_post(self, response: ScrapyResponse, request_name: int) -> None:
         self.slog.info(f"post & request_name: {request_name}")
-        Operations.parse_response_data(response_data=response.text, mark="POST_DEMO")
+        json_data = json.loads(response.text)
+        self.slog.info(
+            f"get & request_name: {request_name}; response_data: {json_data}"
+        )
