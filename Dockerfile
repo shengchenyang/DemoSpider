@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs20
+FROM nikolaik/python-nodejs:python3.11-nodejs26
 RUN apt update && apt-get -y install libgl1
 WORKDIR /data/DemoSpider
 COPY . .
