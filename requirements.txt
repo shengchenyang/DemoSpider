@@ -1,2 +1,2 @@
-ayugespidertools[all]==3.16.0
-scrapy==2.17.0
+ayugespidertools[all]==3.17.0
+scrapy==2.19.0
