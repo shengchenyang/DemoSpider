@@ -2,7 +2,7 @@
 name = "DemoSpider"
 requires-python = ">=3.11,<4.0"
 readme = "README.md"
-version = "3.15.0"
+version = "0.1.0"
 description = "AyugeSpiderTools 的具体场景实现。"
 authors = [
     { name = "ayuge", email = "ayugesheng@gmail.com" },
