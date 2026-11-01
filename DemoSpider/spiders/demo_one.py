@@ -52,7 +52,8 @@ class DemoOneSpider(AyuSpider):
                 octree_text=octree_text,
                 octree_href=octree_href,
                 _table=_save_table,
-                # 更新逻辑，如果 octree_text 已存在则更新或忽略，不存在会执行插入(需配合唯一索引使用)。
+                # 更新逻辑，如果 octree_text 已存在则更新或忽略，不存在会执行插入(需配合唯一索引使用，
+                # 如果 _update_rule 中的规则是多个，那么需要创建联合唯一索引)。
                 _update_rule={"octree_text": octree_text},
                 # 以 _update_rule 查询条件判断已存在时候，要更新哪些字段。_update_keys 不设置则还是
                 # 走新增(注意：在设置了唯一索引时，推荐设置 _update_keys 参数或 insert_ignore 配置
