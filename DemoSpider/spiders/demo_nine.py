@@ -1,7 +1,5 @@
 """
-- 使用 PostgreSQLAsyncPortal 来查询时就需要自己先提前创建好所需的库和表了；也可以删除它，然后
-AyuFtyPostgresPipeline 就可以自动创库创表及所需字段了。
-- 这里主要是为了展示使用 PostgreSQLAsyncPortal 来查询的示例。
+需要自己先提前创建好所需的库和表。
 """
 
 from __future__ import annotations
@@ -55,7 +53,9 @@ class DemoNineSpider(AyuSpider):
                 _table=_save_table,
                 _update_rule={"octree_text": octree_text},
                 _update_keys={"octree_href"},
-                _conflict_cols={"octree_text"},
+                # 3.18.0 及之后的版本不需要设置 _conflict_cols 了，喜欢旧方式的实现可以把 AyuFtyPostgresPipeline
+                # 改为 AyuFtyPostgresLegacyPipeline 即可。
+                # _conflict_cols={"octree_text"},
             )
             self.slog.info(f"octree_item: {octree_item}")
             yield octree_item
