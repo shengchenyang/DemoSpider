@@ -30,6 +30,10 @@ class DemoCurlCffiSpider(AyuSpider):
             # 将 scrapy Request 替换为 curl_cffi 方式
             "ayugespidertools.middlewares.CurlCffiDownloaderMiddleware": 543,
         },
+        # curl_cffi.requests.AsyncSession 的配置项，非必需项，按需配置
+        "CURL_CFFI_CONFIG": {
+            "allow_redirects": False,
+        },
     }
 
     async def start(self) -> AsyncIterator[Any]:
