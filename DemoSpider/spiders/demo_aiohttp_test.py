@@ -22,9 +22,9 @@ class DemoAiohttpTestSpider(AyuSpider):
             # 使用 aiohttp 请求的中间件
             "ayugespidertools.middlewares.AiohttpDownloaderMiddleware": 543,
         },
-        # scrapy Request 替换为 aiohttp 的配置示例
+        # aiohttp.TCPConnector 的配置项，非必需项，按需配置
         "AIOHTTP_CONFIG": {
-            "sleep": 0,
+            "verify_ssl": True,
             "retry_times": 3,
         },
         "CONCURRENT_REQUESTS": 100,
